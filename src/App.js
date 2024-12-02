@@ -1,14 +1,14 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './pages/general pages/homePage';
+import Structure from './pages/pageStructure';
 
 function App() {
   return (
-    <div className='bg-[#f3f3f3] min-h-screen'>
+    <div>
       <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        {/* <Route path="/dashboard/*" element={<UserDashboard />} /> */}
+        <Route path="/" element={<Structure />} />
+        {/* <Route path="/sign-in" element={<SignIn />} /> */}
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </BrowserRouter>
