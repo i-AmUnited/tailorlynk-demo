@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Button from "./button";
-import image1 from "../assets/images/image 1.jpg";
-import image2 from "../assets/images/image 2.jpg";
-import image3 from "../assets/images/image 3.jpg";
+import Button from "../../../components/button";
+import image1 from "../../../assets/images/image 1.jpg";
+import image2 from "../../../assets/images/image 2.jpg";
+import image3 from "../../../assets/images/image 3.jpg";
 
 const Carousel = () => {
     const images = [image1, image2, image3    ];
@@ -36,8 +36,8 @@ const Carousel = () => {
             </div>
             <div className="bg-black/60 absolute top-0 w-full h-full flex items-end justify-center text-white px-4 pb-10">
                 <div>
-                    <div className="grid gap-4 text-center text-pretty">
-                        <span className="font-semibold text-2xl crimson-font">Your Dream Outfit, Made in Nigeria.</span>
+                    <div className="grid gap-3 text-center text-pretty">
+                        <span className="font-bold text-xl secondary-font">Your Dream Outfit, Made in Nigeria.</span>
                         <span className="w-full md:w-3/4 justify-self-center">
                             Dive into the dazzling realm of Nigerian fashion with affordable tailor-made pieces, delivered to your doorstep.
                         </span>
