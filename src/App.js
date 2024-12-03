@@ -1,6 +1,7 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Structure from './pages/pageStructure';
+import SignIn from './pages/auth pages/signin';
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Structure />} />
-        {/* <Route path="/sign-in" element={<SignIn />} /> */}
+        <Route path="/sign-in" element={<SignIn />} />
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </BrowserRouter>
