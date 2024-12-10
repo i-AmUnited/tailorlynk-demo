@@ -4,7 +4,7 @@ const EducationalResources = () => {
     return ( 
         <div className="grid gap-4">
             <div className="flex items-center justify-between">
-                <div className="font-medium">Educational resources</div>
+                <div className="font-bold secondary-font">Educational resources</div>
                 {/* <Link className="text-xs opacity-60">[ View all tailors ]</Link> */}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-4">
