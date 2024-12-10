@@ -15,7 +15,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-end gap-1 font-semibold text-[13px] px-3 text-primary">
           <img src={cart} alt="" className="h-5"/>
-          <span>9</span>
+          <span>0</span>
         </div>
       </div>
     </div>

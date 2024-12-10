@@ -5,7 +5,7 @@ import image2 from "../../../assets/images/image 2.jpg";
 import image3 from "../../../assets/images/image 3.jpg";
 
 const Carousel = () => {
-    const images = [image1, image2, image3    ];
+    const images = [image1, image2, image3 ];
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -42,8 +42,8 @@ const Carousel = () => {
                             Dive into the dazzling realm of Nigerian fashion with affordable tailor-made pieces, delivered to your doorstep.
                         </span>
                     </div>
-                    <div className="flex justify-center my-6">
-                        <Button buttonText={"Get started"} otherStyles={"bg-[#CB997E]"} />
+                    <div className="flex justify-center my-10 md:my-8">
+                        <Button buttonRole={"link"} destination={"/sign-up"} buttonText={"Get started"} otherStyles={"bg-primary text-white"}/>
                     </div>
                     <div className="flex justify-center">
                         <div className="p-2 rounded bg-brandGreen/20 w-fit backdrop-blur-md flex gap-[6px]">

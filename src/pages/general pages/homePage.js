@@ -13,20 +13,20 @@ const Home = () => {
         <Carousel />
         <RecommendedVendors />
         {/* Register */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-center">
           <div className="md:col-span-2 flex justify-center text-center lg:text-start">
-            <div>
-              <div className="mb-6">
-                <p className="font-bold text-xl secondary-font mb-2">Register as a vendor!</p>
+            <div className="grid gap-10">
+              <div>
+                <p className="font-bold text-lg secondary-font mb-2">Register as a vendor!</p>
                 <p>
                   Embrace the opportunity to showcase your skills and connect
                   with clients
                 </p>
               </div>
-              <Button buttonText={"Get started"} otherStyles={"bg-primary text-white"}/>
+              <Button buttonRole={"link"} destination={"/sign-in"} buttonText={"Get started"} otherStyles={"bg-primary text-white"}/>
             </div>
           </div>
-          <div className="md:col-span-3">
+          <div className="md:col-span-3 mt-6 md:mt-0">
             <div className="w-full aspect-video rounded-md overflow-hidden h-[300px]">
               <img src={img1} alt="" />
             </div>
@@ -36,7 +36,7 @@ const Home = () => {
         <div className="flex justify-center">
           <div className="w-full md:w-[80%] grid gap-6">
             <div className="leading-7 text-center">
-              <span className="font-bold text-xl secondary-font">Fashion inspiration of the month!</span> <br />
+              <span className="font-bold text-lg secondary-font">Fashion inspiration of the month!</span> <br />
               <span>[January]</span>
             </div>
             <div className="relative">

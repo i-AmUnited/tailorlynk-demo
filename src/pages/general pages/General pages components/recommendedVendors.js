@@ -5,7 +5,7 @@ const RecommendedVendors = () => {
     return ( 
         <div className="grid gap-4">
             <div className="flex items-center justify-between">
-                <div className="font-medium">Recommended <span className="text-primary">Tailors</span></div>
+                <div className="font-bold secondary-font">Recommended <span className="text-primary">Tailors</span></div>
                 <Link className="text-xs opacity-60">[ View all tailors ]</Link>
             </div>
             <div className="flex overflow-x-auto lg:grid lg:grid-cols-4 w-full gap-4">
