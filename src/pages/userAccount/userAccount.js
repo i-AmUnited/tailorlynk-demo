@@ -28,10 +28,10 @@ function UserAccount() {
             </Link>
           </div>
           <button
-            className="p-2 text-2xl focus:outline-none text-white hover:text-white"
+            className="px-5 text-xl focus:outline-none text-white hover:text-white"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
-            {isSidebarOpen ? "<" : ">"}
+            {isSidebarOpen ? "close" : "open"}
           </button>
           <nav className="mt-4">
             <ul className="space-y-4">
