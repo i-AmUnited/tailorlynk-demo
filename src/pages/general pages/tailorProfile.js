@@ -166,7 +166,7 @@ const TailorProfile = () => {
           <div className="bg-white border rounded-md overflow-hidden mb-4">
             <div className="flex items-center justify-between bg-white px-4 py-6 border-b">
               <div className="font-bold secondary-font">Reviews</div>
-              <div className="text-xs text-primary underline underline-offset-2 cursor-pointer" onClick={() => setReportModal(true)}>
+              <div className="text-xs text-primary font-semibold underline underline-offset-2 cursor-pointer" onClick={() => setReportModal(true)}>
                 Write a review
               </div>
             </div>
