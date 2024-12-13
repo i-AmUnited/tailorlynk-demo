@@ -16,6 +16,10 @@ import ChangePassword from "./pages/userAccount/changePassword";
 import Measurements from "./pages/userAccount/Measurements";
 import Overview from "./pages/userAccount/Overview";
 import MessageCenter from "./pages/userAccount/MessageCenter";
+import Order from "./pages/userAccount/Order";
+import SavedStyles from "./pages/userAccount/SavedStyles";
+import ShippingAddress from "./pages/userAccount/ShippingAddress";
+import Feedback from "./pages/userAccount/Feedback";
 
 function App() {
   return (
@@ -37,6 +41,10 @@ function App() {
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="Overview" element={<Overview />} />
             <Route path="message-center" element={<MessageCenter />} />
+            <Route path="order" element={<Order />} />
+            <Route path="saved-styles" element={<SavedStyles />} />
+            <Route path="shipping-address" element={<ShippingAddress />} />
+            <Route path="feedback" element={<Feedback />} />
           </Route>
 
           <Route path="/sign-in" element={<SignIn />} />

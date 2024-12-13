@@ -6,8 +6,12 @@ import ChangePassword from "./changePassword";
 import Measurements from "./Measurements";
 import Overview from "./Overview";
 import MessageCenter from "./MessageCenter";
+import Order from "./Order";
 import Footer from "../../components/footer";
 import logo from "../../assets/logos/logo.svg";
+import SavedStyles from "./SavedStyles";
+import ShippingAddress from "./ShippingAddress";
+import Feedback from "./Feedback";
 
 function UserAccount() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -45,10 +49,42 @@ function UserAccount() {
               </li>
               <li>
                 <Link
+                  to="measurements"
+                  className="block px-4 py-2 hover:bg-gray-700 rounded"
+                >
+                  Measurements
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="saved-styles"
+                  className="block px-4 py-2 hover:bg-gray-700 rounded"
+                >
+                  Saved Styles
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="message-center"
                   className="block px-4 py-2 hover:bg-gray-700 rounded"
                 >
                   Message Center
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="order"
+                  className="block px-4 py-2 hover:bg-gray-700 rounded"
+                >
+                  Order
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="shipping-address"
+                  className="block px-4 py-2 hover:bg-gray-700 rounded"
+                >
+                  Shipping Address
                 </Link>
               </li>
               <li>
@@ -61,10 +97,10 @@ function UserAccount() {
               </li>
               <li>
                 <Link
-                  to="measurements"
+                  to="feedback"
                   className="block px-4 py-2 hover:bg-gray-700 rounded"
                 >
-                  Measurements
+                  Feedback
                 </Link>
               </li>
             </ul>
@@ -80,6 +116,10 @@ function UserAccount() {
             <Route path="measurements" element={<Measurements />} />
             <Route path="overview" element={<Overview />} />
             <Route path="message-center" element={<MessageCenter />} />
+            <Route path="order" element={<Order />} />
+            <Route path="saved-styles" element={<SavedStyles />} />
+            <Route path="shipping-address" element={<ShippingAddress />} />
+            <Route path="feedback" element={<Feedback />} />
           </Routes>
         </div>
       </div>
