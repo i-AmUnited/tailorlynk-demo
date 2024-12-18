@@ -9,6 +9,7 @@ import TailorProfile from './pages/general pages/tailorProfile';
 import ErrorPage from './pages/errorPage';
 import ProductDetail from './pages/general pages/productPage';
 import Cart from './pages/general pages/cart';
+import AllProducts from './pages/general pages/Products';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="tailor-profile" element={<TailorProfile />} />
           <Route path="product-detail" element={<ProductDetail />} />
+          <Route path="all-products" element={<AllProducts />} />
           <Route path="cart" element={<Cart />} />
         </Route>
         <Route path="/sign-in" element={<SignIn />} />
