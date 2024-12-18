@@ -1,3 +1,4 @@
+
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Structure from "./pages/pageStructure";
@@ -53,6 +54,7 @@ function App() {
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
+
     </div>
   );
 }
