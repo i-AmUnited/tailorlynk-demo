@@ -22,7 +22,7 @@ function Overview() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-md shadow-md">
+    <div className="bg-white p-6 rounded-md shadow-md h-[100%]">
       <h2 className="text-xl font-bold mb-4">Overview</h2>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

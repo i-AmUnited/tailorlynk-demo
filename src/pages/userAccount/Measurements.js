@@ -27,7 +27,7 @@ function Measurements() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-md shadow-md">
+    <div className="bg-white p-6 rounded-md shadow-md h-full">
       <h2 className="text-xl font-bold mb-4">Measurements</h2>
       <p className="text-sm text-gray-600 mb-4">
         <span className="text-red-500 font-bold">*</span> For best results,

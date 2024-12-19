@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
-import AccountDetails from "./AccountDetails";
+import { Link, Route, Routes, NavLink } from "react-router-dom";
+import { HiMenuAlt4, HiOutlineX, HiArrowLeft } from "react-icons/hi";
 import SavedItems from "./savedItems";
 import ChangePassword from "./changePassword";
 import Measurements from "./Measurements";
@@ -12,105 +12,117 @@ import logo from "../../assets/logos/logo.svg";
 import SavedStyles from "./SavedStyles";
 import ShippingAddress from "./ShippingAddress";
 import Feedback from "./Feedback";
+import Navbar from "../../components/navbar";
+import navSidebar from "../../components/navSidebar";
+
+const SideLinks = [
+  { id: 1, url: "/user-account", text: "Overview" },
+  { id: 2, url: "/user-account/measurements", text: "Measurements" },
+  { id: 3, url: "/user-account/saved-styles", text: "Saved Styles" },
+  { id: 4, url: "/user-account/message-center", text: "Message Center" },
+  { id: 5, url: "/user-account/order", text: "Order" },
+  { id: 6, url: "/user-account/shipping-address", text: "Shipping Address" },
+  { id: 7, url: "/user-account/change-password", text: "Change Password" },
+  { id: 8, url: "/user-account/feedback", text: "Feedback" },
+];
 
 function UserAccount() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [mobileNav, setMobileNav] = useState(false);
+
+  const handleNavLinkClick = () => {
+    setMobileNav(false); // Close the sidebar when a link is clicked
+  };
 
   return (
     <div className="flex flex-col h-screen justify-between">
+      <div className="container mx-auto lg:px-20 px-5">
+        <Navbar />
+      </div>
+      {/* mobile nav icons */}
+      <button
+        className="lg:hidden flex self-end"
+        onClick={() => setMobileNav(!mobileNav)}
+      >
+        {mobileNav ? (
+          <HiOutlineX className="text-xl text-primary" />
+        ) : (
+          <HiMenuAlt4 className="text-xl text-primary" />
+        )}
+      </button>
+
       {/* Main content with sidebar and routes */}
-      <div className="flex flex-1">
+      <div className="flex flex-row gap-10 lg:px-20 px-5 mt-10">
         {/* Sidebar */}
         <div
-          className={`${
-            isSidebarOpen ? "w-64" : "w-36"
-          } bg-[#CB997E] text-white transition-all duration-300`}
+          // className={`${
+          //   isSidebarOpen ? "w-64" : "w-36"
+          // } bg-white text-white transition-all duration-300 p-2 shadow-md rounded-md  hidden lg:block`}
+          className="w-64 bg-white shadow-md rounded-md text-white hidden lg:block"
+          // className={` ${
+          //   mobileNav ? "left-0" : "-left-full"
+          // } fixed top-0 bottom-0 w-[60vw] lg:hidden transition-all bg-white shadow-md pt-10`}
         >
-          <div className="p-4">
+          <div className="">
             <Link to="/" className="text-lg font-bold hover:underline">
-              <img src={logo} alt="" className="h-12 md:h-14" />
+              {/* <img src={logo} alt="" className="h-12 md:h-14" /> */}
+              <p className="text-primary"> [Back to homepage] </p>
             </Link>
           </div>
-          <button
-            className="px-5 text-xl focus:outline-none text-white hover:text-white"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          >
-            {isSidebarOpen ? "close" : "open"}
-          </button>
+
           <nav className="mt-4">
-            <ul className="space-y-4">
-              <li>
-                <Link
-                  to="overview"
-                  className="block px-4 py-2 hover:bg-gray-700 rounded"
-                >
-                  Overview
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="measurements"
-                  className="block px-4 py-2 hover:bg-gray-700 rounded"
-                >
-                  Measurements
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="saved-styles"
-                  className="block px-4 py-2 hover:bg-gray-700 rounded"
-                >
-                  Saved Styles
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="message-center"
-                  className="block px-4 py-2 hover:bg-gray-700 rounded"
-                >
-                  Message Center
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="order"
-                  className="block px-4 py-2 hover:bg-gray-700 rounded"
-                >
-                  Order
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="shipping-address"
-                  className="block px-4 py-2 hover:bg-gray-700 rounded"
-                >
-                  Shipping Address
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="change-password"
-                  className="block px-4 py-2 hover:bg-gray-700 rounded"
-                >
-                  Change Password
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="feedback"
-                  className="block px-4 py-2 hover:bg-gray-700 rounded"
-                >
-                  Feedback
-                </Link>
-              </li>
+            <ul className="mt-4 space-y-3">
+              {SideLinks.map(({ id, url, text }) => (
+                <li key={id} className="hover:bg-gray-100 rounded-md">
+                  <NavLink
+                    to={url}
+                    onClick={handleNavLinkClick}
+                    className="block px-4 py-2 text-gray-700 hover:text-black"
+                  >
+                    {text}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        {/* nav sidebar */}
+        <div
+          className={` ${
+            mobileNav ? "left-0" : "-left-full"
+          } fixed top-0 bottom-0 w-[60vw] lg:hidden transition-all bg-white shadow-md pt-10`}
+        >
+          <div className="">
+            <Link to="/" className="text-lg font-bold hover:underline">
+              {/* <img src={logo} alt="" className="h-12 md:h-14" /> */}
+              <p className="text-primary"> [Back to homepage] </p>
+            </Link>
+          </div>
+
+          <nav className="mt-4">
+            <ul className="mt-4 space-y-3">
+              {SideLinks.map(({ id, url, text }) => (
+                <li key={id} className="hover:bg-gray-100 rounded-md">
+                  <NavLink
+                    to={url}
+                    onClick={handleNavLinkClick}
+                    className="block px-4 py-2 text-gray-700 hover:text-black"
+                  >
+                    {text}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>
 
         {/* Content */}
-        <div className="flex-1 bg-gray-100 p-8">
+        <div className="bg-gray-100 w-full">
           <Routes>
-            <Route path="details" element={<AccountDetails />} />
+            {/* Default route for /user-account */}
+            <Route index element={<Overview />} /> {/* Default to Overview */}
+            {/* Other routes */}
             <Route path="saved-items" element={<SavedItems />} />
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="measurements" element={<Measurements />} />
@@ -125,7 +137,9 @@ function UserAccount() {
       </div>
 
       {/* Footer */}
-      <Footer />
+      <div className="mt-20">
+        <Footer />
+      </div>
     </div>
   );
 }

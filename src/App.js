@@ -10,6 +10,7 @@ import ErrorPage from "./pages/errorPage";
 import ProductDetail from "./pages/general pages/productPage";
 import Cart from "./pages/general pages/cart";
 import UserAccount from "./pages/userAccount/userAccount";
+import NewAccount from "./pages/userAccount/newAccount";
 import AccountDetails from "./pages/userAccount/AccountDetails";
 import SavedItems from "./pages/userAccount/savedItems";
 import ChangePassword from "./pages/userAccount/changePassword";
@@ -35,11 +36,11 @@ function App() {
 
           {/* User Account Dashboard */}
           <Route path="/user-account" element={<UserAccount />}>
-            <Route path="details" element={<AccountDetails />} />
+            {/* Default Route for User Account */}
+            <Route index element={<Overview />} /> {/* Default child route */}
             <Route path="measurements" element={<Measurements />} />
             <Route path="saved-items" element={<SavedItems />} />
             <Route path="change-password" element={<ChangePassword />} />
-            <Route path="Overview" element={<Overview />} />
             <Route path="message-center" element={<MessageCenter />} />
             <Route path="order" element={<Order />} />
             <Route path="saved-styles" element={<SavedStyles />} />
