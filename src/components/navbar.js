@@ -8,7 +8,6 @@ import profile from "../assets/icons/profile.svg";
 import receipt from "../assets/icons/receipt.svg";
 import signout from "../assets/icons/signout.svg";
 import message from "../assets/icons/message.svg";
-import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
