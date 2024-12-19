@@ -4,6 +4,7 @@ import Input from "../../components/input";
 import SelectInput from "../../components/select";
 import remove from "../../assets/icons/trash.svg";
 import info from "../../assets/icons/info.svg";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const serviceType = [
@@ -17,9 +18,9 @@ const Cart = () => {
             <div className="bg-white border rounded-md overflow-hidden">
               <div className="flex items-center justify-between bg-white px-4 py-6 border-b">
                 <div className="font-bold secondary-font">My cart</div>
-                <div className="text-xs text-primary font-semibold underline underline-offset-2 cursor-pointer">
+                <Link to={"/all-products"} className="text-xs text-primary font-semibold underline underline-offset-2 cursor-pointer">
                   Continue shopping
-                </div>
+                </Link>
               </div>
               <div className="p-4">
                 <div className="grid md:flex gap-4 pb-4 border-b last:pb-0 mb-4">

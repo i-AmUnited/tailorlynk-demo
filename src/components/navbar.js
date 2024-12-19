@@ -8,6 +8,7 @@ import profile from "../assets/icons/profile.svg";
 import receipt from "../assets/icons/receipt.svg";
 import signout from "../assets/icons/signout.svg";
 import message from "../assets/icons/message.svg";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -33,9 +34,9 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-between items-end py-4 border-b border-b-[#c4c4c432] relative">
-      <div>
+      <Link to={"/"}>
         <img src={logo} alt="Logo" className="h-12 md:h-14" />
-      </div>
+      </Link>
 
       <div className="border rounded py-2 flex items-center divide-x">
         <div
