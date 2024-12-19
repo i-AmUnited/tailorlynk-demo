@@ -143,17 +143,57 @@ const TailorProfile = () => {
             Orders are typically ready and shipped within 7 days
           </div>
         </div>
-        <div className="mb-10">
-          <div className="font-bold secondary-font mb-4">Catalogue:</div>
-          <VendorCatalogue />
-        </div>
-        <div className="bg-white border rounded-md p-4 flex items-center gap-6">
-          <img src={chat} alt="" className="size-12" />
-          <div className="text-xs text-pretty leading-5">
-            Can’t find a style that you like? Share your idea with the tailor.{" "}
-            <span className="text-primary underline font-medium">
-              Start chat
-            </span>
+        <div className="lg:col-span-3">
+          <div className="bg-white border rounded-md p-4 flex items-center gap-4 mb-4">
+            <div>
+              <div className="flex items-center justify-center size-12 bg-primary/20 rounded-full text-xs font-bold text-primary">
+                4.8
+              </div>
+            </div>
+            <div className="text-xs text-pretty leading-5 font-semibold">
+              Average rating{" "}
+              <span className="text-black/50 font-normal">(32 reviews)</span>
+            </div>
+          </div>
+          <div className="bg-white border rounded-md overflow-hidden mb-4">
+            <div className="flex items-center justify-between bg-white px-4 py-6 border-b">
+              <div className="font-bold secondary-font">Reviews</div>
+              <div
+                className="text-xs text-primary font-semibold underline underline-offset-2 cursor-pointer"
+                onClick={() => setReportModal(true)}
+              >
+                Write a review
+              </div>
+            </div>
+            <div className="px-4 max-h-[400px] overflow-y-scroll border-y-[12px] border-white">
+              {reviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="grid gap-1 content-between py-4 border-b last:border-none"
+                >
+                  <div className="flex justify-between items-center">
+                    <div className="font-semibold">
+                      {review.name}{" "}
+                      <span className="text-primary">({review.rating})</span>
+                    </div>
+                    <div>{review.date}</div>
+                  </div>
+                  <div className="text-gray-500 text-xs">{review.review}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-white border rounded-md overflow-hidden mb-4">
+            <div className="bg-white px-4 py-6 border-b font-bold secondary-font">
+              Report tailor
+            </div>
+            <div className="bg-white p-4 grid gap-6">
+              <SelectInput label={"Select a reason"} options={reportReasons} />
+              <Button
+                buttonText={"Report"}
+                otherStyles={"bg-red-500 text-white"}
+              />
+            </div>
           </div>
         </div>
       </div>
