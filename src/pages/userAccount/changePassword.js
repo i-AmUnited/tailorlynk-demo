@@ -16,7 +16,7 @@ function ChangePassword() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 h-full">
       <h2 className="text-xl font-semibold mb-4">Change Password</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

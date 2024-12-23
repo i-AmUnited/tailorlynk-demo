@@ -177,7 +177,6 @@ const TailorProfile = () => {
               onClick={() => setReportModal(true)}
             >
               Write a review
-
             </div>
           </div>
           <div className="px-4 max-h-[400px] overflow-y-scroll border-y-[12px] border-white">

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import logo from "../assets/logos/logo.svg";
 import cart from "../assets/icons/cart.svg";
 import arrow from "../assets/icons/arrow.svg";
@@ -7,8 +8,6 @@ import profile from "../assets/icons/profile.svg";
 import receipt from "../assets/icons/receipt.svg";
 import signout from "../assets/icons/signout.svg";
 import message from "../assets/icons/message.svg";
-import { Link } from "react-router-dom";
-
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -50,10 +49,13 @@ const Navbar = () => {
           {showDropdown && (
             <div className="absolute top-full mt-2 right-0 min-w-44 max-w-56 bg-white shadow-lg border rounded-lg z-10 font-medium">
               <ul className="p-2 truncate">
-                <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                  <img src={profile} alt="Arrow" className="h-[18px]" />
-                  <span className="truncate">My account</span>
-                </li>
+                <Link to="/user-account">
+                  <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                    <img src={profile} alt="Arrow" className="h-[18px]" />
+                    <span className="truncate">My account</span>
+                  </li>
+                </Link>
+
                 <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
                   <img src={message} alt="Arrow" className="h-[18px]" />
                   <span className="truncate">Messages</span>
