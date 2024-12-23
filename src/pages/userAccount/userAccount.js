@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Route, Routes, NavLink } from "react-router-dom";
-import { HiMenuAlt4, HiOutlineX, HiArrowLeft } from "react-icons/hi";
+import { HiMenuAlt4, HiOutlineX } from "react-icons/hi";
 import SavedItems from "./savedItems";
 import ChangePassword from "./changePassword";
 import Measurements from "./Measurements";
@@ -8,12 +8,10 @@ import Overview from "./Overview";
 import MessageCenter from "./MessageCenter";
 import Order from "./Order";
 import Footer from "../../components/footer";
-import logo from "../../assets/logos/logo.svg";
 import SavedStyles from "./SavedStyles";
 import ShippingAddress from "./ShippingAddress";
 import Feedback from "./Feedback";
 import Navbar from "../../components/navbar";
-import navSidebar from "../../components/navSidebar";
 
 const SideLinks = [
   { id: 1, url: "/user-account", text: "Overview" },
@@ -27,7 +25,6 @@ const SideLinks = [
 ];
 
 function UserAccount() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
 
   const handleNavLinkClick = () => {
@@ -54,18 +51,9 @@ function UserAccount() {
       {/* Main content with sidebar and routes */}
       <div className="flex flex-row gap-10 lg:px-20 px-5 mt-10">
         {/* Sidebar */}
-        <div
-          // className={`${
-          //   isSidebarOpen ? "w-64" : "w-36"
-          // } bg-white text-white transition-all duration-300 p-2 shadow-md rounded-md  hidden lg:block`}
-          className="w-64 bg-white shadow-md rounded-md text-white hidden lg:block"
-          // className={` ${
-          //   mobileNav ? "left-0" : "-left-full"
-          // } fixed top-0 bottom-0 w-[60vw] lg:hidden transition-all bg-white shadow-md pt-10`}
-        >
+        <div className="w-64 bg-white shadow-md rounded-md text-white hidden lg:block">
           <div className="">
             <Link to="/" className="text-lg font-bold hover:underline">
-              {/* <img src={logo} alt="" className="h-12 md:h-14" /> */}
               <p className="text-primary"> [Back to homepage] </p>
             </Link>
           </div>
@@ -95,7 +83,6 @@ function UserAccount() {
         >
           <div className="">
             <Link to="/" className="text-lg font-bold hover:underline">
-              {/* <img src={logo} alt="" className="h-12 md:h-14" /> */}
               <p className="text-primary"> [Back to homepage] </p>
             </Link>
           </div>
