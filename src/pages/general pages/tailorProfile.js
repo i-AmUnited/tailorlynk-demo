@@ -6,6 +6,9 @@ import SelectInput from "../../components/select";
 import Button from "../../components/button";
 import { useState } from "react";
 import Modal from "../../components/modal";
+import { Route, Routes } from "react-router-dom";
+import Home from "./homePage";
+import Cart from "./cart";
 
 const TailorProfile = () => {
   const img1 =

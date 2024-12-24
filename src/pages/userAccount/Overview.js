@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Input from "../../components/input";
+import SelectInput from "../../components/select";
+import Button from "../../components/button";
 
 function Overview() {
   const [formData, setFormData] = useState({
@@ -22,23 +25,18 @@ function Overview() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-md shadow-md h-[100%]">
-      <h2 className="text-xl font-bold mb-4">Overview</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div>
-            <label htmlFor="fullName" className="block font-medium mb-1">
-              Your full name:
-            </label>
-            <input
-              type="text"
-              id="fullName"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-            />
-          </div>
+    <div className="">
+      <div className="px-4 py-6 border-b font-bold secondary-font">Overview</div>
+      <form onSubmit={handleSubmit} className="px-4 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Input 
+            label={"Your full name"} 
+            type="text"
+            id="fullName"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleChange}
+          />
           <div>
             <label htmlFor="email" className="block font-medium mb-1">
               Email address:
@@ -83,13 +81,8 @@ function Overview() {
             </select>
           </div>
         </div>
-        <div className="mt-4">
-          <button
-            type="submit"
-            className="px-6 py-2 bg-indigo-500 text-white font-medium rounded-md hover:bg-indigo-600"
-          >
-            Save
-          </button>
+        <div className="mt-6">
+          <Button buttonRole={"submit"} buttonText={"Save details"} otherStyles={"bg-primary text-white"}/>
         </div>
       </form>
     </div>

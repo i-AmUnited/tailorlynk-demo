@@ -1,22 +1,25 @@
 import React, { useState } from "react";
+import arrow from "../../assets/icons/arrow.svg";
+import Modal from "../../components/modal";
 
 const Orders = () => {
+  
+  const [orderStatusModal, setOrderStatusModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 2;
+  const productsPerPage = 4;
 
-  // Sample orders data
   const orders = [
     {
       id: 1,
-      title: "Traditional agbada with Kampala material - 5",
+      title: "Traditional agbada with Kampala material - 1",
       tailor: "Agbada specialist",
-      cost: "25,000 naira",
+      cost: "25,000,000 naira",
       date: "33 Jan, 2024",
       status: "Shipped",
     },
     {
       id: 2,
-      title: "Traditional agbada with Kampala material - 5",
+      title: "Traditional agbada with Kampala material - 2",
       tailor: "Agbada specialist",
       cost: "25,000 naira",
       date: "33 Jan, 2024",
@@ -24,7 +27,7 @@ const Orders = () => {
     },
     {
       id: 3,
-      title: "Quality linen material - 1",
+      title: "Quality linen material - 3",
       vendor: "FabricsNG",
       cost: "25,000 naira",
       date: "25 Feb, 2024",
@@ -75,10 +78,8 @@ const Orders = () => {
     },
   ];
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(orders.length / productsPerPage);
 
-  // Get products for the current page
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentOrders = orders.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -97,85 +98,94 @@ const Orders = () => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-md shadow-md">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Orders</h2>
-
-      {/* Orders List */}
-      {currentOrders.map((order) => (
-        <div key={order.id} className="border-b pb-6 mb-6">
-          <div className="flex items-start space-x-4">
-            <img
-              src="https://images.unsplash.com/photo-1661332530594-cdebec770a38?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="order-img"
-              className="w-16 h-16 rounded-md object-cover"
-            />
-            <div className="flex-1">
-              <h3 className="font-semibold text-lg text-gray-800">
-                {order.title}
-              </h3>
-              <p className="text-sm text-gray-500">
-                <span className="font-medium">Vendor/Tailor: </span>
-                {order.tailor || order.vendor}
-              </p>
-              <p className="text-sm text-gray-500">
-                <span className="font-medium">Cost: </span>
-                {order.cost}
-              </p>
-              <p className="text-sm text-gray-500">
-                <span className="font-medium">Date: </span>
-                {order.date}
-              </p>
+    <div className="">
+      <div className="px-4 py-6 border-b font-bold secondary-font">Orders</div>
+      <div className="px-4 py-6 grid gap-4">
+        {/* Orders List */}
+        {currentOrders.map((order) => (
+          <div key={order.id} className="border-b pb-4">
+            <div className="flex items-start gap-4">
+              <img
+                src="https://images.unsplash.com/photo-1661332530594-cdebec770a38?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="order-img"
+                className="size-16 rounded-md object-cover"
+              />
+              <div className="grid w-full gap-4">
+                <div className="flex items-center justify-between">
+                  <div className="font-semibold">{order.title}</div>
+                  <div className="text-primary text-xs">[View item]</div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                  <p className="grid">
+                    <span className="font-medium">Vendor/Tailor: </span>
+                    <span className="text-primary">
+                      {order.tailor || order.vendor}
+                    </span>
+                  </p>
+                  <p className=" grid">
+                    <span className="font-medium">Cost: </span>
+                    <span>{order.cost}</span>
+                  </p>
+                  <p className="grid">
+                    <span className="font-medium">Date: </span>
+                    <span>{order.date}</span>
+                  </p>
+                </div>
+                <div className="flex gap-2 items-center text-xs text-black/50 cursor-pointer" onClick={() => setOrderStatusModal(true)}>
+                  <span>Order status:</span>
+                  <span>Work in progress</span>
+                  <img alt="" src={arrow} className="-rotate-90 h-5" />
+                </div>
+                {
+                  orderStatusModal &&
+                  <div>
+                    {order.title}
+                  </div>
+                }
+              </div>
             </div>
+            {/* Order status */}
+            {order.delivered && (
+              <div className="mt-4 text-sm text-gray-600">
+                <span className="flex items-center">
+                  <span className="mr-2">ℹ️</span>
+                  Your order has been delivered.{" "}
+                  <a href="#" className="text-[#CB997E] underline ml-1">
+                    Write a review
+                  </a>
+                </span>
+              </div>
+            )}
           </div>
-          {/* Order status */}
-          <div className="mt-4 flex justify-between items-center text-sm text-[#CB997E]">
-            <span>Order received</span>
-            <span>Work in progress</span>
-            <span>Work completed</span>
-            <span>Shipped</span>
-          </div>
-
-          {order.delivered && (
-            <div className="mt-4 text-sm text-gray-600">
-              <span className="flex items-center">
-                <span className="mr-2">ℹ️</span>
-                Your order has been delivered.{" "}
-                <a href="#" className="text-[#CB997E] underline ml-1">
-                  Write a review
-                </a>
-              </span>
-            </div>
-          )}
+        ))}
+        {/* Pagination */}
+        <div className="flex items-center justify-center mt-6">
+          <button
+            onClick={goToPrevPage}
+            disabled={currentPage === 1}
+            className={`px-3 py-1 mx-1 rounded ${
+              currentPage === 1
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-[#CB997E] text-white hover:bg-[#B5838D]"
+            }`}
+          >
+            Prev
+          </button>
+          <span className="text-gray-700 mx-2">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className={`px-3 py-1 mx-1 rounded ${
+              currentPage === totalPages
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-[#CB997E] text-white hover:bg-[#B5838D]"
+            }`}
+          >
+            Next
+          </button>
         </div>
-      ))}
-
-      {/* Pagination */}
-      <div className="flex items-center justify-center mt-6">
-        <button
-          onClick={goToPrevPage}
-          disabled={currentPage === 1}
-          className={`px-3 py-1 mx-1 rounded ${
-            currentPage === 1
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-[#CB997E] text-white hover:bg-[#B5838D]"
-          }`}
-        >
-          Prev
-        </button>
-        <span className="text-gray-700 mx-2">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={goToNextPage}
-          disabled={currentPage === totalPages}
-          className={`px-3 py-1 mx-1 rounded ${
-            currentPage === totalPages
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-[#CB997E] text-white hover:bg-[#B5838D]"
-          }`}
-        >
-          Next
-        </button>
       </div>
     </div>
   );

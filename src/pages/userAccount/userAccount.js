@@ -7,16 +7,15 @@ import Measurements from "./Measurements";
 import Overview from "./Overview";
 import MessageCenter from "./MessageCenter";
 import Order from "./Order";
-import Footer from "../../components/footer";
 import SavedStyles from "./SavedStyles";
 import ShippingAddress from "./ShippingAddress";
 import Feedback from "./Feedback";
-import Navbar from "../../components/navbar";
+import ErrorPage from "../errorPage";
 
 const SideLinks = [
   { id: 1, url: "/user-account", text: "Overview" },
   { id: 2, url: "/user-account/measurements", text: "Measurements" },
-  { id: 3, url: "/user-account/saved-styles", text: "Saved Styles" },
+  { id: 3, url: "/user-account/saved-styles", text: "Saved items" },
   { id: 4, url: "/user-account/message-center", text: "Message Center" },
   { id: 5, url: "/user-account/order", text: "Order" },
   { id: 6, url: "/user-account/shipping-address", text: "Shipping Address" },
@@ -32,10 +31,7 @@ function UserAccount() {
   };
 
   return (
-    <div className="flex flex-col h-screen justify-between">
-      <div className="container mx-auto lg:px-20 px-5">
-        <Navbar />
-      </div>
+    <div className="">
       {/* mobile nav icons */}
       <button
         className="lg:hidden flex self-end"
@@ -49,23 +45,28 @@ function UserAccount() {
       </button>
 
       {/* Main content with sidebar and routes */}
-      <div className="flex flex-row gap-10 lg:px-20 px-5 mt-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Sidebar */}
-        <div className="w-64 bg-white shadow-md rounded-md text-white hidden lg:block">
-          <div className="">
-            <Link to="/" className="text-lg font-bold hover:underline">
+        <div className="lg:col-span-3 bg-white border rounded-md hidden lg:block h-fit">
+          <div className="px-4 py-6 border-b">
+            <Link to="/" className="font-semibold">
               <p className="text-primary"> [Back to homepage] </p>
             </Link>
           </div>
 
-          <nav className="mt-4">
-            <ul className="mt-4 space-y-3">
+          <nav className="">
+            <ul className="px-4 py-5 grid gap-5">
               {SideLinks.map(({ id, url, text }) => (
-                <li key={id} className="hover:bg-gray-100 rounded-md">
+                <li key={id} className="">
                   <NavLink
                     to={url}
+                    end={url === "/user-account"}
                     onClick={handleNavLinkClick}
-                    className="block px-4 py-2 text-gray-700 hover:text-black"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-black font-semibold"
+                        : "text-gray-400"
+                    }
                   >
                     {text}
                   </NavLink>
@@ -82,7 +83,7 @@ function UserAccount() {
           } fixed top-0 bottom-0 w-[60vw] lg:hidden transition-all bg-white shadow-md pt-10`}
         >
           <div className="">
-            <Link to="/" className="text-lg font-bold hover:underline">
+            <Link to="/" className="font-bold">
               <p className="text-primary"> [Back to homepage] </p>
             </Link>
           </div>
@@ -105,11 +106,9 @@ function UserAccount() {
         </div>
 
         {/* Content */}
-        <div className="bg-gray-100 w-full">
+        <div className="w-full bg-white border rounded-md lg:col-span-9">
           <Routes>
-            {/* Default route for /user-account */}
-            <Route index element={<Overview />} /> {/* Default to Overview */}
-            {/* Other routes */}
+            <Route index element={<Overview />} />
             <Route path="saved-items" element={<SavedItems />} />
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="measurements" element={<Measurements />} />
@@ -119,13 +118,9 @@ function UserAccount() {
             <Route path="saved-styles" element={<SavedStyles />} />
             <Route path="shipping-address" element={<ShippingAddress />} />
             <Route path="feedback" element={<Feedback />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className="mt-20">
-        <Footer />
       </div>
     </div>
   );
