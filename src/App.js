@@ -1,4 +1,3 @@
-
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Structure from "./pages/pageStructure";
@@ -28,34 +27,13 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Structure />}>
-            <Route index element={<Home />} />
-            <Route path="tailor-profile" element={<TailorProfile />} />
-            <Route path="product-detail" element={<ProductDetail />} />
-            <Route path="cart" element={<Cart />} />
-          </Route>
-
-          {/* User Account Dashboard */}
-          <Route path="/user-account" element={<UserAccount />}>
-            {/* Default Route for User Account */}
-            <Route index element={<Overview />} /> {/* Default child route */}
-            <Route path="measurements" element={<Measurements />} />
-            <Route path="saved-items" element={<SavedItems />} />
-            <Route path="change-password" element={<ChangePassword />} />
-            <Route path="message-center" element={<MessageCenter />} />
-            <Route path="order" element={<Order />} />
-            <Route path="saved-styles" element={<SavedStyles />} />
-            <Route path="shipping-address" element={<ShippingAddress />} />
-            <Route path="feedback" element={<Feedback />} />
-          </Route>
-
+          <Route path="/*" element={<Structure />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<CreateAccount />} />
           <Route path="/forgot-password" element={<ResetPassword />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
-
     </div>
   );
 }

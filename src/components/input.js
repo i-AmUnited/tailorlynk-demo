@@ -3,7 +3,7 @@ import showPasswordIcon from "../assets/icons/eye.svg"
 import hidePasswordIcon from "../assets/icons/eyeShut.svg"
 import searchIcon from "../assets/icons/search.svg"
 
-const Input = ({label, type, placeholder, value, name, readOnly, disabled, customStyles, onChange, onBlur, onError, isPassword, isSearch}) => {
+const Input = ({label, type, placeholder, value, id, name, readOnly, disabled, customStyles, onChange, onBlur, onError, isPassword, isSearch}) => {
   const [inputType, setInputType] = useState(type);
 
   const togglePassword = () => {
@@ -30,7 +30,7 @@ const Input = ({label, type, placeholder, value, name, readOnly, disabled, custo
                 </div> :
                 null
               }
-              <div><input type={inputType} readOnly={readOnly} disabled={disabled} onChange={onChange} placeholder={placeholder} value={value} name={name} onBlur={onBlur} className={`w-full px-4 py-5 md:py-4 border text-sm placeholder:text-[12px] focus:outline focus:outline-primary rounded-md ${customStyles}`}/></div>
+              <div><input type={inputType} id={id} readOnly={readOnly} disabled={disabled} onChange={onChange} placeholder={placeholder} value={value} name={name} onBlur={onBlur} className={`w-full px-4 py-5 md:py-4 border text-sm placeholder:text-[12px] focus:outline focus:outline-primary rounded-md ${customStyles}`}/></div>
             </div>
           </div>
           <span className="text-red-500 text-xs">{onError}</span>
