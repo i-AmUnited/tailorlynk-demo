@@ -6,10 +6,10 @@ const ProductCard = ({vendorName, vendorLocation, cardScrolls}) => {
         <div className="grid gap-2">
           <div className={`${cardScrolls === "true" ? "w-64 lg:w-full h-[150px]" : "w-full h-[250px] md:h-[150px]"}  rounded-lg overflow-hidden relative`}>
              <img src={img1} alt="" className="h-full w-full object-cover"/>
-             <div className={`${cardScrolls === "true" ? "w-64 lg:w-full h-[150px]" : "w-full h-[250px] md:h-[150px]"} absolute top-0 flex justify-end items-end p-4`}>
+             <div className={`${cardScrolls === "true" ? "w-64 lg:w-full h-[150px]" : "w-full h-[250px] md:h-[150px]"} absolute top-0 flex justify-end items-end p-2 hover:bg-black/10 transition-all cursor-pointer`}>
               <div className="p-2 rounded-md bg-white/5 backdrop-blur-md flex items-center gap-1 text-white">
-                <img src={starIcon} alt="" className="h-4"/>
-                <span className="font-bold text-[12px] mt-[2px]">3.9</span>
+                <img src={starIcon} alt="" className="h-3"/>
+                <span className="font-semibold text-xs mt-[2px]">3.9</span>
               </div>
              </div>
           </div>

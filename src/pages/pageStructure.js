@@ -6,6 +6,7 @@ import TailorProfile from "./general pages/tailorProfile";
 import ProductDetail from "./general pages/productPage";
 import Cart from "./general pages/cart";
 import UserAccount from "./userAccount/userAccount";
+import AllProducts from "./general pages/Products";
 
 const Structure = () => {
   return (
@@ -15,6 +16,7 @@ const Structure = () => {
         <Routes >
         <Route index element={<Home />} />
             <Route path="tailor-profile" element={<TailorProfile />} />
+            <Route path="all-products" element={<AllProducts />} />
             <Route path="product-detail" element={<ProductDetail />} />
             <Route path="cart" element={<Cart />} />
             <Route path="user-account/*" element={<UserAccount />} />

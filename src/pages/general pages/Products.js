@@ -1,8 +1,8 @@
+import { useState } from "react";
 import Back from "../../components/goBack";
 import filterIcon from "../../assets/icons/filter.svg";
 import Input from "../../components/input";
 import ProductCard from "../../components/productCard";
-import { useState } from "react";
 import arrow from "../../assets/icons/arrow.svg";
 
 const AllProducts = () => {
@@ -34,14 +34,22 @@ const AllProducts = () => {
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const itemsPerPage = 12;
+
+  // Filter products based on search query
+  const filteredProducts = products.filter(
+    (product) =>
+      product.vendorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.vendorLocation.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
 
-  const currentProducts = products.slice(startIndex, endIndex);
-
-  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   const goToNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -60,35 +68,46 @@ const AllProducts = () => {
           </div>
           <div className="text-sm font-semibold">
             Tailors -{" "}
-            <span className="text-[#c4c4c4] font-semibold text-xs">(41)</span>
+            <span className="text-black/60 font-medium text-xs">
+              [{searchQuery ? filteredProducts.length : products.length}]
+            </span>
           </div>
         </div>
         <div className="grid md:flex gap-2 md:gap-4 items-center">
           <div>
             <Input
-              placeholder={"Search..."}
-              type={"search"}
-              customStyles={"w-full"}
-              isSearch={"true"}
+              placeholder="Search..."
+              type="search"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1); // Reset to page 1 when searching
+              }}
+              customStyles="w-full"
+              isSearch="true"
             />
           </div>
-          <div className="flex items-center gap-4 px-6 py-5 md:py-4 w-fit justify-self-end border bg-white rounded-md">
+          <div className="flex items-center gap-4 px-6 py-5 md:py-4 w-fit justify-self-end border cursor-pointer hover:border-primary transition-all bg-white rounded-md">
             <img src={filterIcon} alt="filter" className="h-4" />
             <span className="text-primary">Filter</span>
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {currentProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            vendorName={product.vendorName}
-            vendorLocation={product.vendorLocation}
-          />
-        ))}
-      </div>
+      {filteredProducts.length === 0 ? (
+        <div>No vendor matches your search result.</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {currentProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              vendorName={product.vendorName}
+              vendorLocation={product.vendorLocation}
+            />
+          ))}
+        </div>
+      )}
       {/* Pagination */}
-      <div className="flex items-center gap-2 mt-6 text-xs">
+      <div className={`${filteredProducts.length === 0 ? "hidden" : ""} flex items-center gap-2 mt-6 text-xs`}>
         <button
           onClick={goToPreviousPage}
           disabled={currentPage === 1}
