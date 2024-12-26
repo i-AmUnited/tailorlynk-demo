@@ -30,7 +30,7 @@ const Input = ({label, type, placeholder, value, id, name, readOnly, disabled, c
                 </div> :
                 null
               }
-              <div><input type={inputType} id={id} readOnly={readOnly} disabled={disabled} onChange={onChange} placeholder={placeholder} value={value} name={name} onBlur={onBlur} className={`w-full px-4 py-5 md:py-4 border text-sm placeholder:text-[12px] focus:outline focus:outline-primary rounded-md ${customStyles}`}/></div>
+              <div><input type={inputType} id={id} readOnly={readOnly} disabled={disabled} onChange={onChange} placeholder={placeholder} value={value} name={name} onBlur={onBlur} className={`w-full px-4 py-5 md:py-4 border text-sm placeholder:text-[12px] focus:outline-0 focus:border-primary rounded-md ${customStyles}`}/></div>
             </div>
           </div>
           <span className="text-red-500 text-xs">{onError}</span>

@@ -4,6 +4,8 @@ import gramIcon from "../../assets/icons/instagram.svg";
 import EducationalResources from "./General pages components/educationalResources";
 import Accordion from "../../components/faq";
 import Carousel from "./General pages components/homePageCarousel";
+import tailorImage from "../../assets/images/tailorImage.jpg";
+import vendorImage from "../../assets/images/vendorImage.jpg";
 
 const Home = () => {
   const img1 = "https://plus.unsplash.com/premium_photo-1670871853624-87056a19a28f?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -12,12 +14,12 @@ const Home = () => {
       <div className="grid gap-14">
         <Carousel />
         <RecommendedVendors />
-        {/* Register */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-center">
+        {/* Register as a tailor */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-16 items-center">
           <div className="md:col-span-2 flex justify-center text-center lg:text-start">
             <div className="grid gap-10">
               <div>
-                <p className="font-bold text-lg secondary-font mb-2">Register as a vendor!</p>
+                <p className="font-bold text-[14px] secondary-font mb-2">Register as a tailor!</p>
                 <p>
                   Embrace the opportunity to showcase your skills and connect
                   with clients
@@ -28,7 +30,28 @@ const Home = () => {
           </div>
           <div className="md:col-span-3 mt-6 md:mt-0">
             <div className="w-full aspect-video rounded-md overflow-hidden h-[300px]">
-              <img src={img1} alt="" />
+              <img src={tailorImage} alt="" className="object-cover h-[300px]"/>
+            </div>
+          </div>
+        </div>
+        <RecommendedVendors />
+        {/* Register as a vendor */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-16 items-center">
+          <div className="md:col-span-3 mt-6 md:mt-0">
+            <div className="w-full aspect-video rounded-md overflow-hidden h-[300px]">
+              <img src={vendorImage} alt="" className="object-cover w-full h-[300px]" />
+            </div>
+          </div>
+          <div className="md:col-span-2 flex justify-center text-center lg:text-start">
+            <div className="grid gap-10">
+              <div>
+                <p className="font-bold text-[14px] secondary-font mb-2">Sell clothing materials</p>
+                <p>
+                  Embrace the opportunity to showcase your skills and connect
+                  with clients
+                </p>
+              </div>
+              <Button buttonRole={"link"} destination={"/sign-in"} buttonText={"Get started"} otherStyles={"bg-primary text-white"}/>
             </div>
           </div>
         </div>
