@@ -13,3 +13,26 @@ body {
   font-style: normal;
   font-optical-sizing: auto;
 }
+
+/* CUSTOM SCROLLBAR */
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #b7b7a440;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #CB997E80;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #CB997E;
+}
