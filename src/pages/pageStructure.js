@@ -15,7 +15,7 @@ const Structure = () => {
         <Navbar />
         <Routes >
         <Route index element={<Home />} />
-            <Route path="tailor-profile" element={<TailorProfile />} />
+            <Route path="tailor-profile/:vendorID" element={<TailorProfile />} />
             <Route path="all-products" element={<AllProducts />} />
             <Route path="product-detail" element={<ProductDetail />} />
             <Route path="cart" element={<Cart />} />

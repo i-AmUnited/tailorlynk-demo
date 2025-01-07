@@ -55,18 +55,24 @@ const Navbar = () => {
                   </li>
                 </Link>
 
-                <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                  <img src={message} alt="Arrow" className="h-[18px]" />
-                  <span className="truncate">Messages</span>
-                </li>
-                <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                  <img src={receipt} alt="Arrow" className="h-[18px]" />
-                  <span className="truncate">Orders</span>
-                </li>
-                <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                  <img src={bookmark} alt="Arrow" className="h-[18px]" />
-                  <span className="truncate">Saved styles</span>
-                </li>
+                <Link to="/user-account/message-center">
+                  <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                    <img src={message} alt="Arrow" className="h-[18px]" />
+                    <span className="truncate">Messages</span>
+                  </li>
+                </Link>
+                <Link to="user-account/order">
+                  <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                    <img src={receipt} alt="Arrow" className="h-[18px]" />
+                    <span className="truncate">Orders</span>
+                  </li>
+                </Link>
+                <Link to="/user-account/saved-styles">
+                  <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                    <img src={bookmark} alt="Arrow" className="h-[18px]" />
+                    <span className="truncate">Saved styles</span>
+                  </li>
+                </Link>
                 <li className="p-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer flex items-center gap-2 truncate">
                   <img src={signout} alt="Arrow" className="h-[18px]" />
                   <span className="truncate">Signout</span>

@@ -3,23 +3,60 @@ import logo from "../../assets/logos/logo.svg";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import { useState } from "react";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import { userAccountRegistration, verifyUserEmail } from "../../hooks/local/reducer";
 
 const CreateAccount = () => {
   const [provideEmail, setProvideEmail] = useState(true);
   const [verifyEmail, setVerifyEmail] = useState(false);
   const [completeSetup, setCompleteSetup] = useState(false);
 
-  const showVerifyEmail = () => {
-    setProvideEmail(false);
-    setVerifyEmail(true);
-    setCompleteSetup(false);
-  };
+  const dispatch = useDispatch();
 
-  const showCompleteSetup = () => {
-    setProvideEmail(false);
-    setVerifyEmail(false);
-    setCompleteSetup(true);
-  };
+  const provideEmailForm = useFormik({
+    initialValues:{
+      email: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required("Please provide an email address")
+        .email("Please enter a valid email address"),
+    }),
+    onSubmit: async(values) => {
+      const {email} = values; 
+      let emailData = {emailAddress:email};
+      const {payload} = await dispatch(userAccountRegistration(emailData));
+      if(payload.statusCode === 200) {
+        setProvideEmail(false);
+        setVerifyEmail(true);
+        setCompleteSetup(false);
+        console.log("Email sent!")
+      }
+    }
+    })
+
+    const verifyEmailForm = useFormik({
+      initialValues:{
+        code: "",
+        email: "",
+      },
+      validationSchema: Yup.object({
+        code: Yup.string()
+          .required("Please provide your verification code")
+      }),
+      onSubmit: async(values) => {
+        const {email, code} = values; 
+        let verificationData = {emailAddress:email, code};
+        const {payload} = await dispatch(verifyUserEmail(verificationData));
+        if(payload.statusCode === 200) {
+          setProvideEmail(false);
+          setVerifyEmail(false);
+          setCompleteSetup(true);
+        }
+      }
+      })
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
@@ -33,7 +70,7 @@ const CreateAccount = () => {
         <div className="bg-white rounded-lg border px-5 py-14">
           {/* Provide email address */}
           {provideEmail && 
-          <div>
+          <form onSubmit={provideEmailForm.handleSubmit}>
             <div className="flex justify-between items-center mb-10">
               <div className="font-bold text-primary">Create an account</div>
               <Link
@@ -44,7 +81,15 @@ const CreateAccount = () => {
               </Link>
             </div>
             <div className="grid gap-4">
-              <Input label={"Email address:"} />
+              <Input
+                label={"Email address:"}
+                name={"email"}
+                value={provideEmailForm.values.email}
+                onChange={provideEmailForm.handleChange}
+                onBlur={provideEmailForm.handleBlur}
+                onError={
+                provideEmailForm.touched.email && provideEmailForm.errors.email ? provideEmailForm.errors.email : null}
+              />
               <div className="text-center text-xs text-brandGreen">
                 Please make sure you are providing a valid email address. We’ll
                 send an email verification code to complete your account creation.
@@ -52,18 +97,16 @@ const CreateAccount = () => {
             </div>
             <div className="mt-6 flex justify-center">
               <Button
-                buttonRole={"custom"}
-                onClick={showVerifyEmail}
                 buttonText={"Verify email address"}
                 otherStyles={"bg-primary text-white"}
               />
             </div>
-          </div>
+          </form>
           }
 
           {/* Verify email address */}
           {verifyEmail &&
-          <div>
+          <form onSubmit={verifyEmailForm.handleSubmit}>
             <div className="flex justify-between items-center mb-2">
               <div className="font-bold text-primary">Verify email address</div>
               <Link to={"/sign-in"} className="text-red-500 text-xs font-bold">
@@ -71,16 +114,23 @@ const CreateAccount = () => {
               </Link>
             </div>
             <p className="mb-10 text-black/60 text-[13px]">We’ve sent a verification code to your email address. Please provide the code below.</p>
-            <Input label={"Verification code:"} />
+              <Input label={"Email address:"} name={"email"} value={provideEmailForm.values.email} disabled={true}/>
+              <Input
+                label={"Verification code:"}
+                name={"code"}
+                  value={verifyEmailForm.values.code}
+                  onChange={verifyEmailForm.handleChange}
+                  onBlur={verifyEmailForm.handleBlur}
+                  onError={
+                  verifyEmailForm.touched.code && verifyEmailForm.errors.code ? verifyEmailForm.errors.code : null}
+              />
             <div className="mt-6 flex justify-center">
               <Button
-                buttonRole={"custom"}
-                onClick={showCompleteSetup}
                 buttonText={"Continue"}
                 otherStyles={"bg-primary text-white"}
               />
             </div>
-          </div>
+          </form>
           }
 
           {/* Complete setup */}
