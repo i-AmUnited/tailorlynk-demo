@@ -10,47 +10,71 @@ const initialState = {
     ...retrieveFromLocalStorage(["userSession"])
 }
 
-// const saveToLocalStorage = (key,data)=>{
-//     localStorage.setItem(key, data);
-// }
+const saveToLocalStorage = (key,data)=>{
+    localStorage.setItem(key, data);
+}
 
-// export const userSignIn = createAsyncThunk(
-//   "user/signIn",
-//   async(values) => {
-//       const signInEndPoint = await apiEndPoints.signIn(values);
-//       const response = await signInEndPoint.data;
-//       saveToLocalStorage("userSession", JSON.stringify(response));
-//       return response;
-//   }
-// )
+export const userSignIn = createAsyncThunk(
+  "user/signIn",
+  async(values) => {
+      const signInEndPoint = await apiEndPoints.signIn(values);
+      const response = await signInEndPoint.data;
+      saveToLocalStorage("userSession", JSON.stringify(response));
+      return response;
+  }
+)
 
-// const signOutSession = () =>{
-//   localStorage.removeItem("users");
-//   localStorage.removeItem("userSession"); 
-// }
+const signOutSession = () =>{
+  localStorage.removeItem("users");
+  localStorage.removeItem("userSession"); 
+}
 
-// export const signOut = createAsyncThunk(
-//   "user/signOut",
-//   async()=>{
-//       signOutSession();
-//   }
-// )
+export const signOut = createAsyncThunk(
+  "user/signOut",
+  async()=>{
+      signOutSession();
+  }
+)
 
 export const userAccountRegistration = createAsyncThunk(
   "user/accountRegistration",
   async(values) => {
-      const accountRegistrationEndPoint = await apiEndPoints.accountRegistration(values);
-      const response = await accountRegistrationEndPoint.data;
-      return response;
+      try{
+            const accountRegistrationEndPoint = await apiEndPoints.accountRegistration(values);
+            const response = await accountRegistrationEndPoint.data;
+            return response;
+      }
+      catch(error){
+       return error.response.data;
+      }
   }
 )
 
 export const verifyUserEmail = createAsyncThunk(
   "user/verifyUserEmail",
   async(values) => {
+    try{
       const verifyEmailEndPoint = await apiEndPoints.verifyEmail(values);
       const response = await verifyEmailEndPoint.data;
       return response;
+    }
+    catch(error){
+      return error.response.data;
+    }
+  }
+)
+
+export const completeUserRegistration = createAsyncThunk(
+  "user/completeUserRegistration",
+  async(values) => {
+    try{
+      const completeRegistrationEndPoint = await apiEndPoints.completeRegistration(values);
+      const response = await completeRegistrationEndPoint.data;
+      return response;
+    }
+    catch(error){
+      return error.response.data;
+     }
   }
 )
 
@@ -79,42 +103,29 @@ const slice = createSlice ({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // .addCase(userSignIn.fulfilled, (state, action) => {
-      //   if (action.payload.status_code === "0") {
-      //     state.users = action.payload;
-      //     state.isAuthenticated = true;
-      //     state.userSession = action.payload;
-      //   } else {
-      //     state.error = action.payload.message;
-      //     showErrorMessage(action.payload.message);
-      //   }
-      //   state.loading = false;
-      // })
-      // .addCase(signOut.fulfilled , (state)=>{
-      //   state.isAuthenticated = false;
-      //   state.loading = false;
-      //   state.users = null;
-      // })
-      // .addCase(userSignIn.rejected, (state) => {
-      //   state.loading = false;
-      //   state.users = null;
-      //   state.isAuthenticated = false;
-      // })
-      // .addCase(userAccountRegistration.fulfilled, (state, action) => {
-      //   if (action.payload.statusCode === 200) {
-      //     state.users = action.payload;
-      //     showSuccessMessage(action.payload.message);
-      //   } else {
-      //     state.error = action.payload.message;
-      //     showErrorMessage(action.payload.message);
-      //   }
-      //   state.loading = false;
-      // })
-      // .addCase(userSignUp.rejected, (state) => {
-      //   state.loading = false;
-      //   state.users = null;
-      //   state.isAuthenticated = false;
-      // })
+      .addCase(userSignIn.fulfilled, (state, action) => {
+        if (action.payload.statusCode === 200) {
+          state.users = action.payload;
+          state.isAuthenticated = true;
+          state.userSession = action.payload;
+        } else {
+          state.error = action.payload.message;
+          showErrorMessage(action.payload.message);
+        }
+        state.loading = false;
+      })
+
+      .addCase(userSignIn.rejected, (state) => {
+        state.loading = false;
+        state.users = null;
+        state.isAuthenticated = false;
+      })
+
+      .addCase(signOut.fulfilled , (state)=>{
+        state.isAuthenticated = false;
+        state.loading = false;
+        state.users = null;
+      })
 
       .addMatcher(
         isAnyOf(
@@ -136,6 +147,7 @@ const slice = createSlice ({
         isAnyOf(
           userAccountRegistration.fulfilled,
           verifyUserEmail.fulfilled,
+          completeUserRegistration.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -155,6 +167,8 @@ const slice = createSlice ({
           vendorDetail.pending,
           userAccountRegistration.pending,
           verifyUserEmail.pending,
+          completeUserRegistration.pending,
+          userSignIn.pending,
         ),
         (state) => {
           state.loading = true;
@@ -169,11 +183,14 @@ const slice = createSlice ({
           vendorDetail.rejected,
           userAccountRegistration.rejected,
           verifyUserEmail.rejected,
+          completeUserRegistration.rejected,
         ),
         (state, action) => {
           state.loading = false;
-          state.error = showErrorMessage(action.error.message);
           state.users = null;
+          const { data } = action.payload || {};
+          let errorMessage = data?.message || "Failed, Try again later";
+          state.error = showErrorMessage(errorMessage);
         }
       );
   }

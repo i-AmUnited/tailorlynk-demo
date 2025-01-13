@@ -3,24 +3,28 @@ import { apiClient } from "./apiClient";
 
 export class apiEndPoints {
   static extractError(error) {
-    let extracted;
+    let extracted = [];
     if (error.isAxiosError) {
-      if (error.request) {
-        extracted = ["Network error"];
-      } else if (error.response) {
-        extracted = [error.response.message];
+      if (error.response) {
+        if (error.response.data && error.response.message) {
+          extracted.push(error.response.message);
+        } else {
+          extracted.push("An unexpected Error occurred");
+        }
+      } else if (error.request) {
+        extracted.push("Network Error Occurred");
       } else {
-        extracted = ["An unexpected error occured"];
+        extracted.push("An Unexpected Error Occurred");
       }
     } else {
-      extracted = [error.response.message || "An unexpected error occurred"];
+      extracted.push(error.message || "An unexpected Error occurred");
     }
-    extracted.forEach((error) => showErrorMessage(error));
+    extracted.forEach((errorMsg) => showErrorMessage(errorMsg));
   }
 
   static async signIn(data) {
     try {
-      return apiClient.post("/user_login", data);
+      return apiClient.post("customer/login", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -29,7 +33,7 @@ export class apiEndPoints {
 
   static async accountRegistration(data) {
     try {
-      return apiClient.post("/customer/account-registration", data);
+      return apiClient.post("customer/account-registration", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -38,7 +42,16 @@ export class apiEndPoints {
 
   static async verifyEmail(data) {
     try {
-      return apiClient.post("/customer/verify-email-address", data);
+      return apiClient.post("customer/verify-email-address", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async completeRegistration(data) {
+    try {
+      return apiClient.post("customer/complete-registration", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -47,7 +60,7 @@ export class apiEndPoints {
 
   static async listVendors(data) {
     try {
-      return apiClient.get("/customer/list-vendor", data);
+      return apiClient.get("customer/list-vendor", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -56,7 +69,7 @@ export class apiEndPoints {
 
   static async vendorDetail(vendorID) {
     try {
-      return apiClient.get(`/customer/single-vendor?vendorId=${vendorID}`);
+      return apiClient.get(`customer/single-vendor?vendorId=${vendorID}`);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;

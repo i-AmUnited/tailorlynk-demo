@@ -8,6 +8,7 @@ import profile from "../assets/icons/profile.svg";
 import receipt from "../assets/icons/receipt.svg";
 import signout from "../assets/icons/signout.svg";
 import message from "../assets/icons/message.svg";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -30,6 +31,11 @@ const Navbar = () => {
     };
   }, []);
 
+  const userSessionData = useSelector((state) => state.user.userSession);
+
+  // console.log(userSessionData?.data?.customerData);
+  const username = userSessionData?.data?.customerData?.fullName;
+
   return (
     <div className="flex justify-between items-end py-4 border-b border-b-[#c4c4c432] relative">
       <Link to={"/"}>
@@ -42,7 +48,7 @@ const Navbar = () => {
           onClick={toggleDropdown}
           ref={dropdownRef}
         >
-          <span>Guest</span>
+          { !userSessionData ? <span>Guest</span> : <span>{username}</span>}
           <img src={arrow} alt="Arrow" className="h-5" />
 
           {showDropdown && (
@@ -73,10 +79,10 @@ const Navbar = () => {
                     <span className="truncate">Saved styles</span>
                   </li>
                 </Link>
-                <li className="p-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer flex items-center gap-2 truncate">
+                <Link to={"/user-account/sign-out"} className="p-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer flex items-center gap-2 truncate">
                   <img src={signout} alt="Arrow" className="h-[18px]" />
                   <span className="truncate">Signout</span>
-                </li>
+                </Link>
               </ul>
             </div>
           )}
