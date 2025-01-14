@@ -150,22 +150,24 @@ const CreateAccount = () => {
           {verifyEmail &&
           <form onSubmit={verifyEmailForm.handleSubmit}>
             <div className="flex justify-between items-center mb-2">
-              <div className="font-bold text-primary">Verify email address</div>
+              <div className="font-bold text-primary">Verify email address.</div>
               <Link to={"/sign-in"} className="text-red-500 text-xs font-bold">
                 Cancel
               </Link>
             </div>
             <p className="mb-10 text-black/60 text-[13px]">We’ve sent a verification code to your email address. Please provide the code below.</p>
-              <Input label={"Email address:"} name={"email"} value={verifyEmailForm.values.email} disabled={true}/>
-              <Input
-                label={"Verification code:"}
-                name={"code"}
-                  value={verifyEmailForm.values.code}
-                  onChange={verifyEmailForm.handleChange}
-                  onBlur={verifyEmailForm.handleBlur}
-                  onError={
-                  verifyEmailForm.touched.code && verifyEmailForm.errors.code ? verifyEmailForm.errors.code : null}
-              />
+              <div className="grid gap-4">
+                <Input label={"Email address:"} name={"email"} value={verifyEmailForm.values.email} disabled={true}/>
+                <Input
+                  label={"Verification code:"}
+                  name={"code"}
+                    value={verifyEmailForm.values.code}
+                    onChange={verifyEmailForm.handleChange}
+                    onBlur={verifyEmailForm.handleBlur}
+                    onError={
+                    verifyEmailForm.touched.code && verifyEmailForm.errors.code ? verifyEmailForm.errors.code : null}
+                />
+              </div>
             <div className="mt-6 flex justify-center">
               <Button
                 buttonText={"Continue"}
