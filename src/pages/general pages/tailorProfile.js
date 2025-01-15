@@ -1,24 +1,18 @@
 import Back from "../../components/goBack";
 import VendorCatalogue from "./General pages components/vendorCatalogue";
 import chat from "../../assets/icons/chatIcon.svg";
+import Select from "../../components/select";
 import SelectInput from "../../components/select";
 import Button from "../../components/button";
 import { useState } from "react";
 import Modal from "../../components/modal";
-import { useParams } from "react-router-dom";
-import { useVendorDetail } from "../reuseableEffects";
+import { Route, Routes } from "react-router-dom";
+import Home from "./homePage";
+import Cart from "./cart";
 
 const TailorProfile = () => {
-
-  const { vendorID } = useParams();
-  const vendorDetail = useVendorDetail(vendorID)
-
-  const vendorPersonal = vendorDetail?.vendorData;
-  const vendorCatalogue = vendorDetail?.catalogueData;
-  const vendorMaterialList = vendorDetail?.materialData;
-
-  console.log();
-
+  const img1 =
+    "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826";
 
   const [reportModal, setReportModal] = useState(false);
 
@@ -127,18 +121,18 @@ const TailorProfile = () => {
           <div className="bg-white rounded-md overflow-hidden border">
             <div className="p-4 font-medium flex items-center gap-4">
               <Back />
-              <span>{vendorPersonal?.businessName}</span>
+              <span>Agbada specialist</span>
             </div>
-            <img src={vendorPersonal?.brandLogo} alt="" className="h-[250px] w-full object-cover" />
+            <img src={img1} alt="" className="h-[250px] w-full object-cover" />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-4">
             <div className="grid">
               <div>Category:</div>
               <div className="text-xs text-black/50">Male clothing</div>
             </div>
             <div className="grid">
               <div>Location:</div>
-              <div className="text-xs text-black/50">{vendorPersonal?.businessAddress}</div>
+              <div className="text-xs text-black/50">Lagos, Nigeria</div>
             </div>
             <div className="grid">
               <div>Availability:</div>
@@ -152,15 +146,9 @@ const TailorProfile = () => {
             Orders are typically ready and shipped within 7 days
           </div>
         </div>
-        <div className="grid gap-6 mb-10">
-          <div className="">
-            <div className="font-bold secondary-font mb-4">Catalogue:</div>
-            <VendorCatalogue products={vendorCatalogue}/>
-          </div>
-          <div className="">
-            <div className="font-bold secondary-font mb-4">Materials:</div>
-            <VendorCatalogue products={vendorMaterialList}/>
-          </div>
+        <div className="mb-10">
+          <div className="font-bold secondary-font mb-4">Catalogue:</div>
+          <VendorCatalogue />
         </div>
         <div className="bg-white border rounded-md p-4 flex items-center gap-6">
           <img src={chat} alt="" className="size-12" />
@@ -176,10 +164,10 @@ const TailorProfile = () => {
         <div className="bg-white border rounded-md p-4 flex items-center gap-4 mb-4">
           <div>
             <div className="flex items-center justify-center size-12 bg-primary/20 rounded-full text-xs font-bold text-primary">
-              {vendorPersonal?.rating}
+              4.8
             </div>
           </div>
-          <div className="text-xs text-pretty font-semibold">
+          <div className="text-xs text-pretty leading-5 font-semibold">
             Average rating{" "}
             <span className="text-black/50 font-normal">(32 reviews)</span>
           </div>

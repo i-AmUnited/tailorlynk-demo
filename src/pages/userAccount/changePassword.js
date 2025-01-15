@@ -16,44 +16,38 @@ function ChangePassword() {
   };
 
   return (
-    <div className="">
-      <div className="px-4 py-6 border-b font-bold secondary-font">
-      Change Password
-      </div>
-      <form onSubmit={handleSubmit} className="space-y-4 px-4 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-gray-700">Old Password:</label>
-            <input
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              placeholder="Enter old password"
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
+    <div className="bg-white rounded-lg shadow-md p-6 h-full">
+      <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-gray-700">Old Password:</label>
+          <input
+            type="password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            placeholder="Enter old password"
+            className="w-full p-2 border border-gray-300 rounded"
+          />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-gray-700">New Password:</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Enter new password"
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700">Confirm New Password:</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm new password"
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
+        <div>
+          <label className="block text-gray-700">New Password:</label>
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="Enter new password"
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700">Confirm New Password:</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm new password"
+            className="w-full p-2 border border-gray-300 rounded"
+          />
         </div>
         <button
           type="submit"
