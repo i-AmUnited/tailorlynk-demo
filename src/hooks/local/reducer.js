@@ -40,9 +40,9 @@ export const userAccountRegistration = createAsyncThunk(
   "user/accountRegistration",
   async(values) => {
       try{
-            const accountRegistrationEndPoint = await apiEndPoints.accountRegistration(values);
-            const response = await accountRegistrationEndPoint.data;
-            return response;
+        const accountRegistrationEndPoint = await apiEndPoints.accountRegistration(values);
+        const response = await accountRegistrationEndPoint.data;
+        return response;
       }
       catch(error){
        return error.response.data;
@@ -96,6 +96,23 @@ export const vendorDetail = createAsyncThunk(
   }
 )
 
+export const vendorReviewList = createAsyncThunk(
+  "user/vendorReviews",
+  async(vendorID) => {
+      const vendorReviewsEndPoint = await apiEndPoints.vendorReviews(vendorID);
+      const response = await vendorReviewsEndPoint.data;
+      return response;
+  }
+)
+
+export const writeReview = createAsyncThunk(
+  "user/writeReview",
+  async(values) => {
+      const writeReviewEndPoint = await apiEndPoints.rateVendor(values);
+      const response = await writeReviewEndPoint.data;
+      return response
+  }
+)
 
 const slice = createSlice ({
   name: "user",
@@ -131,6 +148,7 @@ const slice = createSlice ({
         isAnyOf(
           listVendors.fulfilled,
           vendorDetail.fulfilled,
+          vendorReviewList.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -148,6 +166,7 @@ const slice = createSlice ({
           userAccountRegistration.fulfilled,
           verifyUserEmail.fulfilled,
           completeUserRegistration.fulfilled,
+          writeReview.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -169,6 +188,8 @@ const slice = createSlice ({
           verifyUserEmail.pending,
           completeUserRegistration.pending,
           userSignIn.pending,
+          vendorReviewList.pending,
+          writeReview.pending,
         ),
         (state) => {
           state.loading = true;
@@ -184,6 +205,8 @@ const slice = createSlice ({
           userAccountRegistration.rejected,
           verifyUserEmail.rejected,
           completeUserRegistration.rejected,
+          vendorReviewList.rejected,
+          writeReview.rejected,
         ),
         (state, action) => {
           state.loading = false;

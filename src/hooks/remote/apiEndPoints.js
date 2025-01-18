@@ -76,4 +76,22 @@ export class apiEndPoints {
     }
   }
 
+  static async vendorReviews(vendorID) {
+    try {
+      return apiClient.get(`customer/vendor-rating-list?vendorId=${vendorID}`);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async rateVendor(data) {
+    try {
+      return apiClient.post("customer/rate-vendor", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
 }

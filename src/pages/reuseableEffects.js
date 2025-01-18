@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { listVendors, vendorDetail } from '../hooks/local/reducer';
+import { listVendors, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])
@@ -34,4 +34,21 @@ export function useVendorDetail(vendorID) {
     }, [dispatch, vendorID]);
   
     return vendordetail;
+  }
+
+export function useVendorReviews(vendorID) {
+    const [vendorReviews, setvendorReviews] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchvendorReviews = async() => {
+        try {
+            const {payload} = await dispatch(vendorReviewList(vendorID));
+            setvendorReviews(payload.data);
+        }
+        catch(e){}
+      }
+      fetchvendorReviews();
+    }, [dispatch, vendorID]);
+  
+    return vendorReviews;
   }
