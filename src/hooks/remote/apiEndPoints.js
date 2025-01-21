@@ -94,4 +94,23 @@ export class apiEndPoints {
     }
   }
 
+  static async reportVendor(data) {
+    try {
+      return apiClient.post("customer/report-vendor", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async singleCatalogueMaterial(catalogueId) {
+    try {
+      return apiClient.get(
+        `customer/single-catalogue-material?id=${catalogueId}`
+      );
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
 }

@@ -5,7 +5,7 @@ const SelectInput = ({ label, name, id, options, value, onChange, onBlur, onErro
     <div>
       <div className="grid gap-[2px]">
         <label className='text-xs' htmlFor={id}>{label}:</label>
-        <div className="w-full px-4 border focus:outline focus:outline-primary rounded-md">
+        <div className="w-full px-4 border focus:outline focus:outline-primary rounded-md bg-white">
           <select
             name={name}
             value={value}

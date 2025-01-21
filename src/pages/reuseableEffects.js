@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { listVendors, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
+import { listVendors, singleCatalogueDetail, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])
@@ -51,4 +51,22 @@ export function useVendorReviews(vendorID) {
     }, [dispatch, vendorID]);
   
     return vendorReviews;
+  }
+
+  export function useCatalogueDetail(catalogueId) {
+    const [catalogueDetail, setCatalogueDetail] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchSingleCatalogueDetail = async() => {
+        try {
+            const {payload} = await dispatch(singleCatalogueDetail(catalogueId));
+            setCatalogueDetail(payload.data);
+            // console.log(payload.data)
+        }
+        catch(e){}
+      }
+      fetchSingleCatalogueDetail();
+    }, [dispatch, catalogueId]);
+  
+    return catalogueDetail;
   }
