@@ -17,7 +17,7 @@ const Structure = () => {
         <Route index element={<Home />} />
             <Route path="tailor-profile/:vendorID" element={<TailorProfile />} />
             <Route path="all-products" element={<AllProducts />} />
-            <Route path="product-detail" element={<ProductDetail />} />
+            <Route path="product-detail/:catalogueId" element={<ProductDetail />} />
             <Route path="cart" element={<Cart />} />
             <Route path="user-account/*" element={<UserAccount />} />
         </Routes>

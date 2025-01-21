@@ -8,12 +8,14 @@ const SignOut = () => {
     const isAuthenticated = useSelector((state)=>state.user.isAuthenticated);
     useEffect(()=>{
         dispatch(signOut());
+        window.location.reload();
     },[dispatch]);
 
     if (!isAuthenticated) {
         return (
             <>
               <Navigate to={'/'} />
+              
             </>
         );
     }

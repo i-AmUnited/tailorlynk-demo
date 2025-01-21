@@ -5,6 +5,9 @@ import Input from "../../components/input";
 import ProductCard from "../../components/productCard";
 import arrow from "../../assets/icons/arrow.svg";
 import { useVendorList } from "../reuseableEffects";
+import { useSelector } from "react-redux";
+import Spinner from "../../components/Spinners/Spinner";
+
 
 const AllProducts = () => {
 
@@ -65,6 +68,7 @@ const AllProducts = () => {
 
   return (
     <div>
+      <Spinner loading={useSelector((state) => state.user).loading} />
       <div className="grid md:flex items-center md:justify-between gap-4 mb-4">
         <div className="flex items-center gap-4">
           <div>
