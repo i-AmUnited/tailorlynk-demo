@@ -4,6 +4,13 @@ import Input from "../../components/input";
 import ProductCard from "../../components/productCard";
 import { useState } from "react";
 import arrow from "../../assets/icons/arrow.svg";
+<<<<<<< HEAD
+=======
+import { useVendorList } from "../reuseableEffects";
+import { useSelector } from "react-redux";
+import Spinner from "../../components/Spinners/Spinner";
+
+>>>>>>> 600ca51a835616c18fbbf9ae68acfe480e9e58ef
 
 const AllProducts = () => {
   const products = [
@@ -53,6 +60,7 @@ const AllProducts = () => {
 
   return (
     <div>
+      <Spinner loading={useSelector((state) => state.user).loading} />
       <div className="grid md:flex items-center md:justify-between gap-4 mb-4">
         <div className="flex items-center gap-4">
           <div>

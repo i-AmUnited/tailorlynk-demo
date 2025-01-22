@@ -12,12 +12,16 @@ const Structure = () => {
     <div className="grid content-between min-h-screen gap-4">
       <div className="px-4 md:px-16 lg:px-48 grid gap-4">
         <Navbar />
-        <Routes >
-        <Route index element={<Home />} />
-            <Route path="tailor-profile" element={<TailorProfile />} />
-            <Route path="product-detail" element={<ProductDetail />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="user-account/*" element={<UserAccount />} />
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="tailor-profile/:vendorID" element={<TailorProfile />} />
+          <Route path="all-products" element={<AllProducts />} />
+          <Route
+            path="product-detail/:catalogueId"
+            element={<ProductDetail />}
+          />
+          <Route path="cart" element={<Cart />} />
+          <Route path="user-account/*" element={<UserAccount />} />
         </Routes>
       </div>
       <Footer />

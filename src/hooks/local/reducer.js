@@ -40,9 +40,9 @@ export const userAccountRegistration = createAsyncThunk(
   "user/accountRegistration",
   async(values) => {
       try{
-            const accountRegistrationEndPoint = await apiEndPoints.accountRegistration(values);
-            const response = await accountRegistrationEndPoint.data;
-            return response;
+        const accountRegistrationEndPoint = await apiEndPoints.accountRegistration(values);
+        const response = await accountRegistrationEndPoint.data;
+        return response;
       }
       catch(error){
        return error.response.data;
@@ -96,6 +96,42 @@ export const vendorDetail = createAsyncThunk(
   }
 )
 
+export const vendorReviewList = createAsyncThunk(
+  "user/vendorReviews",
+  async(vendorID) => {
+      const vendorReviewsEndPoint = await apiEndPoints.vendorReviews(vendorID);
+      const response = await vendorReviewsEndPoint.data;
+      return response;
+  }
+)
+
+export const writeReview = createAsyncThunk(
+  "user/writeReview",
+  async(values) => {
+      const writeReviewEndPoint = await apiEndPoints.rateVendor(values);
+      const response = await writeReviewEndPoint.data;
+      return response
+  }
+)
+
+export const vendorReport = createAsyncThunk(
+  "user/vendorReport",
+  async(values) => {
+      const vendorReportEndPoint = await apiEndPoints.reportVendor(values);
+      const response = await vendorReportEndPoint.data;
+      return response
+  }
+)
+
+export const singleCatalogueDetail = createAsyncThunk(
+  "user/singleCatalogueDetail",
+  async(catalogueId) => {
+      const singleCatalogueDetailEndPoint = await apiEndPoints.singleCatalogueMaterial(catalogueId);
+      const response = await singleCatalogueDetailEndPoint.data;
+      // console.log(response);
+      return response;
+  }
+)
 
 const slice = createSlice ({
   name: "user",
@@ -131,6 +167,8 @@ const slice = createSlice ({
         isAnyOf(
           listVendors.fulfilled,
           vendorDetail.fulfilled,
+          vendorReviewList.fulfilled,
+          singleCatalogueDetail.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -148,6 +186,8 @@ const slice = createSlice ({
           userAccountRegistration.fulfilled,
           verifyUserEmail.fulfilled,
           completeUserRegistration.fulfilled,
+          writeReview.fulfilled,
+          vendorReport.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -169,6 +209,10 @@ const slice = createSlice ({
           verifyUserEmail.pending,
           completeUserRegistration.pending,
           userSignIn.pending,
+          vendorReviewList.pending,
+          writeReview.pending,
+          vendorReport.pending,
+          singleCatalogueDetail.pending,
         ),
         (state) => {
           state.loading = true;
@@ -184,6 +228,10 @@ const slice = createSlice ({
           userAccountRegistration.rejected,
           verifyUserEmail.rejected,
           completeUserRegistration.rejected,
+          vendorReviewList.rejected,
+          writeReview.rejected,
+          vendorReport.rejected,
+          singleCatalogueDetail.rejected,
         ),
         (state, action) => {
           state.loading = false;
