@@ -6,6 +6,7 @@ import TailorProfile from "./general pages/tailorProfile";
 import ProductDetail from "./general pages/productPage";
 import Cart from "./general pages/cart";
 import UserAccount from "./userAccount/userAccount";
+import AllProducts from "./general pages/Products";
 
 const Structure = () => {
   return (

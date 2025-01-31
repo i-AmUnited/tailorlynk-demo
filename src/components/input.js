@@ -1,14 +1,30 @@
 import { useState } from "react";
-import showPasswordIcon from "../assets/icons/eye.svg"
-import hidePasswordIcon from "../assets/icons/eyeShut.svg"
-import searchIcon from "../assets/icons/search.svg"
+import showPasswordIcon from "../assets/icons/eye.svg";
+import hidePasswordIcon from "../assets/icons/eyeShut.svg";
+import searchIcon from "../assets/icons/search.svg";
 
-const Input = ({label, type, placeholder, value, id, name, readOnly, disabled, customStyles, onChange, onBlur, onError, isPassword, isSearch, variant}) => {
+const Input = ({
+  label,
+  type,
+  placeholder,
+  value,
+  id,
+  name,
+  readOnly,
+  disabled,
+  customStyles,
+  onChange,
+  onBlur,
+  onError,
+  isPassword,
+  isSearch,
+  variant,
+}) => {
   const [inputType, setInputType] = useState(type);
 
   const togglePassword = () => {
-    setInputType((prevType) => (prevType === "password" ? "text" : "password"))
-  }
+    setInputType((prevType) => (prevType === "password" ? "text" : "password"));
+  };
   return (
     <div>
       <div className="grid gap-[2px]">
@@ -47,13 +63,6 @@ const Input = ({label, type, placeholder, value, id, name, readOnly, disabled, c
               <div className="absolute top-0 h-full right-0 p-1 cursor-pointer">
                 <span className="aspect-square bg-white h-full flex items-center justify-center">
                   <img src={searchIcon} alt="Search" className="h-4" />
-<<<<<<< HEAD
-                  </span>
-                </div> :
-                null
-              }
-              <div><input type={inputType} id={id} readOnly={readOnly} disabled={disabled} onChange={onChange} placeholder={placeholder} value={value} name={name} onBlur={onBlur} className={`w-full px-4 py-5 md:py-4 border text-sm placeholder:text-[12px] focus:outline focus:outline-primary rounded-md ${customStyles}`}/></div>
-=======
                 </span>
               </div>
             ) : null}
@@ -70,7 +79,6 @@ const Input = ({label, type, placeholder, value, id, name, readOnly, disabled, c
                 onBlur={onBlur}
                 className={`w-full px-4 py-5 md:py-4 border text-sm placeholder:text-[12px] focus:outline-0 focus:border-primary rounded-md ${customStyles}`}
               />
->>>>>>> 600ca51a835616c18fbbf9ae68acfe480e9e58ef
             </div>
           </div>
         )}
@@ -78,6 +86,6 @@ const Input = ({label, type, placeholder, value, id, name, readOnly, disabled, c
       <span className="text-red-500 text-xs">{onError}</span>
     </div>
   );
-}
- 
+};
+
 export default Input;

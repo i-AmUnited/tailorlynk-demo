@@ -1,69 +1,99 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Feedback = () => {
   const [feedbackType, setFeedbackType] = useState("Positive feedback");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const FEEDBACK_API_URL = process.env.REACT_APP_FEEDBACK_API_URL;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Feedback Submitted:", { feedbackType, message });
-    setMessage(""); // Clear message field after submission
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        FEEDBACK_API_URL, // Now using the specific feedback API URL
+        {
+          type: feedbackType.replace(/\s+/g, ""),
+          message,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
+            "x-api-key": "16112024",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setLoading(false);
+      if (response.status === 200) {
+        toast.success("Thank you for your feedback! 🎉", { autoClose: 3000 });
+        setMessage(""); // Clear input field
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error(
+        error.response?.data?.message || "Failed to submit feedback.",
+        { autoClose: 3000 }
+      );
+    }
   };
 
   return (
-    <div className="bg-white p-5 rounded-md shadow-md">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Feedback</h2>
-      <p className="text-[#CB997E] font-medium mb-4">We Value Your Feedback!</p>
-      <p className="text-gray-600 mb-6">
-        Thank you for choosing Tailorlynk. We strive to provide the best
+    <div className="max-w-lg mx-auto mt-8 p-6 border rounded-lg shadow-sm bg-white">
+      <ToastContainer /> {/* Toast notification container */}
+      <h2 className="text-xl font-semibold mb-4">Feedback</h2>
+      <p className="text-sm text-gray-600 mb-6">
+        <span className="text-primary font-bold">We Value Your Feedback!</span>{" "}
+        Thank you for choosing TailorLynk. We strive to provide the best
         experience for our customers, and your feedback is essential in helping
         us achieve that goal. Whether you had an exceptional experience or there
         are areas where we can improve, we want to hear from you.
       </p>
-
       <form onSubmit={handleSubmit}>
-        <div className="mb-6">
+        <div className="mb-4">
           <label
             htmlFor="feedbackType"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium mb-1"
           >
             Feedback type:
           </label>
           <select
             id="feedbackType"
+            className="w-full p-2 border rounded"
             value={feedbackType}
             onChange={(e) => setFeedbackType(e.target.value)}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#CB997E] focus:border-[#CB997E] sm:text-sm"
           >
             <option>Positive feedback</option>
-            <option>Neutral feedback</option>
             <option>Negative feedback</option>
+            <option>Neutral feedback</option>
           </select>
         </div>
 
-        <div className="mb-6">
-          <label
-            htmlFor="message"
-            className="block text-sm font-medium text-gray-700"
-          >
+        <div className="mb-4">
+          <label htmlFor="message" className="block text-sm font-medium mb-1">
             Your message:
           </label>
           <textarea
             id="message"
+            rows="3"
+            className="w-full p-2 border rounded"
+            placeholder="Start typing..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Start typing..."
-            rows="4"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#CB997E] focus:border-[#CB997E] sm:text-sm resize-none"
-            required
           />
         </div>
 
         <button
           type="submit"
-          className="bg-[#CB997E] text-white font-medium px-6 py-2 rounded-md hover:bg-[#B5838D] transition duration-300"
+          className="w-full bg-primary text-white py-2 rounded-lg"
+          disabled={loading}
         >
-          Send feedback
+          {loading ? "Sending feedback..." : "Send feedback"}
         </button>
       </form>
     </div>

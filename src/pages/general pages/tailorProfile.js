@@ -1,26 +1,16 @@
 import Back from "../../components/goBack";
 import VendorCatalogue from "./General pages components/vendorCatalogue";
 import chat from "../../assets/icons/chatIcon.svg";
-import Select from "../../components/select";
 import SelectInput from "../../components/select";
 import Button from "../../components/button";
 import { useState } from "react";
 import Modal from "../../components/modal";
-<<<<<<< HEAD
-import { Route, Routes } from "react-router-dom";
-import Home from "./homePage";
-import Cart from "./cart";
-
-const TailorProfile = () => {
-  const img1 =
-    "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826";
-=======
 import { useParams } from "react-router-dom";
 import { useVendorDetail, useVendorReviews } from "../reuseableEffects";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../components/Spinners/Spinner";
 import { useFormik } from "formik";
-import * as Yup from "yup"
+import * as Yup from "yup";
 import { vendorReport, writeReview } from "../../hooks/local/reducer";
 import Input from "../../components/input";
 import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
@@ -30,10 +20,13 @@ const TailorProfile = () => {
   const dispatch = useDispatch();
 
   const { vendorID } = useParams();
-  const vendorDetail = useVendorDetail(vendorID)
+  const vendorDetail = useVendorDetail(vendorID);
   const vendorReviews = useVendorReviews(vendorID);
 
-  const totalRating = vendorReviews.reduce((sum, review) => sum + review.rating, 0)
+  const totalRating = vendorReviews.reduce(
+    (sum, review) => sum + review.rating,
+    0
+  );
   const averageRating = totalRating / vendorReviews.length;
   const roundedAverage = averageRating.toFixed(1);
 
@@ -47,7 +40,6 @@ const TailorProfile = () => {
 
   const [reportDiv, setReportDiv] = useState(true);
   const [reportSuccessDiv, setReportSuccessDiv] = useState(false);
->>>>>>> 600ca51a835616c18fbbf9ae68acfe480e9e58ef
 
   const [reportModal, setReportModal] = useState(false);
 
@@ -67,75 +59,51 @@ const TailorProfile = () => {
   ];
 
   const sendReviewForm = useFormik({
-        initialValues: {
-          vendor_id: vendorID,
-          rating: "",
-          review: "",
-          customer_name: username,
-        },
-        validationSchema: Yup.object({
-          rating: Yup.string().required("Please select a rating"),
-          review: Yup.string().required("Please write a review"),
-        }),
-        onSubmit: async (values) => {
-          const { vendor_id, rating, review, customer_name } = values;
-          let sendReviewData = { vendor_id, rating, review, customer_name };
-          const { payload } = await dispatch(writeReview(sendReviewData));
-          if (payload.statusCode === 200) {
-            setReportModal(false);
-          }
-        },
-      });
+    initialValues: {
+      vendor_id: vendorID,
+      rating: "",
+      review: "",
+      customer_name: username,
+    },
+    validationSchema: Yup.object({
+      rating: Yup.string().required("Please select a rating"),
+      review: Yup.string().required("Please write a review"),
+    }),
+    onSubmit: async (values) => {
+      const { vendor_id, rating, review, customer_name } = values;
+      let sendReviewData = { vendor_id, rating, review, customer_name };
+      const { payload } = await dispatch(writeReview(sendReviewData));
+      if (payload.statusCode === 200) {
+        setReportModal(false);
+      }
+    },
+  });
 
-      const reportVendorForm = useFormik({
-        initialValues: {
-          email_address: email,
-          vendor_id: vendorID,
-          reason: "",
-          description: "",
-        },
-        validationSchema: Yup.object({
-          reason: Yup.string().required("Please select a reason"),
-          description: Yup.string().required("Please write a discription of your issue"),
-        }),
-        onSubmit: async (values) => {
-          const { email_address, vendor_id, reason, description } = values;
-          let reportVendorData = { email_address, vendor_id, reason, description };
-          const { payload } = await dispatch(vendorReport(reportVendorData));
-          if (payload.statusCode === 200) {
-            setReportDiv(false);
-            setReportSuccessDiv(true);
-          }
-        },
-      });
+  const reportVendorForm = useFormik({
+    initialValues: {
+      email_address: email,
+      vendor_id: vendorID,
+      reason: "",
+      description: "",
+    },
+    validationSchema: Yup.object({
+      reason: Yup.string().required("Please select a reason"),
+      description: Yup.string().required(
+        "Please write a discription of your issue"
+      ),
+    }),
+    onSubmit: async (values) => {
+      const { email_address, vendor_id, reason, description } = values;
+      let reportVendorData = { email_address, vendor_id, reason, description };
+      const { payload } = await dispatch(vendorReport(reportVendorData));
+      if (payload.statusCode === 200) {
+        setReportDiv(false);
+        setReportSuccessDiv(true);
+      }
+    },
+  });
 
   return (
-<<<<<<< HEAD
-    <div className="grid grid-cols-1 lg:grid-cols-7 gap-4">
-      <div className="lg:col-span-4">
-        <div className="grid gap-4 mb-10">
-          <div className="bg-white rounded-md overflow-hidden border">
-            <div className="p-4 font-medium flex items-center gap-4">
-              <Back />
-              <span>Agbada specialist</span>
-            </div>
-            <img src={img1} alt="" className="h-[250px] w-full object-cover" />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-4">
-            <div className="grid">
-              <div>Category:</div>
-              <div className="text-xs text-black/50">Male clothing</div>
-            </div>
-            <div className="grid">
-              <div>Location:</div>
-              <div className="text-xs text-black/50">Lagos, Nigeria</div>
-            </div>
-            <div className="grid">
-              <div>Availability:</div>
-              <div className="text-xs text-green-500 flex items-center gap-1">
-                <span className="size-2 rounded-full bg-green-500"></span>
-                <span>Ready to work</span>
-=======
     <div>
       <Spinner loading={useSelector((state) => state.user).loading} />
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-4">
@@ -145,7 +113,6 @@ const TailorProfile = () => {
               <div className="p-4 font-medium flex items-center gap-4">
                 <Back />
                 <span>{vendorPersonal?.businessName}</span>
->>>>>>> 600ca51a835616c18fbbf9ae68acfe480e9e58ef
               </div>
               <img
                 src={vendorPersonal?.brandLogo}
@@ -153,61 +120,6 @@ const TailorProfile = () => {
                 className="h-[250px] w-full object-cover"
               />
             </div>
-<<<<<<< HEAD
-          </div>
-          <div className="text-xs">
-            Orders are typically ready and shipped within 7 days
-          </div>
-        </div>
-        <div className="mb-10">
-          <div className="font-bold secondary-font mb-4">Catalogue:</div>
-          <VendorCatalogue />
-        </div>
-        <div className="bg-white border rounded-md p-4 flex items-center gap-6">
-          <img src={chat} alt="" className="size-12" />
-          <div className="text-xs text-pretty leading-5">
-            Can’t find a style that you like? Share your idea with the tailor.{" "}
-            <span className="text-primary underline font-medium">
-              Start chat
-            </span>
-          </div>
-        </div>
-      </div>
-      <div className="lg:col-span-3">
-        <div className="bg-white border rounded-md p-4 flex items-center gap-4 mb-4">
-          <div>
-            <div className="flex items-center justify-center size-12 bg-primary/20 rounded-full text-xs font-bold text-primary">
-              4.8
-            </div>
-          </div>
-          <div className="text-xs text-pretty leading-5 font-semibold">
-            Average rating{" "}
-            <span className="text-black/50 font-normal">(32 reviews)</span>
-          </div>
-        </div>
-        <div className="bg-white border rounded-md overflow-hidden mb-4">
-          <div className="flex items-center justify-between bg-white px-4 py-6 border-b">
-            <div className="font-bold secondary-font">Reviews</div>
-            <div
-              className="text-xs text-primary underline underline-offset-2 cursor-pointer"
-              onClick={() => setReportModal(true)}
-            >
-              Write a review
-            </div>
-          </div>
-          <div className="px-4 max-h-[400px] overflow-y-scroll border-y-[12px] border-white">
-            {reviews.map((review) => (
-              <div
-                key={review.id}
-                className="grid gap-1 content-between py-4 border-b last:border-none"
-              >
-                <div className="flex justify-between items-center">
-                  <div className="font-semibold">
-                    {review.name}{" "}
-                    <span className="text-primary">({review.rating})</span>
-                  </div>
-                  <div>{review.date}</div>
-=======
             <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
               <div className="grid">
                 <div>Category:</div>
@@ -217,10 +129,8 @@ const TailorProfile = () => {
                 <div>Location:</div>
                 <div className="text-black/50">
                   {vendorPersonal?.businessAddress}
->>>>>>> 600ca51a835616c18fbbf9ae68acfe480e9e58ef
                 </div>
               </div>
-              
             </div>
             <div className="text-xs">
               Orders are typically ready and shipped within 7 days
@@ -229,7 +139,10 @@ const TailorProfile = () => {
           <div className="grid gap-6 mb-10">
             <div className="">
               <div className="font-bold secondary-font mb-4">Catalogue:</div>
-              <VendorCatalogue vendorName={vendorPersonal?.businessName} products={vendorCatalogue} />
+              <VendorCatalogue
+                vendorName={vendorPersonal?.businessName}
+                products={vendorCatalogue}
+              />
             </div>
             <div className="">
               <div className="font-bold secondary-font mb-4">Materials:</div>
@@ -248,7 +161,11 @@ const TailorProfile = () => {
         </div>
         <div className="lg:col-span-3 lg:relative">
           <div className="lg:sticky lg:top-5">
-            <div className={`bg-white border rounded-md p-4 flex items-center gap-4 mb-4 ${vendorReviews.length === 0 ? "hidden" : ""}`}>
+            <div
+              className={`bg-white border rounded-md p-4 flex items-center gap-4 mb-4 ${
+                vendorReviews.length === 0 ? "hidden" : ""
+              }`}
+            >
               <div>
                 <div className="flex items-center justify-center size-12 bg-primary/20 rounded-full text-xs font-bold text-primary">
                   {roundedAverage}
@@ -258,7 +175,9 @@ const TailorProfile = () => {
                 <span>Average rating</span>
                 <span className="text-black/50 font-normal">
                   {vendorReviews.length} review
-                  <span className={`${vendorReviews.length > 1 ? "" : "hidden"}`}>
+                  <span
+                    className={`${vendorReviews.length > 1 ? "" : "hidden"}`}
+                  >
                     s
                   </span>
                 </span>
@@ -306,7 +225,11 @@ const TailorProfile = () => {
                 )}
               </div>
             </div>
-            <div className={`bg-white border rounded-md overflow-hidden mb-4 ${!userSessionData ? "hidden" : ""}`}>
+            <div
+              className={`bg-white border rounded-md overflow-hidden mb-4 ${
+                !userSessionData ? "hidden" : ""
+              }`}
+            >
               <div className="bg-white px-4 py-6 border-b font-bold secondary-font">
                 Report tailor
               </div>
