@@ -1,141 +1,171 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
-import { retrieveFromLocalStorage, showErrorMessage, showSuccessMessage } from "../constants";
-import {apiEndPoints} from '../remote/apiEndPoints';
+import {
+  retrieveFromLocalStorage,
+  showErrorMessage,
+  showSuccessMessage,
+} from "../constants";
+import { apiEndPoints } from "../remote/apiEndPoints";
 
 const initialState = {
-    users: null,
-    loading: false,
-    error: null,
-    isAuthenticated: false,
-    ...retrieveFromLocalStorage(["userSession"])
-}
+  users: null,
+  loading: false,
+  error: null,
+  isAuthenticated: false,
+  ...retrieveFromLocalStorage(["userSession"]),
+};
 
-const saveToLocalStorage = (key,data)=>{
-    localStorage.setItem(key, data);
-}
+const saveToLocalStorage = (key, data) => {
+  localStorage.setItem(key, data);
+};
 
-export const userSignIn = createAsyncThunk(
-  "user/signIn",
-  async(values) => {
+export const userSignIn = createAsyncThunk("user/signIn",
+   async (values) => {
+    try{
       const signInEndPoint = await apiEndPoints.signIn(values);
       const response = await signInEndPoint.data;
       saveToLocalStorage("userSession", JSON.stringify(response));
       return response;
-  }
-)
+    }
+    catch(error){
+      return error.response.data;
+    }
+});
 
-const signOutSession = () =>{
+const signOutSession = () => {
   localStorage.removeItem("users");
-  localStorage.removeItem("userSession"); 
-}
+  localStorage.removeItem("userSession");
+};
 
-export const signOut = createAsyncThunk(
-  "user/signOut",
-  async()=>{
-      signOutSession();
-  }
-)
+export const signOut = createAsyncThunk("user/signOut", async () => {
+  signOutSession();
+});
 
 export const userAccountRegistration = createAsyncThunk(
   "user/accountRegistration",
-  async(values) => {
-      try{
-        const accountRegistrationEndPoint = await apiEndPoints.accountRegistration(values);
-        const response = await accountRegistrationEndPoint.data;
-        return response;
-      }
-      catch(error){
-       return error.response.data;
-      }
+  async (values) => {
+    try {
+      const accountRegistrationEndPoint =
+        await apiEndPoints.accountRegistration(values);
+      const response = await accountRegistrationEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
   }
-)
+);
 
 export const verifyUserEmail = createAsyncThunk(
   "user/verifyUserEmail",
-  async(values) => {
-    try{
+  async (values) => {
+    try {
       const verifyEmailEndPoint = await apiEndPoints.verifyEmail(values);
       const response = await verifyEmailEndPoint.data;
       return response;
-    }
-    catch(error){
+    } catch (error) {
       return error.response.data;
     }
   }
-)
+);
 
 export const completeUserRegistration = createAsyncThunk(
   "user/completeUserRegistration",
-  async(values) => {
-    try{
-      const completeRegistrationEndPoint = await apiEndPoints.completeRegistration(values);
+  async (values) => {
+    try {
+      const completeRegistrationEndPoint =
+        await apiEndPoints.completeRegistration(values);
       const response = await completeRegistrationEndPoint.data;
       return response;
-    }
-    catch(error){
+    } catch (error) {
       return error.response.data;
-     }
+    }
   }
-)
+);
 
 export const listVendors = createAsyncThunk(
   "user/listVendors",
-  async(values) => {
-      const listVendorEndPoint = await apiEndPoints.listVendors(values);
-      const response = await listVendorEndPoint.data;
-      return response;
+  async (values) => {
+    const listVendorEndPoint = await apiEndPoints.listVendors(values);
+    const response = await listVendorEndPoint.data;
+    return response;
   }
-)
+);
 
 export const vendorDetail = createAsyncThunk(
   "user/vendorDetail",
-  async(vendorID) => {
-      const vendorDetailEndPoint = await apiEndPoints.vendorDetail(vendorID);
-      const response = await vendorDetailEndPoint.data;
-      return response;
+  async (vendorID) => {
+    const vendorDetailEndPoint = await apiEndPoints.vendorDetail(vendorID);
+    const response = await vendorDetailEndPoint.data;
+    return response;
   }
-)
+);
 
 export const vendorReviewList = createAsyncThunk(
   "user/vendorReviews",
-  async(vendorID) => {
-      const vendorReviewsEndPoint = await apiEndPoints.vendorReviews(vendorID);
-      const response = await vendorReviewsEndPoint.data;
-      return response;
+  async (vendorID) => {
+    const vendorReviewsEndPoint = await apiEndPoints.vendorReviews(vendorID);
+    const response = await vendorReviewsEndPoint.data;
+    return response;
   }
-)
+);
 
 export const writeReview = createAsyncThunk(
   "user/writeReview",
-  async(values) => {
-      const writeReviewEndPoint = await apiEndPoints.rateVendor(values);
-      const response = await writeReviewEndPoint.data;
-      return response
+  async (values) => {
+    const writeReviewEndPoint = await apiEndPoints.rateVendor(values);
+    const response = await writeReviewEndPoint.data;
+    return response;
   }
-)
+);
 
 export const vendorReport = createAsyncThunk(
   "user/vendorReport",
-  async(values) => {
-      const vendorReportEndPoint = await apiEndPoints.reportVendor(values);
-      const response = await vendorReportEndPoint.data;
-      return response
+  async (values) => {
+    const vendorReportEndPoint = await apiEndPoints.reportVendor(values);
+    const response = await vendorReportEndPoint.data;
+    return response;
   }
-)
+);
 
 export const singleCatalogueDetail = createAsyncThunk(
   "user/singleCatalogueDetail",
-  async(catalogueId) => {
-      const singleCatalogueDetailEndPoint = await apiEndPoints.singleCatalogueMaterial(catalogueId);
-      const response = await singleCatalogueDetailEndPoint.data;
-      // console.log(response);
-      return response;
+  async (catalogueId) => {
+    const singleCatalogueDetailEndPoint =
+      await apiEndPoints.singleCatalogueMaterial(catalogueId);
+    const response = await singleCatalogueDetailEndPoint.data;
+    // console.log(response);
+    return response;
   }
-)
+);
 
-const slice = createSlice ({
+export const resetPasswordOTP = createAsyncThunk(
+  "user/resetPasswordOTP",
+  async (values) => {
+    try {
+      const resetOTPEndPoint = await apiEndPoints.passwordResetOtp(values);
+      const response = await resetOTPEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const changePassword = createAsyncThunk(
+  "user/changePassword",
+  async (values) => {
+    try {
+      const changePasswordEndPoint = await apiEndPoints.changePassword(values);
+      const response = await changePasswordEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+const slice = createSlice({
   name: "user",
-  initialState : initialState,
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -151,13 +181,13 @@ const slice = createSlice ({
         state.loading = false;
       })
 
-      .addCase(userSignIn.rejected, (state) => {
-        state.loading = false;
+      .addCase(userSignIn.pending, (state) => {
+        state.loading = true;
         state.users = null;
         state.isAuthenticated = false;
       })
 
-      .addCase(signOut.fulfilled , (state)=>{
+      .addCase(signOut.fulfilled, (state) => {
         state.isAuthenticated = false;
         state.loading = false;
         state.users = null;
@@ -168,7 +198,7 @@ const slice = createSlice ({
           listVendors.fulfilled,
           vendorDetail.fulfilled,
           vendorReviewList.fulfilled,
-          singleCatalogueDetail.fulfilled,
+          singleCatalogueDetail.fulfilled
         ),
         (state, action) => {
           state.loading = false;
@@ -180,7 +210,7 @@ const slice = createSlice ({
           }
         }
       )
-      
+
       .addMatcher(
         isAnyOf(
           userAccountRegistration.fulfilled,
@@ -188,12 +218,14 @@ const slice = createSlice ({
           completeUserRegistration.fulfilled,
           writeReview.fulfilled,
           vendorReport.fulfilled,
+          resetPasswordOTP.fulfilled,
+          changePassword.fulfilled
         ),
         (state, action) => {
           state.loading = false;
           if (action.payload.statusCode === 200) {
             state.users = action.payload;
-            showSuccessMessage(action.payload.message)
+            showSuccessMessage(action.payload.message);
           } else {
             state.error = action.payload.message;
             showErrorMessage(action.payload.message);
@@ -213,6 +245,8 @@ const slice = createSlice ({
           writeReview.pending,
           vendorReport.pending,
           singleCatalogueDetail.pending,
+          resetPasswordOTP.pending,
+          changePassword.pending,
         ),
         (state) => {
           state.loading = true;
@@ -232,6 +266,9 @@ const slice = createSlice ({
           writeReview.rejected,
           vendorReport.rejected,
           singleCatalogueDetail.rejected,
+          resetPasswordOTP.rejected,
+          userSignIn.rejected,
+          changePassword.rejected,
         ),
         (state, action) => {
           state.loading = false;
@@ -241,7 +278,7 @@ const slice = createSlice ({
           state.error = showErrorMessage(errorMessage);
         }
       );
-  }
-})
+  },
+});
 
 export const userReducer = slice.reducer;

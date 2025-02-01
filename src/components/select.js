@@ -11,7 +11,7 @@ const SelectInput = ({ label, name, id, options, value, onChange, onBlur, onErro
             value={value}
             onChange={onChange}
             onBlur={onBlur}
-            className='w-full py-5 md:py-4 active:outline-0 focus:outline-0'>
+            className='w-full py-5 md:py-4 active:outline-0 focus:outline-0 bg-white'>
             {options.map((option, index) => (
               <option key={index} value={option.value}>
                 {option.label}

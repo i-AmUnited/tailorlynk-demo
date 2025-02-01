@@ -20,8 +20,10 @@ const TailorProfile = () => {
   const dispatch = useDispatch();
 
   const { vendorID } = useParams();
-  const vendorDetail = useVendorDetail(vendorID);
-  const vendorReviews = useVendorReviews(vendorID);
+  const decodedVendorID = atob(vendorID)
+  const vendorDetail = useVendorDetail(decodedVendorID)
+  const vendorReviews = useVendorReviews(decodedVendorID);
+
 
   const totalRating = vendorReviews.reduce(
     (sum, review) => sum + review.rating,
@@ -59,49 +61,47 @@ const TailorProfile = () => {
   ];
 
   const sendReviewForm = useFormik({
-    initialValues: {
-      vendor_id: vendorID,
-      rating: "",
-      review: "",
-      customer_name: username,
-    },
-    validationSchema: Yup.object({
-      rating: Yup.string().required("Please select a rating"),
-      review: Yup.string().required("Please write a review"),
-    }),
-    onSubmit: async (values) => {
-      const { vendor_id, rating, review, customer_name } = values;
-      let sendReviewData = { vendor_id, rating, review, customer_name };
-      const { payload } = await dispatch(writeReview(sendReviewData));
-      if (payload.statusCode === 200) {
-        setReportModal(false);
-      }
-    },
-  });
+        initialValues: {
+          vendor_id: decodedVendorID,
+          rating: "",
+          review: "",
+          customer_name: username,
+        },
+        validationSchema: Yup.object({
+          rating: Yup.string().required("Please select a rating"),
+          review: Yup.string().required("Please write a review"),
+        }),
+        onSubmit: async (values) => {
+          const { vendor_id, rating, review, customer_name } = values;
+          let sendReviewData = { vendor_id, rating, review, customer_name };
+          const { payload } = await dispatch(writeReview(sendReviewData));
+          if (payload.statusCode === 200) {
+            setReportModal(false);
+          }
+        },
+      });
 
-  const reportVendorForm = useFormik({
-    initialValues: {
-      email_address: email,
-      vendor_id: vendorID,
-      reason: "",
-      description: "",
-    },
-    validationSchema: Yup.object({
-      reason: Yup.string().required("Please select a reason"),
-      description: Yup.string().required(
-        "Please write a discription of your issue"
-      ),
-    }),
-    onSubmit: async (values) => {
-      const { email_address, vendor_id, reason, description } = values;
-      let reportVendorData = { email_address, vendor_id, reason, description };
-      const { payload } = await dispatch(vendorReport(reportVendorData));
-      if (payload.statusCode === 200) {
-        setReportDiv(false);
-        setReportSuccessDiv(true);
-      }
-    },
-  });
+      const reportVendorForm = useFormik({
+        initialValues: {
+          email_address: email,
+          vendor_id: decodedVendorID,
+          reason: "",
+          description: "",
+        },
+        validationSchema: Yup.object({
+          reason: Yup.string().required("Please select a reason"),
+          description: Yup.string().required("Please write a discription of your issue"),
+        }),
+        onSubmit: async (values) => {
+          const { email_address, vendor_id, reason, description } = values;
+          let reportVendorData = { email_address, vendor_id, reason, description };
+          const { payload } = await dispatch(vendorReport(reportVendorData));
+          if (payload.statusCode === 200) {
+            setReportDiv(false);
+            setReportSuccessDiv(true);
+          }
+        },
+      });
 
   return (
     <div>

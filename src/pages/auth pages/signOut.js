@@ -15,7 +15,6 @@ const SignOut = () => {
         return (
             <>
               <Navigate to={'/'} />
-              
             </>
         );
     }

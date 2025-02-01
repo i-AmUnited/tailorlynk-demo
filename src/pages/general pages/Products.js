@@ -86,7 +86,7 @@ const AllProducts = () => {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-                setCurrentPage(1); // Reset to page 1 when searching
+                setCurrentPage(1);
               }}
               customStyles="w-full"
               isSearch="true"
