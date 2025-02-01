@@ -64,56 +64,71 @@ function ChangePassword() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="relative">
           <label className="block text-gray-700">Old Password:</label>
-          <input
-            type={showOldPassword ? "text" : "password"} // Toggle visibility
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            placeholder="Enter old password"
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <button
-            type="button"
-            onClick={() => setShowOldPassword(!showOldPassword)}
-            className="absolute top-2 right-2"
-          >
-            <FontAwesomeIcon icon={showOldPassword ? faEyeSlash : faEye} />
-          </button>
+          <div className="relative">
+            <input
+              type={showOldPassword ? "text" : "password"} // Toggle visibility
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              placeholder="Enter old password"
+              className="w-full p-2 pr-10 border border-gray-300 rounded" // Added 'pr-10' for icon space
+            />
+            <button
+              type="button"
+              onClick={() => setShowOldPassword(!showOldPassword)}
+              className="absolute inset-y-0 right-3 flex items-center"
+            >
+              <FontAwesomeIcon
+                icon={showOldPassword ? faEyeSlash : faEye}
+                className="text-gray-500"
+              />
+            </button>
+          </div>
         </div>
 
         <div className="relative">
           <label className="block text-gray-700">New Password:</label>
-          <input
-            type={showNewPassword ? "text" : "password"} // Toggle visibility
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Enter new password"
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <button
-            type="button"
-            onClick={() => setShowNewPassword(!showNewPassword)}
-            className="absolute top-2 right-2"
-          >
-            <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
-          </button>
+          <div className="relative">
+            <input
+              type={showNewPassword ? "text" : "password"} // Toggle visibility
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Enter new password"
+              className="w-full p-2 pr-10 border border-gray-300 rounded"
+            />
+            <button
+              type="button"
+              onClick={() => setShowNewPassword(!showNewPassword)}
+              className="absolute inset-y-0 right-3 flex items-center"
+            >
+              <FontAwesomeIcon
+                icon={showNewPassword ? faEyeSlash : faEye}
+                className="text-gray-500"
+              />
+            </button>
+          </div>
         </div>
 
         <div className="relative">
           <label className="block text-gray-700">Confirm New Password:</label>
-          <input
-            type={showConfirmPassword ? "text" : "password"} // Toggle visibility
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm new password"
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <button
-            type="button"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute top-2 right-2"
-          >
-            <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
-          </button>
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"} // Toggle visibility
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm new password"
+              className="w-full p-2 pr-10 border border-gray-300 rounded"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute top-2 right-2"
+            >
+              <FontAwesomeIcon
+                icon={showConfirmPassword ? faEyeSlash : faEye}
+                className="text-gray-500"
+              />
+            </button>
+          </div>
         </div>
 
         <button
