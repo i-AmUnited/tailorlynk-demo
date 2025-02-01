@@ -13,6 +13,9 @@ const Feedback = () => {
     e.preventDefault();
     setLoading(true);
 
+    // Log the API Token before making the request
+    console.log("API Token:", process.env.REACT_APP_API_TOKEN);
+
     try {
       const response = await axios.post(
         FEEDBACK_API_URL, // Now using the specific feedback API URL
@@ -44,53 +47,59 @@ const Feedback = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-6 border rounded-lg shadow-sm bg-white">
+    <div className="rounded-lg  bg-white">
       <ToastContainer /> {/* Toast notification container */}
-      <h2 className="text-xl font-semibold mb-4">Feedback</h2>
-      <p className="text-sm text-gray-600 mb-6">
-        <span className="text-primary font-bold">We Value Your Feedback!</span>{" "}
-        Thank you for choosing TailorLynk. We strive to provide the best
+      <div className="px-4 py-6 border-b font-bold secondary-font">
+        Feedback
+      </div>
+      <p className="text-[#CB997E] font-medium mb-1">We Value Your Feedback!</p>
+      <p className="text-gray-600 mb-6 text-xs">
+        Thank you for choosing Tailorlynk. We strive to provide the best
         experience for our customers, and your feedback is essential in helping
         us achieve that goal. Whether you had an exceptional experience or there
         are areas where we can improve, we want to hear from you.
       </p>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+      <form onSubmit={handleSubmit} className="px-4 py-6">
+        <div className="">
           <label
             htmlFor="feedbackType"
-            className="block text-sm font-medium mb-1"
+            className="block text-sm font-medium text-gray-700"
           >
             Feedback type:
           </label>
           <select
             id="feedbackType"
-            className="w-full p-2 border rounded"
             value={feedbackType}
             onChange={(e) => setFeedbackType(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#CB997E] focus:border-[#CB997E] sm:text-sm"
           >
             <option>Positive feedback</option>
-            <option>Negative feedback</option>
             <option>Neutral feedback</option>
+            <option>Negative feedback</option>
           </select>
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="message" className="block text-sm font-medium mb-1">
+        <div className="mb-6">
+          <label
+            htmlFor="message"
+            className="block text-sm font-medium text-gray-700"
+          >
             Your message:
           </label>
           <textarea
             id="message"
-            rows="3"
-            className="w-full p-2 border rounded"
-            placeholder="Start typing..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            placeholder="Start typing..."
+            rows="4"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#CB997E] focus:border-[#CB997E] sm:text-sm resize-none"
+            required
           />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-primary text-white py-2 rounded-lg"
+          className="w-[20%] bg-primary text-white py-2 rounded-lg"
           disabled={loading}
         >
           {loading ? "Sending feedback..." : "Send feedback"}

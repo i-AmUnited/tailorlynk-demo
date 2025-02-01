@@ -11,6 +11,8 @@ import SavedStyles from "./SavedStyles";
 import ShippingAddress from "./ShippingAddress";
 import Feedback from "./Feedback";
 import ErrorPage from "../errorPage";
+import { useSelector } from "react-redux";
+import SignOut from "../auth pages/signOut";
 
 const SideLinks = [
   { id: 1, url: "/user-account", text: "Overview" },
@@ -29,6 +31,11 @@ function UserAccount() {
   const handleNavLinkClick = () => {
     setMobileNav(false); // Close the sidebar when a link is clicked
   };
+
+  const userSessionData = useSelector((state) => state.user.userSession);
+  if (!userSessionData) {
+    return <SignOut />;
+  }
 
   return (
     <div className="">
@@ -63,9 +70,7 @@ function UserAccount() {
                     end={url === "/user-account"}
                     onClick={handleNavLinkClick}
                     className={({ isActive }) =>
-                      isActive
-                        ? "text-black font-semibold"
-                        : "text-gray-400"
+                      isActive ? "text-black font-semibold" : "text-gray-400"
                     }
                   >
                     {text}
@@ -118,6 +123,7 @@ function UserAccount() {
             <Route path="saved-styles" element={<SavedStyles />} />
             <Route path="shipping-address" element={<ShippingAddress />} />
             <Route path="feedback" element={<Feedback />} />
+            <Route path="sign-out" element={<SignOut />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
