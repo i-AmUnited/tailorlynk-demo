@@ -52,55 +52,55 @@ const Navbar = () => {
           {showDropdown && (
             <div className="absolute top-full mt-2 right-0 min-w-44 max-w-56 bg-white shadow-lg border rounded-lg z-10 font-medium">
               <ul className="p-2 truncate">
-                { !userSessionData ?
-                <div>
-                  <Link to="/Sign-up">
-                    <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                      <img src={profile} alt="Arrow" className="h-[18px]" />
-                      <span className="truncate">Sign up</span>
-                    </li>
-                  </Link>
-                  <Link to="/sign-in">
-                    <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                      <img src={message} alt="Arrow" className="h-[18px]" />
-                      <span className="truncate">Sign in</span>
-                    </li>
-                  </Link>
-                </div>
-               :
-                <div>
-                  <Link to="/user-account">
-                    <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                      <img src={profile} alt="Arrow" className="h-[18px]" />
-                      <span className="truncate">My account</span>
-                    </li>
-                  </Link>
-                  <Link to="/user-account/message-center">
-                    <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                      <img src={message} alt="Arrow" className="h-[18px]" />
-                      <span className="truncate">Messages</span>
-                    </li>
-                  </Link>
-                  <Link to="user-account/order">
-                    <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                      <img src={receipt} alt="Arrow" className="h-[18px]" />
-                      <span className="truncate">Orders</span>
-                    </li>
-                  </Link>
-                  <Link to="/user-account/saved-styles">
-                    <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                      <img src={bookmark} alt="Arrow" className="h-[18px]" />
-                      <span className="truncate">Saved styles</span>
-                    </li>
-                  </Link>
-                  <Link to={"/user-account/sign-out"}>
-                    <li  className="p-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer flex items-center gap-2 truncate">
-                      <img src={signout} alt="Arrow" className="h-[18px]" />
-                      <span className="truncate">Signout</span>
-                    </li>
-                  </Link>
-                </div>
-                 }
+                {!userSessionData ? (
+                  <div>
+                    <Link to="/Sign-up">
+                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                        <img src={profile} alt="Arrow" className="h-[18px]" />
+                        <span className="truncate">Sign up</span>
+                      </li>
+                    </Link>
+                    <Link to="/sign-in">
+                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                        <img src={message} alt="Arrow" className="h-[18px]" />
+                        <span className="truncate">Sign in</span>
+                      </li>
+                    </Link>
+                  </div>
+                ) : (
+                  <div>
+                    <Link to="/user-account">
+                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                        <img src={profile} alt="Arrow" className="h-[18px]" />
+                        <span className="truncate">My account</span>
+                      </li>
+                    </Link>
+                    <Link to="/user-account/message-center">
+                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                        <img src={message} alt="Arrow" className="h-[18px]" />
+                        <span className="truncate">Messages</span>
+                      </li>
+                    </Link>
+                    <Link to="user-account/order">
+                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                        <img src={receipt} alt="Arrow" className="h-[18px]" />
+                        <span className="truncate">Orders</span>
+                      </li>
+                    </Link>
+                    <Link to="/user-account/saved-styles">
+                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                        <img src={bookmark} alt="Arrow" className="h-[18px]" />
+                        <span className="truncate">Saved styles</span>
+                      </li>
+                    </Link>
+                    <Link to={"/user-account/sign-out"}>
+                      <li className="p-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer flex items-center gap-2 truncate">
+                        <img src={signout} alt="Arrow" className="h-[18px]" />
+                        <span className="truncate">Signout</span>
+                      </li>
+                    </Link>
+                  </div>
+                )}
               </ul>
             </div>
           )}

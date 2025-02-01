@@ -10,7 +10,7 @@ import { useVendorDetail, useVendorReviews } from "../reuseableEffects";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../components/Spinners/Spinner";
 import { useFormik } from "formik";
-import * as Yup from "yup"
+import * as Yup from "yup";
 import { vendorReport, writeReview } from "../../hooks/local/reducer";
 import Input from "../../components/input";
 import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
@@ -20,10 +20,13 @@ const TailorProfile = () => {
   const dispatch = useDispatch();
 
   const { vendorID } = useParams();
-  const vendorDetail = useVendorDetail(vendorID)
+  const vendorDetail = useVendorDetail(vendorID);
   const vendorReviews = useVendorReviews(vendorID);
 
-  const totalRating = vendorReviews.reduce((sum, review) => sum + review.rating, 0)
+  const totalRating = vendorReviews.reduce(
+    (sum, review) => sum + review.rating,
+    0
+  );
   const averageRating = totalRating / vendorReviews.length;
   const roundedAverage = averageRating.toFixed(1);
 
@@ -56,47 +59,49 @@ const TailorProfile = () => {
   ];
 
   const sendReviewForm = useFormik({
-        initialValues: {
-          vendor_id: vendorID,
-          rating: "",
-          review: "",
-          customer_name: username,
-        },
-        validationSchema: Yup.object({
-          rating: Yup.string().required("Please select a rating"),
-          review: Yup.string().required("Please write a review"),
-        }),
-        onSubmit: async (values) => {
-          const { vendor_id, rating, review, customer_name } = values;
-          let sendReviewData = { vendor_id, rating, review, customer_name };
-          const { payload } = await dispatch(writeReview(sendReviewData));
-          if (payload.statusCode === 200) {
-            setReportModal(false);
-          }
-        },
-      });
+    initialValues: {
+      vendor_id: vendorID,
+      rating: "",
+      review: "",
+      customer_name: username,
+    },
+    validationSchema: Yup.object({
+      rating: Yup.string().required("Please select a rating"),
+      review: Yup.string().required("Please write a review"),
+    }),
+    onSubmit: async (values) => {
+      const { vendor_id, rating, review, customer_name } = values;
+      let sendReviewData = { vendor_id, rating, review, customer_name };
+      const { payload } = await dispatch(writeReview(sendReviewData));
+      if (payload.statusCode === 200) {
+        setReportModal(false);
+      }
+    },
+  });
 
-      const reportVendorForm = useFormik({
-        initialValues: {
-          email_address: email,
-          vendor_id: vendorID,
-          reason: "",
-          description: "",
-        },
-        validationSchema: Yup.object({
-          reason: Yup.string().required("Please select a reason"),
-          description: Yup.string().required("Please write a discription of your issue"),
-        }),
-        onSubmit: async (values) => {
-          const { email_address, vendor_id, reason, description } = values;
-          let reportVendorData = { email_address, vendor_id, reason, description };
-          const { payload } = await dispatch(vendorReport(reportVendorData));
-          if (payload.statusCode === 200) {
-            setReportDiv(false);
-            setReportSuccessDiv(true);
-          }
-        },
-      });
+  const reportVendorForm = useFormik({
+    initialValues: {
+      email_address: email,
+      vendor_id: vendorID,
+      reason: "",
+      description: "",
+    },
+    validationSchema: Yup.object({
+      reason: Yup.string().required("Please select a reason"),
+      description: Yup.string().required(
+        "Please write a discription of your issue"
+      ),
+    }),
+    onSubmit: async (values) => {
+      const { email_address, vendor_id, reason, description } = values;
+      let reportVendorData = { email_address, vendor_id, reason, description };
+      const { payload } = await dispatch(vendorReport(reportVendorData));
+      if (payload.statusCode === 200) {
+        setReportDiv(false);
+        setReportSuccessDiv(true);
+      }
+    },
+  });
 
   return (
     <div>
@@ -126,7 +131,6 @@ const TailorProfile = () => {
                   {vendorPersonal?.businessAddress}
                 </div>
               </div>
-              
             </div>
             <div className="text-xs">
               Orders are typically ready and shipped within 7 days
@@ -135,7 +139,10 @@ const TailorProfile = () => {
           <div className="grid gap-6 mb-10">
             <div className="">
               <div className="font-bold secondary-font mb-4">Catalogue:</div>
-              <VendorCatalogue vendorName={vendorPersonal?.businessName} products={vendorCatalogue} />
+              <VendorCatalogue
+                vendorName={vendorPersonal?.businessName}
+                products={vendorCatalogue}
+              />
             </div>
             <div className="">
               <div className="font-bold secondary-font mb-4">Materials:</div>
@@ -154,7 +161,11 @@ const TailorProfile = () => {
         </div>
         <div className="lg:col-span-3 lg:relative">
           <div className="lg:sticky lg:top-5">
-            <div className={`bg-white border rounded-md p-4 flex items-center gap-4 mb-4 ${vendorReviews.length === 0 ? "hidden" : ""}`}>
+            <div
+              className={`bg-white border rounded-md p-4 flex items-center gap-4 mb-4 ${
+                vendorReviews.length === 0 ? "hidden" : ""
+              }`}
+            >
               <div>
                 <div className="flex items-center justify-center size-12 bg-primary/20 rounded-full text-xs font-bold text-primary">
                   {roundedAverage}
@@ -164,7 +175,9 @@ const TailorProfile = () => {
                 <span>Average rating</span>
                 <span className="text-black/50 font-normal">
                   {vendorReviews.length} review
-                  <span className={`${vendorReviews.length > 1 ? "" : "hidden"}`}>
+                  <span
+                    className={`${vendorReviews.length > 1 ? "" : "hidden"}`}
+                  >
                     s
                   </span>
                 </span>
@@ -212,7 +225,11 @@ const TailorProfile = () => {
                 )}
               </div>
             </div>
-            <div className={`bg-white border rounded-md overflow-hidden mb-4 ${!userSessionData ? "hidden" : ""}`}>
+            <div
+              className={`bg-white border rounded-md overflow-hidden mb-4 ${
+                !userSessionData ? "hidden" : ""
+              }`}
+            >
               <div className="bg-white px-4 py-6 border-b font-bold secondary-font">
                 Report tailor
               </div>

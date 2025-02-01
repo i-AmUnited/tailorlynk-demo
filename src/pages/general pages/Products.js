@@ -8,11 +8,8 @@ import { useVendorList } from "../reuseableEffects";
 import { useSelector } from "react-redux";
 import Spinner from "../../components/Spinners/Spinner";
 
-
 const AllProducts = () => {
-
   const vendorList = useVendorList();
-
 
   // const products = [
   //   { id: 1, vendorName: "Adekunle Couture", vendorLocation: "Lagos" },
@@ -118,7 +115,11 @@ const AllProducts = () => {
         </div>
       )}
       {/* Pagination */}
-      <div className={`${filteredList.length === 0 || filteredList.length < 12 ? "hidden" : ""} flex items-center gap-2 mt-6 text-xs`}>
+      <div
+        className={`${
+          filteredList.length === 0 || filteredList.length < 12 ? "hidden" : ""
+        } flex items-center gap-2 mt-6 text-xs`}
+      >
         <button
           onClick={goToPreviousPage}
           disabled={currentPage === 1}

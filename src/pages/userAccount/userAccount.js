@@ -70,9 +70,7 @@ function UserAccount() {
                     end={url === "/user-account"}
                     onClick={handleNavLinkClick}
                     className={({ isActive }) =>
-                      isActive
-                        ? "text-black font-semibold"
-                        : "text-gray-400"
+                      isActive ? "text-black font-semibold" : "text-gray-400"
                     }
                   >
                     {text}
