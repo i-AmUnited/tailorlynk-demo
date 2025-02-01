@@ -20,8 +20,9 @@ const TailorProfile = () => {
   const dispatch = useDispatch();
 
   const { vendorID } = useParams();
-  const vendorDetail = useVendorDetail(vendorID)
-  const vendorReviews = useVendorReviews(vendorID);
+  const decodedVendorID = atob(vendorID)
+  const vendorDetail = useVendorDetail(decodedVendorID)
+  const vendorReviews = useVendorReviews(decodedVendorID);
 
   const totalRating = vendorReviews.reduce((sum, review) => sum + review.rating, 0)
   const averageRating = totalRating / vendorReviews.length;
@@ -57,7 +58,7 @@ const TailorProfile = () => {
 
   const sendReviewForm = useFormik({
         initialValues: {
-          vendor_id: vendorID,
+          vendor_id: decodedVendorID,
           rating: "",
           review: "",
           customer_name: username,
@@ -79,7 +80,7 @@ const TailorProfile = () => {
       const reportVendorForm = useFormik({
         initialValues: {
           email_address: email,
-          vendor_id: vendorID,
+          vendor_id: decodedVendorID,
           reason: "",
           description: "",
         },

@@ -13,7 +13,6 @@ const AllProducts = () => {
 
   const vendorList = useVendorList();
 
-
   // const products = [
   //   { id: 1, vendorName: "Adekunle Couture", vendorLocation: "Lagos" },
   //   { id: 2, vendorName: "Chukwu Stitches", vendorLocation: "Abuja" },
@@ -89,7 +88,7 @@ const AllProducts = () => {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-                setCurrentPage(1); // Reset to page 1 when searching
+                setCurrentPage(1);
               }}
               customStyles="w-full"
               isSearch="true"

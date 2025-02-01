@@ -30,7 +30,7 @@ const VendorCatalogue = ({ products = [], catalogueId}) => {
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
-          <Link to={`/product-detail/${product.catalogueId}`} >
+          <Link to={`/product-detail/${btoa(product.catalogueId)}`} >
             <div key={product.id} className="grid content-between md:text-xs">
               <div>
                 <img

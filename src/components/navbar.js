@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logos/logo.svg";
-import cart from "../assets/icons/cart.svg";
+import cartIcon from "../assets/icons/cart.svg";
 import arrow from "../assets/icons/arrow.svg";
 import bookmark from "../assets/icons/bookmark.svg";
 import profile from "../assets/icons/profile.svg";
@@ -9,10 +9,13 @@ import receipt from "../assets/icons/receipt.svg";
 import signout from "../assets/icons/signout.svg";
 import message from "../assets/icons/message.svg";
 import { useSelector } from "react-redux";
+import { useCart } from "./cartContext";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+
+  const { cart } = useCart();
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -105,10 +108,10 @@ const Navbar = () => {
             </div>
           )}
         </div>
-        <div className="flex items-end gap-1 font-semibold text-[13px] px-3 text-primary">
-          <img src={cart} alt="Cart" className="h-5" />
-          <span>0</span>
-        </div>
+        <Link to={"/cart"} className="flex items-end gap-1 font-semibold text-[13px] px-3 text-primary">
+          <img src={cartIcon} alt="Cart" className="h-5" />
+          <span>{cart.length}</span>
+        </Link>
       </div>
     </div>
   );

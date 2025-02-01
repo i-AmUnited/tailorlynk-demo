@@ -11,15 +11,26 @@ import { useParams } from "react-router-dom";
 import { useCatalogueDetail } from "../reuseableEffects";
 import Spinner from "../../components/Spinners/Spinner";
 import { useSelector } from "react-redux";
+import { useCart } from "../../components/cartContext";
 
 const ProductDetail = () => {
-  const { catalogueId } = useParams();
-  const productDetail = useCatalogueDetail(catalogueId);
+  const { addToCart, cart, removeFromCart } = useCart();
 
-  // used vendorID that is present in catalogue detail to get the business name from vendorDetail API
-  // const vendorID = productDetail?.vendorId || null;
-  // const vendorDetail = useVendorDetail(vendorID);
-  // const vendorName = vendorDetail?.vendorData?.businessName;
+  const { catalogueId } = useParams();
+  const decodedCatalogueID = atob(catalogueId);
+  const productDetail = useCatalogueDetail(decodedCatalogueID);
+
+  const [quantity, setQuantity] = useState(0);
+
+  const isInCart = cart.some(
+    (item) => item.catalogueId === productDetail.catalogueId
+  );
+
+  // Handle input change
+  const handleQuantityChange = (e) => {
+    const value = Math.max(1, parseInt(e.target.value, 10) || 1); // Ensure at least 1
+    setQuantity(value);
+  };
 
   const image1 = productDetail?.styleImageOne;
   const image2 = productDetail?.styleImageTwo;
@@ -27,7 +38,8 @@ const ProductDetail = () => {
 
   const images = [image1, image2, image3].filter((image) => image);
 
-  const placeholderImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrM4LKSRMQ1x9wl7ySwcTbyDW6a5PBxMa3-w&s"; 
+  const placeholderImage =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrM4LKSRMQ1x9wl7ySwcTbyDW6a5PBxMa3-w&s";
   const validImages = images.length > 0 ? images : [placeholderImage];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,11 +58,6 @@ const ProductDetail = () => {
     }
   };
 
-  const serviceType = [
-    { value: "express", label: "Express service" },
-    { value: "standard", label: "Standard service" },
-  ];
-
   return (
     <div>
       <Spinner loading={useSelector((state) => state.user).loading} />
@@ -63,8 +70,8 @@ const ProductDetail = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
-        <div className="lg:col-span-3 lg:relative">
-          <div className="lg:sticky lg:top-5">
+        <div className="lg:col-span-3 md:relative">
+          <div className="md:sticky md:top-5">
             <div className="aspect-square w-full relative rounded-lg overflow-hidden">
               <img
                 src={validImages[currentIndex] || placeholderImage}
@@ -105,15 +112,15 @@ const ProductDetail = () => {
           </div>
         </div>
         <div className="lg:col-span-4">
-            <div className="text-sm font-semibold mb-1">
-              Product description:
-            </div>
-            <div>{productDetail?.description}</div>
+          <div className="text-sm font-semibold mb-1">Product description:</div>
+          <div>{productDetail?.description}</div>
           <div className="grid gap-6 mt-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid">
                 <div className="text-sm font-medium">Tailor</div>
-                <div className="text-black/80">Vendor name</div>
+                <div className="text-black/80">
+                  {productDetail?.vendorData?.businessName}
+                </div>
               </div>
               <div className="grid">
                 <div className="text-sm font-medium">Price</div>
@@ -128,32 +135,47 @@ const ProductDetail = () => {
                 <div className="text-black/80">{productDetail?.noOfYard}</div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input label={"Quantity:"} type={"number"} />
-              <SelectInput label={"Service type"} options={serviceType} />
-            </div>
-            <div className="grid md:flex gap-4 items-center">
-              <div className="flex gap-4 items-center">
-                <Button
-                  buttonRole={"link"}
-                  buttonText={"Add to cart"}
-                  destination={"/cart"}
-                  otherStyles={"bg-primary text-white"}
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              {!isInCart && (
+                <Input
+                  label={"Quantity:"}
+                  type={"number"}
+                  value={quantity}
+                  onChange={handleQuantityChange}
                 />
+              )}
+            </div>
+            <div className="grid lg:flex gap-4 items-center">
+              <div className="grid grid-cols-2 md:flex gap-4 items-center">
+                <div>
+                  <Button
+                    buttonRole="custom"
+                    buttonText={isInCart ? "Remove from Cart" : "Add to Cart"}
+                    otherStyles={
+                      isInCart
+                        ? "text-red-500 bg-red-100"
+                        : "bg-primary text-white"
+                    }
+                    onClick={() =>
+                      isInCart
+                        ? removeFromCart(productDetail.catalogueId)
+                        : addToCart(productDetail, quantity)
+                    }
+                  />
+                </div>
                 <IconButton
                   buttonText={"Save this item"}
                   otherStyles={
-                    "bg-white border-[1.5px] border-primary text-primary"
+                    "bg-primary/20 text-primary"
                   }
                   icon={save}
                 />
               </div>
-              <div>
-                <IconButton
-                  buttonText={"Share item"}
-                  otherStyles={"text-primary"}
-                  icon={share}
-                />
+              <div className="grid grid-cols-2">
+                <div className="cursor-pointer text-xs font-medium py-5 md:py-4 px-6 rounded flex items-center gap-2 bg-white text-primary w-fit">
+                    <img src={share} alt="" className="h-4" />
+                    <span className="md:hidden">Share item</span>
+                </div>
               </div>
             </div>
           </div>
