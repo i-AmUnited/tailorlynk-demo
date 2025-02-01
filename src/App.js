@@ -11,18 +11,16 @@ function App() {
   return (
     <div>
       <>
-      <ToastContainer
-      bodyClassName={() => "flex items-center text-xs "}
-      />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/*" element={<Structure />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<CreateAccount />} />
-          <Route path="/forgot-password" element={<ResetPassword />} />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-      </BrowserRouter>
+        <ToastContainer bodyClassName={() => "flex items-center text-xs "} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/*" element={<Structure />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<CreateAccount />} />
+            <Route path="/forgot-password" element={<ResetPassword />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </BrowserRouter>
       </>
     </div>
   );

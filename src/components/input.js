@@ -1,14 +1,30 @@
 import { useState } from "react";
-import showPasswordIcon from "../assets/icons/eye.svg"
-import hidePasswordIcon from "../assets/icons/eyeShut.svg"
-import searchIcon from "../assets/icons/search.svg"
+import showPasswordIcon from "../assets/icons/eye.svg";
+import hidePasswordIcon from "../assets/icons/eyeShut.svg";
+import searchIcon from "../assets/icons/search.svg";
 
-const Input = ({label, type, placeholder, value, id, name, readOnly, disabled, customStyles, onChange, onBlur, onError, isPassword, isSearch, variant}) => {
+const Input = ({
+  label,
+  type,
+  placeholder,
+  value,
+  id,
+  name,
+  readOnly,
+  disabled,
+  customStyles,
+  onChange,
+  onBlur,
+  onError,
+  isPassword,
+  isSearch,
+  variant,
+}) => {
   const [inputType, setInputType] = useState(type);
 
   const togglePassword = () => {
-    setInputType((prevType) => (prevType === "password" ? "text" : "password"))
-  }
+    setInputType((prevType) => (prevType === "password" ? "text" : "password"));
+  };
   return (
     <div>
       <div className="grid gap-[2px]">
@@ -70,6 +86,6 @@ const Input = ({label, type, placeholder, value, id, name, readOnly, disabled, c
       <span className="text-red-500 text-xs">{onError}</span>
     </div>
   );
-}
- 
+};
+
 export default Input;
