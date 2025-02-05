@@ -32,80 +32,100 @@ const ResetPassword = () => {
         </div>
         <div className="bg-white rounded-lg border px-5 py-14">
           {/* Provide email address */}
-          {provideEmail && 
-          <div>
-            <div className="flex justify-between items-center mb-10">
-              <div className="font-bold text-primary">Reset password</div>
-              <Link
-                to={"/sign-in"}
-                className="underline underline-offset-2 text-brandGreen text-xs"
-              >
-                Sign in
-              </Link>
-            </div>
-            <div className="grid gap-4">
-              <Input label={"Email address:"} />
-              <div className="text-center text-xs text-brandGreen">
-              Please make sure you provide the email address
-you used to create your tailorlynk account. We’ll
-send a password reset code to complete
-this process.
+          {provideEmail && (
+            <div>
+              <div className="flex justify-between items-center mb-10">
+                <div className="font-bold text-primary">Reset password</div>
+                <Link
+                  to={"/sign-in"}
+                  className="underline underline-offset-2 text-brandGreen text-xs"
+                >
+                  Sign in
+                </Link>
+              </div>
+              <div className="grid gap-4">
+                <Input label={"Email address:"} />
+                <div className="text-center text-xs text-brandGreen">
+                  Please make sure you provide the email address you used to
+                  create your tailorlynk account. We’ll send a password reset
+                  code to complete this process.
+                </div>
+              </div>
+              <div className="mt-6 flex justify-center">
+                <Button
+                  buttonRole={"custom"}
+                  onClick={showVerifyEmail}
+                  buttonText={"Send email"}
+                  otherStyles={"bg-primary text-white"}
+                />
               </div>
             </div>
-            <div className="mt-6 flex justify-center">
-              <Button
-                buttonRole={"custom"}
-                onClick={showVerifyEmail}
-                buttonText={"Send email"}
-                otherStyles={"bg-primary text-white"}
-              />
-            </div>
-          </div>
-          }
+          )}
 
           {/* Verify email address */}
-          {verifyEmail &&
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <div className="font-bold text-primary">Verify email address</div>
-              <Link to={"/sign-in"} className="text-red-500 text-xs font-bold">
-                Cancel
-              </Link>
+          {verifyEmail && (
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <div className="font-bold text-primary">
+                  Verify email address
+                </div>
+                <Link
+                  to={"/sign-in"}
+                  className="text-red-500 text-xs font-bold"
+                >
+                  Cancel
+                </Link>
+              </div>
+              <p className="mb-10 text-black/60 text-[13px]">
+                We’ve sent a verification code to your email address. Please
+                provide the code below.
+              </p>
+              <Input label={"Verification code:"} />
+              <div className="mt-6 flex justify-center">
+                <Button
+                  buttonRole={"custom"}
+                  onClick={showCreateNewPassword}
+                  buttonText={"Continue"}
+                  otherStyles={"bg-primary text-white"}
+                />
+              </div>
             </div>
-            <p className="mb-10 text-black/60 text-[13px]">We’ve sent a verification code to your email address. Please provide the code below.</p>
-            <Input label={"Verification code:"} />
-            <div className="mt-6 flex justify-center">
-              <Button
-                buttonRole={"custom"}
-                onClick={showCreateNewPassword}
-                buttonText={"Continue"}
-                otherStyles={"bg-primary text-white"}
-              />
-            </div>
-          </div>
-          }
+          )}
 
           {/* Create new password */}
-          {createNewPassword &&
-          <div>
-          <div className="flex justify-between items-center mb-10">
-              <div className="font-bold text-primary">Create new password</div>
-              <Link to={"/sign-in"} className="text-red-500 text-xs font-bold">
-                Cancel
-              </Link>
+          {createNewPassword && (
+            <div>
+              <div className="flex justify-between items-center mb-10">
+                <div className="font-bold text-primary">
+                  Create new password
+                </div>
+                <Link
+                  to={"/sign-in"}
+                  className="text-red-500 text-xs font-bold"
+                >
+                  Cancel
+                </Link>
+              </div>
+              <div className="grid gap-4">
+                <Input
+                  label={"Password:"}
+                  type={"password"}
+                  isPassword={"true"}
+                />
+                <Input
+                  label={"Confirm password:"}
+                  type={"password"}
+                  isPassword={"true"}
+                />
+              </div>
+              <div className="mt-6 flex justify-center">
+                <Button
+                  buttonText={"Reset password"}
+                  otherStyles={"bg-primary text-white"}
+                />
+              </div>
             </div>
-            <div className="grid gap-4">
-              <Input label={"Password:"} type={"password"} isPassword={"true"}/>
-              <Input label={"Confirm password:"} type={"password"} isPassword={"true"}/>
-            </div>
-            <div className="mt-6 flex justify-center">
-              <Button
-                buttonText={"Reset password"}
-                otherStyles={"bg-primary text-white"}
-              />
-            </div>
-          </div>
-          }
+          )}
         </div>
       </div>
     </div>
