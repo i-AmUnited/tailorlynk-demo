@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesome
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"; // Import eye icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import axiosInstance from "../../api/axiosInstance";
+import { retrieveFromLocalStorage } from "../../hooks/constants";
 
 function ChangePassword() {
   const [oldPassword, setOldPassword] = useState("");
@@ -15,43 +17,41 @@ function ChangePassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if new password matches confirm password
     if (newPassword !== confirmPassword) {
       toast.error("New password and confirmation do not match.");
       return;
     }
 
-    // Ensure all fields are provided
     if (!oldPassword || !newPassword || !confirmPassword) {
       toast.error("All fields are required.");
       return;
     }
+
+    // Retrieve session data
+    const { userSession } = retrieveFromLocalStorage(["userSession"]);
+    const token = userSession?.data?.accessToken;
+    const apiKey = userSession?.data?.apiKey;
+
     try {
-      // Send the request to the API
-      const response = await fetch(
-        "https://api-tailorlynk.stayandflight.com/api/v1/customer/update-password",
+      const response = await axiosInstance.post(
+        "/customer/update-password",
         {
-          method: "POST",
+          old_password: oldPassword,
+          new_password: newPassword,
+          confirm_password: confirmPassword,
+        },
+        {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-            "x-api-key": "16112024",
+            "x-api-key": apiKey,
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            old_password: oldPassword,
-            new_password: newPassword,
-            confirm_password: confirmPassword,
-          }),
         }
       );
 
-      // Handle the response
-      const data = await response.json();
-
-      if (response.ok) {
+      if (response.status === 200) {
         toast.success("Password updated successfully!");
       } else {
-        toast.error(data.message || "Failed to update password.");
+        toast.error(response.data.message || "Failed to update password.");
       }
     } catch (error) {
       toast.error("An error occurred. Please try again.");

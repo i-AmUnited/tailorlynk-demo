@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axiosInstance from "../../api/axiosInstance";
+import { retrieveFromLocalStorage } from "../../hooks/constants";
 
 function ShippingAddress() {
   const [isInNigeria, setIsInNigeria] = useState(true);
@@ -20,37 +22,41 @@ function ShippingAddress() {
   };
 
   const handleSubmit = async () => {
-    setLoading(true); // Start loading state
+    setLoading(true);
+
+    // Retrieve session data
+    const { userSession } = retrieveFromLocalStorage(["userSession"]);
+    const token = userSession?.data?.accessToken;
+    const apiKey = userSession?.data?.apiKey;
+
     const payload = {
       location: isInNigeria ? "Nigeria" : "Not In Nigeria",
       ...formData,
     };
 
     try {
-      const response = await fetch(
-        "https://api-tailorlynk.stayandflight.com/api/v1/customer/create-shipping-address",
+      const response = await axiosInstance.post(
+        "/customer/create-shipping-address",
+        payload,
         {
-          method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-            "x-api-key": "16112024",
+            "x-api-key": apiKey,
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(payload),
         }
       );
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (response.status === 200) {
         toast.success("Shipping address saved successfully!");
       } else {
-        toast.error(data.message || "Failed to save shipping address.");
+        toast.error(
+          response.data.message || "Failed to save shipping address."
+        );
       }
     } catch (error) {
       toast.error("An error occurred. Please try again.");
     } finally {
-      setLoading(false); // Stop loading state
+      setLoading(false);
     }
   };
 

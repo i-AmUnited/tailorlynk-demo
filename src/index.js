@@ -5,6 +5,10 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import store from "./hooks/local/store";
 import { Provider } from "react-redux";
+import { initializeApiKey } from "./api/initializeApiKey";
+
+// Initialize the API key
+initializeApiKey();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

@@ -1,54 +1,72 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axiosInstance from "../../api/axiosInstance";
+import { retrieveFromLocalStorage } from "../../hooks/constants";
 
 const Feedback = () => {
   const [feedbackType, setFeedbackType] = useState("Positive feedback");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const FEEDBACK_API_URL = process.env.REACT_APP_FEEDBACK_API_URL;
+  const [feedback, setFeedback] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // Log the API Token before making the request
-    console.log("API Token:", process.env.REACT_APP_API_TOKEN);
+    // Retrieve session data using helper function
+    const { userSession } = retrieveFromLocalStorage(["userSession"]);
+    const token = userSession?.data?.accessToken;
+    const apiKey = userSession?.data?.apiKey;
+
+    console.log("Access Token:", token);
+    console.log("API Key:", apiKey);
+
+    // Validate feedbackType and message before sending
+    if (!feedbackType || !message) {
+      toast.error("Please fill in all fields.", { autoClose: 3000 });
+      setLoading(false);
+      return;
+    }
 
     try {
-      const response = await axios.post(
-        FEEDBACK_API_URL, // Now using the specific feedback API URL
-        {
-          type: feedbackType.replace(/\s+/g, ""),
-          message,
-        },
+      const payload = {
+        type: feedbackType,
+        message,
+      };
+
+      console.log("Payload:", payload);
+
+      const response = await axiosInstance.post(
+        "/customer/submit-feedback",
+        payload,
         {
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-            "x-api-key": "16112024",
-            "Content-Type": "application/json",
+            "x-api-key": apiKey,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       setLoading(false);
+
       if (response.status === 200) {
         toast.success("Thank you for your feedback! 🎉", { autoClose: 3000 });
-        setMessage(""); // Clear input field
+        setMessage("");
       }
     } catch (error) {
       setLoading(false);
-      toast.error(
-        error.response?.data?.message || "Failed to submit feedback.",
-        { autoClose: 3000 }
-      );
+      console.error("Error submitting feedback:", error);
+
+      const errorMessage =
+        error.response?.data?.message || "Failed to submit feedback.";
+      toast.error(errorMessage, { autoClose: 3000 });
     }
   };
 
   return (
     <div className="rounded-lg  bg-white">
-      <ToastContainer /> {/* Toast notification container */}
+      <ToastContainer />
       <div className="px-4 py-6 border-b font-bold secondary-font">
         Feedback
       </div>
