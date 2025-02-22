@@ -54,7 +54,7 @@ function ShippingAddress() {
         );
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again.");
+      toast.error("Please fill in your details.");
     } finally {
       setLoading(false);
     }

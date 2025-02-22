@@ -1,172 +1,142 @@
-import React, { useState } from "react";
-import infoIcon from "../../assets/icons/brownInfo.svg";
+import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axiosInstance from "../../api/axiosInstance";
+import { retrieveFromLocalStorage } from "../../hooks/constants";
 
-function Measurements() {
-  const [formData, setFormData] = useState({
-    chest: "",
-    waist: "",
-    hips: "",
-    shoulderWidth: "",
-    sleeveLength: "",
-    shirtLength: "",
-    thigh: "",
-    neck: "",
-    armhole: "",
-  });
+const Measurement = () => {
+  const [measurements, setMeasurements] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchMeasurements();
+  }, []);
+
+  const fetchMeasurements = async () => {
+    const { userSession } = retrieveFromLocalStorage(["userSession"]);
+    const token = userSession?.data?.accessToken;
+    const apiKey = userSession?.data?.apiKey;
+
+    try {
+      const response = await axiosInstance.get("/customer/fetch-measurement", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "x-api-key": apiKey,
+        },
+      });
+
+      if (response.status === 200 && response.data?.data) {
+        const apiData = response.data.data;
+
+        setMeasurements({
+          chest: apiData.chest || "",
+          waist: apiData.waist || "",
+          hip: apiData.hip || "",
+          shoulder: apiData.shoulder || "",
+          sleeveLength: apiData.shortSleeveLength || "",
+          shirtLength: apiData.shirtLength || "",
+          thigh: apiData.thigh || "",
+          neck: apiData.neck || "",
+          armHole: apiData.armHole || "",
+          others: apiData.others || "",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching measurements:", error);
+      toast.error("Failed to load measurements.");
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setMeasurements((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const formatForPostRequest = (data) => {
+    return {
+      chest: data.chest,
+      waist: data.waist,
+      hip: data.hip,
+      shoulder: data.shoulder,
+      short_sleeve_length: data.sleeveLength,
+      long_sleeve_length: data.longSleeveLength || "", // Ensure it's handled
+      thigh: data.thigh,
+      neck: data.neck,
+      arm_hole: data.armHole,
+      shirt_length: data.shirtLength,
+      others: data.others,
+    };
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Measurements Submitted:", formData);
+    setLoading(true);
+
+    const { userSession } = retrieveFromLocalStorage(["userSession"]);
+    const token = userSession?.data?.accessToken;
+    const apiKey = userSession?.data?.apiKey;
+
+    try {
+      const payload = formatForPostRequest(measurements);
+      const response = await axiosInstance.post(
+        "/customer/update-measurement",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "x-api-key": apiKey,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Measurements updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error updating measurements:", error);
+      toast.error("Failed to update measurements.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="">
-      <div className="px-4 py-6 border-b font-bold secondary-font">Measurements</div>
-      <div className="px-4 py-6">
-        <div className="flex gap-[5px] items-center mb-6 text-xs">
-          <img alt="*" src={infoIcon} className="h-[18px]" />
-          <span> For best results, please enter your measurements in <span className="text-primary font-semibold">centimeters</span>.</span>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div>
-              <label htmlFor="chest" className="block font-medium mb-1">
-                Chest / Bust:
-              </label>
-              <input
-                type="text"
-                id="chest"
-                name="chest"
-                value={formData.chest}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-              />
-            </div>
-            <div>
-              <label htmlFor="waist" className="block font-medium mb-1">
-                Waist:
-              </label>
-              <input
-                type="text"
-                id="waist"
-                name="waist"
-                value={formData.waist}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-              />
-            </div>
-            <div>
-              <label htmlFor="hips" className="block font-medium mb-1">
-                Hips:
-              </label>
-              <input
-                type="text"
-                id="hips"
-                name="hips"
-                value={formData.hips}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-              />
-            </div>
-            <div>
-              <label htmlFor="shoulderWidth" className="block font-medium mb-1">
-                Shoulder width:
-              </label>
-              <input
-                type="text"
-                id="shoulderWidth"
-                name="shoulderWidth"
-                value={formData.shoulderWidth}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-              />
-            </div>
-            <div>
-              <label htmlFor="sleeveLength" className="block font-medium mb-1">
-                Sleeve length:
-              </label>
-              <input
-                type="text"
-                id="sleeveLength"
-                name="sleeveLength"
-                value={formData.sleeveLength}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-              />
-            </div>
-            <div>
-              <label htmlFor="shirtLength" className="block font-medium mb-1">
-                Shirt length:
-              </label>
-              <input
-                type="text"
-                id="shirtLength"
-                name="shirtLength"
-                value={formData.shirtLength}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-              />
-            </div>
-            <div>
-              <label htmlFor="thigh" className="block font-medium mb-1">
-                Thigh:
-              </label>
-              <input
-                type="text"
-                id="thigh"
-                name="thigh"
-                value={formData.thigh}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-              />
-            </div>
-            <div>
-              <label htmlFor="neck" className="block font-medium mb-1">
-                Neck:
-              </label>
-              <input
-                type="text"
-                id="neck"
-                name="neck"
-                value={formData.neck}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-              />
-            </div>
-            <div>
-              <label htmlFor="armhole" className="block font-medium mb-1">
-                Armhole:
-              </label>
-              <input
-                type="text"
-                id="armhole"
-                name="armhole"
-                value={formData.armhole}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:border-indigo-400"
-              />
-            </div>
+    <div className="rounded-lg bg-white p-6">
+      <ToastContainer />
+      <h2 className="text-lg font-bold mb-4">Your Measurements</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+      >
+        {Object.keys(measurements).map((key) => (
+          <div key={key}>
+            <label className="block font-medium mb-1">
+              {key
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase())}
+              :
+            </label>
+            <input
+              type="text"
+              name={key}
+              value={measurements[key]}
+              onChange={handleChange}
+              className="input-style"
+            />
           </div>
-          <div className="mt-4">
-            <button
-              type="submit"
-              className="px-6 py-2 bg-indigo-500 text-white font-medium rounded-md hover:bg-indigo-600"
-            >
-              Save measurements
-            </button>
-          </div>
-        </form>
-      </div>
+        ))}
+      </form>
+
+      <button
+        type="submit"
+        onClick={handleSubmit}
+        className="mt-4 bg-primary text-white py-2 px-4 rounded-lg"
+        disabled={loading}
+      >
+        {loading ? "Saving..." : "Save Measurements"}
+      </button>
     </div>
   );
-}
+};
 
-export default Measurements;
+export default Measurement;
