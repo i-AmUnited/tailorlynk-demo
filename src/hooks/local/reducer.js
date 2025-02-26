@@ -163,6 +163,19 @@ export const changePassword = createAsyncThunk(
   }
 );
 
+export const placeOrder = createAsyncThunk(
+  "user/placeOrder",
+  async (values) => {
+    try {
+      const placeOrderEndPoint = await apiEndPoints.createOrder(values);
+      const response = await placeOrderEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
 const slice = createSlice({
   name: "user",
   initialState: initialState,
@@ -219,7 +232,8 @@ const slice = createSlice({
           writeReview.fulfilled,
           vendorReport.fulfilled,
           resetPasswordOTP.fulfilled,
-          changePassword.fulfilled
+          changePassword.fulfilled,
+          placeOrder.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -247,6 +261,7 @@ const slice = createSlice({
           singleCatalogueDetail.pending,
           resetPasswordOTP.pending,
           changePassword.pending,
+          placeOrder.pending,
         ),
         (state) => {
           state.loading = true;
@@ -269,6 +284,7 @@ const slice = createSlice({
           resetPasswordOTP.rejected,
           userSignIn.rejected,
           changePassword.rejected,
+          placeOrder.rejected,
         ),
         (state, action) => {
           state.loading = false;

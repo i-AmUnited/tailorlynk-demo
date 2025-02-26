@@ -43,8 +43,17 @@ const addToCart = (item, quantity = 1) => {
     localStorage.removeItem("cart");
   };
 
+  const updateCartQuantity = (id, newQuantity) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.catalogueId === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+  
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, updateCartQuantity }}>
       {children}
     </CartContext.Provider>
   );

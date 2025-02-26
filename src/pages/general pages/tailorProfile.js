@@ -14,6 +14,9 @@ import * as Yup from "yup";
 import { vendorReport, writeReview } from "../../hooks/local/reducer";
 import Input from "../../components/input";
 import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 
 const TailorProfile = () => {
   const loading = useSelector((state) => state.user.loading);
@@ -114,10 +117,12 @@ const TailorProfile = () => {
                 <Back />
                 <span>{vendorPersonal?.businessName}</span>
               </div>
-              <img
-                src={vendorPersonal?.brandLogo}
-                alt=""
-                className="h-[250px] w-full object-cover"
+              <LazyLoadImage
+                    effect="blur"
+                    src={vendorPersonal?.brandLogo}
+                    alt=""
+                    placeholderSrc={placeholderImage}
+                    wrapperClassName="w-full aspect-video md:aspect-square object-cover object-center rounded-md"
               />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
