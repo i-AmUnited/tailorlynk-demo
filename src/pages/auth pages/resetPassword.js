@@ -14,7 +14,9 @@ const ResetPassword = () => {
   const [verifyEmail, setVerifyEmail] = useState(false);
   const [createNewPassword, setCreateNewPassword] = useState(false);
 
+
   
+  const navigate = useNavigate();
 
   const loading = useSelector((state) => state.user.loading);
 
@@ -86,6 +88,7 @@ const ResetPassword = () => {
       const { payload } = await dispatch(changePassword(changePasswordData));
       if (payload.statusCode === 200) {
         showSuccessMessage(payload.message);
+        navigate("/user-account")
       }
     },
   });

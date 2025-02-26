@@ -1,4 +1,3 @@
-import SelectInput from "../../components/select";
 import info from "../../assets/icons/info.svg";
 import { Link } from "react-router-dom";
 import { useCart } from "../../components/cartContext";
@@ -9,7 +8,7 @@ import { useState } from "react";
 import Back from "../../components/goBack";
 
 const Cart = () => {
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, removeFromCart, clearCart, updateCartQuantity } = useCart();
   
   // Track individual product quantities
   const [quantity, setQuantity] = useState(
@@ -19,20 +18,34 @@ const Cart = () => {
     }, {})
   );
 
+  // const handleIncrease = (id) => {
+  //   setQuantity((prev) => ({ ...prev, [id]: prev[id] + 1 }));
+  // };
+
+  // const handleDecrease = (id) => {
+  //   if (quantity[id] > 1) {
+  //     setQuantity((prev) => ({ ...prev, [id]: prev[id] - 1 }));
+  //   }
+  // };
+
   const handleIncrease = (id) => {
-    setQuantity((prev) => ({ ...prev, [id]: prev[id] + 1 }));
-  };
+  setQuantity((prev) => {
+    const newQuantity = prev[id] + 1;
+    updateCartQuantity(id, newQuantity);
+    return { ...prev, [id]: newQuantity };
+  });
+};
 
-  const handleDecrease = (id) => {
-    if (quantity[id] > 1) {
-      setQuantity((prev) => ({ ...prev, [id]: prev[id] - 1 }));
-    }
-  };
+const handleDecrease = (id) => {
+  if (quantity[id] > 1) {
+    setQuantity((prev) => {
+      const newQuantity = prev[id] - 1;
+      updateCartQuantity(id, newQuantity);
+      return { ...prev, [id]: newQuantity };
+    });
+  }
+};
 
-  const serviceType = [
-    { value: "express", label: "Express service" },
-    { value: "standard", label: "Standard service" },
-  ];
 
   return (
     <div>
@@ -106,7 +119,6 @@ const Cart = () => {
                   </div>
                 </div>
               ))}
-              <SelectInput label={"Service type"} options={serviceType} />
               <div className="mt-4 grid md:flex gap-3 items-center">
                 <img alt="" src={info} />
                 <div className="text-xs leading-5">
@@ -148,6 +160,7 @@ const Cart = () => {
                   <div>Total:</div>
                   <div>&#8358;35,000 </div>
                 </div>
+                <Link to={"/checkout"}>Checkout</Link>
               </div>
             </div>
           </div>

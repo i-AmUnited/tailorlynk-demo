@@ -14,6 +14,9 @@ import * as Yup from "yup"
 import { vendorReport, writeReview } from "../../hooks/local/reducer";
 import Input from "../../components/input";
 import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 
 const TailorProfile = () => {
   const loading = useSelector((state) => state.user.loading);
@@ -110,10 +113,12 @@ const TailorProfile = () => {
                 <Back />
                 <span>{vendorPersonal?.businessName}</span>
               </div>
-              <img
-                src={vendorPersonal?.brandLogo}
-                alt=""
-                className="h-[250px] w-full object-cover"
+              <LazyLoadImage
+                    effect="blur"
+                    src={vendorPersonal?.brandLogo}
+                    alt=""
+                    placeholderSrc={placeholderImage}
+                    wrapperClassName="w-full aspect-video md:aspect-square object-cover object-center rounded-md"
               />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
@@ -127,7 +132,6 @@ const TailorProfile = () => {
                   {vendorPersonal?.businessAddress}
                 </div>
               </div>
-              
             </div>
             <div className="text-xs">
               Orders are typically ready and shipped within 7 days
@@ -136,7 +140,10 @@ const TailorProfile = () => {
           <div className="grid gap-6 mb-10">
             <div className="">
               <div className="font-bold secondary-font mb-4">Catalogue:</div>
-              <VendorCatalogue vendorName={vendorPersonal?.businessName} products={vendorCatalogue} />
+              <VendorCatalogue
+                vendorName={vendorPersonal?.businessName}
+                products={vendorCatalogue}
+              />
             </div>
             <div className="">
               <div className="font-bold secondary-font mb-4">Materials:</div>
@@ -155,7 +162,11 @@ const TailorProfile = () => {
         </div>
         <div className="lg:col-span-3 lg:relative">
           <div className="lg:sticky lg:top-5">
-            <div className={`bg-white border rounded-md p-4 flex items-center gap-4 mb-4 ${vendorReviews.length === 0 ? "hidden" : ""}`}>
+            <div
+              className={`bg-white border rounded-md p-4 flex items-center gap-4 mb-4 ${
+                vendorReviews.length === 0 ? "hidden" : ""
+              }`}
+            >
               <div>
                 <div className="flex items-center justify-center size-12 bg-primary/20 rounded-full text-xs font-bold text-primary">
                   {roundedAverage}
@@ -165,7 +176,9 @@ const TailorProfile = () => {
                 <span>Average rating</span>
                 <span className="text-black/50 font-normal">
                   {vendorReviews.length} review
-                  <span className={`${vendorReviews.length > 1 ? "" : "hidden"}`}>
+                  <span
+                    className={`${vendorReviews.length > 1 ? "" : "hidden"}`}
+                  >
                     s
                   </span>
                 </span>
@@ -213,7 +226,11 @@ const TailorProfile = () => {
                 )}
               </div>
             </div>
-            <div className={`bg-white border rounded-md overflow-hidden mb-4 ${!userSessionData ? "hidden" : ""}`}>
+            <div
+              className={`bg-white border rounded-md overflow-hidden mb-4 ${
+                !userSessionData ? "hidden" : ""
+              }`}
+            >
               <div className="bg-white px-4 py-6 border-b font-bold secondary-font">
                 Report tailor
               </div>

@@ -7,6 +7,8 @@ import ProductDetail from "./general pages/productPage";
 import Cart from "./general pages/cart";
 import UserAccount from "./userAccount/userAccount";
 import AllProducts from "./general pages/Products";
+import Checkout from "./general pages/checkout";
+import PrivacyPolicy from "./general pages/privacyPolicy";
 
 const Structure = () => {
   return (
@@ -19,6 +21,8 @@ const Structure = () => {
             <Route path="all-products" element={<AllProducts />} />
             <Route path="product-detail/:catalogueId" element={<ProductDetail />} />
             <Route path="cart" element={<Cart />} />
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="checkout" element={<Checkout />} />
             <Route path="user-account/*" element={<UserAccount />} />
         </Routes>
       </div>

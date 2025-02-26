@@ -2,7 +2,6 @@ import Back from "../../components/goBack";
 import { useState } from "react";
 import arrow from "../../assets/icons/whiteArrow.svg";
 import Input from "../../components/input";
-import SelectInput from "../../components/select";
 import Button from "../../components/button";
 import IconButton from "../../components/buttonWithIcon";
 import save from "../../assets/icons/bookmark.svg";
@@ -12,6 +11,9 @@ import { useCatalogueDetail } from "../reuseableEffects";
 import Spinner from "../../components/Spinners/Spinner";
 import { useSelector } from "react-redux";
 import { useCart } from "../../components/cartContext";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 
 const ProductDetail = () => {
   const { addToCart, cart, removeFromCart } = useCart();
@@ -38,8 +40,6 @@ const ProductDetail = () => {
 
   const images = [image1, image2, image3].filter((image) => image);
 
-  const placeholderImage =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrM4LKSRMQ1x9wl7ySwcTbyDW6a5PBxMa3-w&s";
   const validImages = images.length > 0 ? images : [placeholderImage];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -73,10 +73,12 @@ const ProductDetail = () => {
         <div className="lg:col-span-3 md:relative">
           <div className="md:sticky md:top-5">
             <div className="aspect-square w-full relative rounded-lg overflow-hidden">
-              <img
-                src={validImages[currentIndex] || placeholderImage}
-                alt={`Slide ${currentIndex + 1}`}
-                className="w-full aspect-square object-cover transition-opacity duration-500 opacity-100"
+              <LazyLoadImage
+                src={validImages[currentIndex]}
+                effect="blur"
+                alt=""
+                placeholderSrc={placeholderImage}
+                wrapperClassName="w-full h-full object-cover object-center"
               />
               <div className="absolute top-0 w-full h-full flex items-end justify-center text-white px-4 pb-6">
                 <div className="p-2 rounded bg-brandGreen/20 w-fit backdrop-blur-md flex gap-[6px]">
@@ -165,16 +167,14 @@ const ProductDetail = () => {
                 </div>
                 <IconButton
                   buttonText={"Save this item"}
-                  otherStyles={
-                    "bg-primary/20 text-primary"
-                  }
+                  otherStyles={"bg-primary/20 text-primary"}
                   icon={save}
                 />
               </div>
               <div className="grid grid-cols-2">
                 <div className="cursor-pointer text-xs font-medium py-5 md:py-4 px-6 rounded flex items-center gap-2 bg-white text-primary w-fit">
-                    <img src={share} alt="" className="h-4" />
-                    <span className="md:hidden">Share item</span>
+                  <img src={share} alt="" className="h-4" />
+                  <span className="md:hidden">Share item</span>
                 </div>
               </div>
             </div>

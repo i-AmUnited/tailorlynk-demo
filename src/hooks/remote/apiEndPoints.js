@@ -131,4 +131,13 @@ export class apiEndPoints {
       throw error;
     }
   }
+
+  static async createOrder(data) {
+    try {
+      return apiClient.post("/create-order", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
 }
