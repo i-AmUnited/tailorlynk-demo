@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import arrow from "../../assets/icons/arrow.svg";
+import Modal from "../../components/modal";
 
 const Orders = () => {
   
-  const [orderStatusDetails, setOrderStatusDetails] = useState(false);
-  const toggleOrderStatusDetails = (orderId) => {
-    setOrderStatusDetails((prevState) => ({
-      ...prevState,
-      [orderId]: !prevState[orderId],
-    }));
-  };
+  const [orderStatusModal, setOrderStatusModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 4;
 
@@ -109,19 +104,19 @@ const Orders = () => {
         {/* Orders List */}
         {currentOrders.map((order) => (
           <div key={order.id} className="border-b pb-4">
-            <div className="grid md:flex items-start gap-4">
+            <div className="flex items-start gap-4">
               <img
                 src="https://images.unsplash.com/photo-1661332530594-cdebec770a38?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="order-img"
                 className="size-16 rounded-md object-cover"
               />
               <div className="grid w-full gap-4">
-                <div className="grid gap-2 md:flex items-center justify-between">
-                  <div className="font-semibold order-2 md:order-1">{order.title}</div>
-                  <div className="text-primary text-xs order-1 md:order-2">[View item]</div>
+                <div className="flex items-center justify-between">
+                  <div className="font-semibold">{order.title}</div>
+                  <div className="text-primary text-xs">[View item]</div>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-                  <p className="grid col-span-2 md:col-span-1">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                  <p className="grid">
                     <span className="font-medium">Vendor/Tailor: </span>
                     <span className="text-primary">
                       {order.tailor || order.vendor}
@@ -136,22 +131,17 @@ const Orders = () => {
                     <span>{order.date}</span>
                   </p>
                 </div>
-                <div className="grid gap-1 text-xs">
-                  <div className="flex gap-2 items-center text-black/50 cursor-pointer" onClick={() => toggleOrderStatusDetails(order.id)}>
-                    <span>Order status:</span>
-                    <span>Work in progress</span>
-                    <img alt="" src={arrow} className={`${orderStatusDetails[order.id] ? "rotate-180 h-5" : "-rotate-90 h-5"} `} />
-                  </div>
-                  {
-                    orderStatusDetails[order.id] &&
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-1">
-                      <div className="flex items-center gap-2"><div className="size-2 bg-primary rounded-full"></div><div>Order received</div></div>
-                      <div className="flex items-center gap-2 opacity-35"><div className="size-2 bg-primary rounded-full"></div><div>Work in progress</div></div>
-                      <div className="flex items-center gap-2 opacity-35"><div className="size-2 bg-primary rounded-full"></div><div>Work completed</div></div>
-                      <div className="flex items-center gap-2 opacity-35"><div className="size-2 bg-primary rounded-full"></div><div>Order shipped</div></div>
-                    </div>
-                  }
+                <div className="flex gap-2 items-center text-xs text-black/50 cursor-pointer" onClick={() => setOrderStatusModal(true)}>
+                  <span>Order status:</span>
+                  <span>Work in progress</span>
+                  <img alt="" src={arrow} className="-rotate-90 h-5" />
                 </div>
+                {
+                  orderStatusModal &&
+                  <div>
+                    {order.title}
+                  </div>
+                }
               </div>
             </div>
             {/* Order status */}
@@ -169,25 +159,33 @@ const Orders = () => {
           </div>
         ))}
         {/* Pagination */}
-        <div className="flex items-center gap-2 mt-6 text-xs">
-        <button
-          onClick={goToPrevPage}
-          disabled={currentPage === 1}
-          className="size-8 rounded-md bg-primary/15 flex items-center justify-center disabled:opacity-50"
-        >
-          <img src={arrow} alt="" className="h-5 rotate-90"/>
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={goToNextPage}
-          disabled={currentPage === totalPages}
-          className="size-8 rounded-md bg-primary/15 flex items-center justify-center disabled:opacity-50"
-        >
-          <img src={arrow} alt="" className="h-5 -rotate-90"/>
-        </button>
-      </div>
+        <div className="flex items-center justify-center mt-6">
+          <button
+            onClick={goToPrevPage}
+            disabled={currentPage === 1}
+            className={`px-3 py-1 mx-1 rounded ${
+              currentPage === 1
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-[#CB997E] text-white hover:bg-[#B5838D]"
+            }`}
+          >
+            Prev
+          </button>
+          <span className="text-gray-700 mx-2">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className={`px-3 py-1 mx-1 rounded ${
+              currentPage === totalPages
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-[#CB997E] text-white hover:bg-[#B5838D]"
+            }`}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ import { useVendorDetail, useVendorReviews } from "../reuseableEffects";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../components/Spinners/Spinner";
 import { useFormik } from "formik";
-import * as Yup from "yup"
+import * as Yup from "yup";
 import { vendorReport, writeReview } from "../../hooks/local/reducer";
 import Input from "../../components/input";
 import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
@@ -27,7 +27,11 @@ const TailorProfile = () => {
   const vendorDetail = useVendorDetail(decodedVendorID)
   const vendorReviews = useVendorReviews(decodedVendorID);
 
-  const totalRating = vendorReviews.reduce((sum, review) => sum + review.rating, 0)
+
+  const totalRating = vendorReviews.reduce(
+    (sum, review) => sum + review.rating,
+    0
+  );
   const averageRating = totalRating / vendorReviews.length;
   const roundedAverage = averageRating.toFixed(1);
 
