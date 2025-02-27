@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import twitterIcon from "../assets/icons/X.svg";
 import instagramIcon from "../assets/icons/instagram.svg";
 
@@ -9,7 +10,7 @@ const Footer = () => {
         <span>About us</span>
         <span>Contact</span>
         <span>FAQs</span>
-        <span>Privacy policy</span>
+        <Link to={"/privacy-policy"}>Privacy policy</Link>
         <span>Terms of service</span>
       </div>
       <hr className="opacity-30" />
