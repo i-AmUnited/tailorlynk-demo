@@ -7,6 +7,7 @@ import bookmark from "../assets/icons/bookmark.svg";
 import profile from "../assets/icons/profile.svg";
 import receipt from "../assets/icons/receipt.svg";
 import signout from "../assets/icons/signout.svg";
+import signIn from "../assets/icons/signIn.svg";
 import message from "../assets/icons/message.svg";
 import { useSelector } from "react-redux";
 import { useCart } from "./cartContext";
@@ -65,7 +66,7 @@ const Navbar = () => {
                     </Link>
                     <Link to="/sign-in">
                       <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                        <img src={message} alt="Arrow" className="h-[18px]" />
+                        <img src={signIn} alt="Arrow" className="h-[18px]" />
                         <span className="truncate">Sign in</span>
                       </li>
                     </Link>
