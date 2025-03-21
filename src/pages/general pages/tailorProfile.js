@@ -118,13 +118,15 @@ const TailorProfile = () => {
                 <Back />
                 <span>{vendorPersonal?.businessName}</span>
               </div>
-              <LazyLoadImage
+              <div className="w-full h-full aspect-video rounded-b-md overflow-hidden">
+                <LazyLoadImage
                 effect="blur"
                 src={vendorPersonal?.brandLogo}
                 alt=""
                 placeholderSrc={placeholderImage}
-                wrapperClassName="w-full aspect-video md:aspect-square object-cover object-center rounded-md"
+                className="object-cover object-center w-full h-full"
               />
+              </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
               <div className="grid">
