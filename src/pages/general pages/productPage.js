@@ -8,7 +8,7 @@ import save from "../../assets/icons/bookmark.svg";
 import share from "../../assets/icons/share.svg";
 import { useParams } from "react-router-dom";
 import { useCatalogueDetail } from "../reuseableEffects";
-import Spinner from "../../components/Spinners/Spinner";
+import Spinner from "../../components/Spinners/pageLoadingSpinner";
 import { useSelector } from "react-redux";
 import { useCart } from "../../components/cartContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -16,13 +16,15 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 
 const ProductDetail = () => {
+  const loading = useSelector((state) => state.user.loading);
+
   const { addToCart, cart, removeFromCart } = useCart();
 
   const { catalogueId } = useParams();
   const decodedCatalogueID = atob(catalogueId);
   const productDetail = useCatalogueDetail(decodedCatalogueID);
 
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   const isInCart = cart.some(
     (item) => item.catalogueId === productDetail.catalogueId
@@ -61,6 +63,7 @@ const ProductDetail = () => {
   return (
     <div>
       <Spinner loading={useSelector((state) => state.user).loading} />
+      
       <div className="flex items-center gap-4 mb-4">
         <div>
           <Back />
@@ -78,7 +81,7 @@ const ProductDetail = () => {
                 effect="blur"
                 alt=""
                 placeholderSrc={placeholderImage}
-                wrapperClassName="w-full h-full object-cover object-center"
+                className="object-cover object-center w-full h-full"
               />
               <div className="absolute top-0 w-full h-full flex items-end justify-center text-white px-4 pb-6">
                 <div className="p-2 rounded bg-brandGreen/20 w-fit backdrop-blur-md flex gap-[6px]">

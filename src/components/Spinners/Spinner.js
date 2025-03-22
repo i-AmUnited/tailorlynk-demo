@@ -1,15 +1,10 @@
 import * as React from "react";
 
-const Spinner = ({loading}) => {
+const Spinner = () => {
     return (
-        <div>
-            {loading &&
-                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="w-10 h-10 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
-                  </div>
-                }
-        </div>
+      <div className="w-5 h-5 border-[3px] border-t-transparent border-gray-500 rounded-full animate-spin"></div>
     );
-}
-
-export default Spinner;
+  };
+  
+  export default Spinner;
+  

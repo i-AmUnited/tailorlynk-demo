@@ -8,14 +8,14 @@ import Modal from "../../components/modal";
 import { useParams } from "react-router-dom";
 import { useVendorDetail, useVendorReviews } from "../reuseableEffects";
 import { useDispatch, useSelector } from "react-redux";
-import Spinner from "../../components/Spinners/Spinner";
+import Spinner from "../../components/Spinners/pageLoadingSpinner";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { vendorReport, writeReview } from "../../hooks/local/reducer";
 import Input from "../../components/input";
 import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import "react-lazy-load-image-component/src/effects/blur.css";
 import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 
 const TailorProfile = () => {
@@ -23,10 +23,9 @@ const TailorProfile = () => {
   const dispatch = useDispatch();
 
   const { vendorID } = useParams();
-  const decodedVendorID = atob(vendorID)
-  const vendorDetail = useVendorDetail(decodedVendorID)
+  const decodedVendorID = atob(vendorID);
+  const vendorDetail = useVendorDetail(decodedVendorID);
   const vendorReviews = useVendorReviews(decodedVendorID);
-
 
   const totalRating = vendorReviews.reduce(
     (sum, review) => sum + review.rating,
@@ -64,47 +63,49 @@ const TailorProfile = () => {
   ];
 
   const sendReviewForm = useFormik({
-        initialValues: {
-          vendor_id: decodedVendorID,
-          rating: "",
-          review: "",
-          customer_name: username,
-        },
-        validationSchema: Yup.object({
-          rating: Yup.string().required("Please select a rating"),
-          review: Yup.string().required("Please write a review"),
-        }),
-        onSubmit: async (values) => {
-          const { vendor_id, rating, review, customer_name } = values;
-          let sendReviewData = { vendor_id, rating, review, customer_name };
-          const { payload } = await dispatch(writeReview(sendReviewData));
-          if (payload.statusCode === 200) {
-            setReportModal(false);
-          }
-        },
-      });
+    initialValues: {
+      vendor_id: decodedVendorID,
+      rating: "",
+      review: "",
+      customer_name: username,
+    },
+    validationSchema: Yup.object({
+      rating: Yup.string().required("Please select a rating"),
+      review: Yup.string().required("Please write a review"),
+    }),
+    onSubmit: async (values) => {
+      const { vendor_id, rating, review, customer_name } = values;
+      let sendReviewData = { vendor_id, rating, review, customer_name };
+      const { payload } = await dispatch(writeReview(sendReviewData));
+      if (payload.statusCode === 200) {
+        setReportModal(false);
+      }
+    },
+  });
 
-      const reportVendorForm = useFormik({
-        initialValues: {
-          email_address: email,
-          vendor_id: decodedVendorID,
-          reason: "",
-          description: "",
-        },
-        validationSchema: Yup.object({
-          reason: Yup.string().required("Please select a reason"),
-          description: Yup.string().required("Please write a discription of your issue"),
-        }),
-        onSubmit: async (values) => {
-          const { email_address, vendor_id, reason, description } = values;
-          let reportVendorData = { email_address, vendor_id, reason, description };
-          const { payload } = await dispatch(vendorReport(reportVendorData));
-          if (payload.statusCode === 200) {
-            setReportDiv(false);
-            setReportSuccessDiv(true);
-          }
-        },
-      });
+  const reportVendorForm = useFormik({
+    initialValues: {
+      email_address: email,
+      vendor_id: decodedVendorID,
+      reason: "",
+      description: "",
+    },
+    validationSchema: Yup.object({
+      reason: Yup.string().required("Please select a reason"),
+      description: Yup.string().required(
+        "Please write a discription of your issue"
+      ),
+    }),
+    onSubmit: async (values) => {
+      const { email_address, vendor_id, reason, description } = values;
+      let reportVendorData = { email_address, vendor_id, reason, description };
+      const { payload } = await dispatch(vendorReport(reportVendorData));
+      if (payload.statusCode === 200) {
+        setReportDiv(false);
+        setReportSuccessDiv(true);
+      }
+    },
+  });
 
   return (
     <div>
@@ -117,13 +118,15 @@ const TailorProfile = () => {
                 <Back />
                 <span>{vendorPersonal?.businessName}</span>
               </div>
-              <LazyLoadImage
-                    effect="blur"
-                    src={vendorPersonal?.brandLogo}
-                    alt=""
-                    placeholderSrc={placeholderImage}
-                    wrapperClassName="w-full aspect-video md:aspect-square object-cover object-center rounded-md"
+              <div className="w-full h-full aspect-video rounded-b-md overflow-hidden">
+                <LazyLoadImage
+                effect="blur"
+                src={vendorPersonal?.brandLogo}
+                alt=""
+                placeholderSrc={placeholderImage}
+                className="object-cover object-center w-full h-full"
               />
+              </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
               <div className="grid">
