@@ -20,7 +20,6 @@ const Feedback = () => {
     const apiKey = userSession?.data?.apiKey;
 
     console.log("Access Token:", token);
-    console.log("API Key:", apiKey);
 
     // Validate feedbackType and message before sending
     if (!feedbackType || !message) {

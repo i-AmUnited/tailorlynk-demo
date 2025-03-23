@@ -59,7 +59,7 @@ const Measurement = () => {
       hip: data.hip,
       shoulder: data.shoulder,
       short_sleeve_length: data.sleeveLength,
-      long_sleeve_length: data.longSleeveLength || "", // Ensure it's handled
+      long_sleeve_length: data.longSleeveLength || "",
       thigh: data.thigh,
       neck: data.neck,
       arm_hole: data.armHole,
