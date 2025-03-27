@@ -11,6 +11,7 @@ import signIn from "../assets/icons/signIn.svg";
 import message from "../assets/icons/message.svg";
 import { useSelector } from "react-redux";
 import { useCart } from "./cartContext";
+import menuIcon from "../assets/icons/menu.svg";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -40,79 +41,151 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-between items-end py-4 border-b border-b-[#c4c4c432] relative">
-      <Link to={"/"}>
-        <img src={logo} alt="Logo" className="h-12 md:h-14" />
-      </Link>
-
-      <div className="border rounded py-2 flex items-center divide-x">
-        <div
-          className="flex items-center px-3 font-semibold cursor-pointer relative"
-          onClick={toggleDropdown}
-          ref={dropdownRef}
-        >
-          {!userSessionData ? <span>Guest</span> : <span>{username}</span>}
-          <img src={arrow} alt="Arrow" className="h-5" />
-
-          {showDropdown && (
-            <div className="absolute top-full mt-2 right-0 min-w-44 max-w-56 bg-white shadow-lg border rounded-lg z-10 font-medium">
-              <ul className="p-2 truncate">
-                {!userSessionData ? (
-                  <div>
-                    <Link to="/Sign-up">
-                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                        <img src={profile} alt="Arrow" className="h-[18px]" />
-                        <span className="truncate">Sign up</span>
-                      </li>
-                    </Link>
-                    <Link to="/sign-in">
-                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                        <img src={signIn} alt="Arrow" className="h-[18px]" />
-                        <span className="truncate">Sign in</span>
-                      </li>
-                    </Link>
-                  </div>
-                ) : (
-                  <div>
-                    <Link to="/user-account">
-                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                        <img src={profile} alt="Arrow" className="h-[18px]" />
-                        <span className="truncate">My account</span>
-                      </li>
-                    </Link>
-                    <Link to="/user-account/message-center">
-                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                        <img src={message} alt="Arrow" className="h-[18px]" />
-                        <span className="truncate">Messages</span>
-                      </li>
-                    </Link>
-                    <Link to="user-account/order">
-                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                        <img src={receipt} alt="Arrow" className="h-[18px]" />
-                        <span className="truncate">Orders</span>
-                      </li>
-                    </Link>
-                    <Link to="/user-account/saved-styles">
-                      <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                        <img src={bookmark} alt="Arrow" className="h-[18px]" />
-                        <span className="truncate">Saved styles</span>
-                      </li>
-                    </Link>
-                    <Link to={"/user-account/sign-out"}>
-                      <li className="p-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer flex items-center gap-2 truncate">
-                        <img src={signout} alt="Arrow" className="h-[18px]" />
-                        <span className="truncate">Signout</span>
-                      </li>
-                    </Link>
-                  </div>
-                )}
-              </ul>
+      <div className="bg-white border rounded-md absolute top-24 w-full z-10 md:hidden p-4">
+        <p className="text-[16px] font-medium mb-4">Guest</p>
+        <ul className="truncate">
+          <li className="py-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+            <img src={profile} alt="Arrow" className="h-[18px]" />
+            <span className="truncate">Toggle casual wears</span>
+          </li>
+          {!userSessionData ? (
+            <div className="grid gap-3">
+              <Link to="/Sign-up">
+                <li className="py-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                  <img src={profile} alt="Arrow" className="h-[18px]" />
+                  <span className="truncate">Sign up</span>
+                </li>
+              </Link>
+              <Link to="/sign-in">
+                <li className="py-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                  <img src={signIn} alt="Arrow" className="h-[18px]" />
+                  <span className="truncate">Sign in</span>
+                </li>
+              </Link>
+            </div>
+          ) : (
+            <div className="grid gap-3">
+              <Link to="/user-account">
+                <li className="py-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                  <img src={profile} alt="Arrow" className="h-[18px]" />
+                  <span className="truncate">My account</span>
+                </li>
+              </Link>
+              <Link to="/user-account/message-center">
+                <li className="py-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                  <img src={message} alt="Arrow" className="h-[18px]" />
+                  <span className="truncate">Messages</span>
+                </li>
+              </Link>
+              <Link to="user-account/order">
+                <li className="py-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                  <img src={receipt} alt="Arrow" className="h-[18px]" />
+                  <span className="truncate">Orders</span>
+                </li>
+              </Link>
+              <Link to="/user-account/saved-styles">
+                <li className="py-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                  <img src={bookmark} alt="Arrow" className="h-[18px]" />
+                  <span className="truncate">Saved styles</span>
+                </li>
+              </Link>
+              <Link to={"/user-account/sign-out"}>
+                <li className="py-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer flex items-center gap-2 truncate">
+                  <img src={signout} alt="Arrow" className="h-[18px]" />
+                  <span className="truncate">Signout</span>
+                </li>
+              </Link>
             </div>
           )}
-        </div>
-        <Link to={"/cart"} className="flex items-end gap-1 font-semibold text-[13px] px-3 text-primary">
-          <img src={cartIcon} alt="Cart" className="h-5" />
-          <span>{cart.length}</span>
+        </ul>
+      </div>
+      <div className="flex gap-10 items-end">
+        <Link to={"/"}>
+          <img src={logo} alt="Logo" className="h-12 md:h-14" />
         </Link>
+        <div className="py-2 hidden md:block">[Switch to Casual Wear]</div>
+      </div>
+      <div className="flex items-center gap-4">
+        <div className="md:hidden py-2">
+          <img alt="" src={menuIcon} className="h-6" />
+        </div>
+        <div className="border rounded py-2 flex items-center divide-x">
+          <div
+            className="hidden md:flex items-center px-3 font-semibold cursor-pointer relative"
+            onClick={toggleDropdown}
+            ref={dropdownRef}
+          >
+            {!userSessionData ? <span>Guest</span> : <span>{username}</span>}
+            <img src={arrow} alt="Arrow" className="h-5" />
+
+            {showDropdown && (
+              <div className="absolute top-full mt-2 right-0 min-w-44 max-w-96 bg-white shadow-lg border rounded-lg z-10 font-medium">
+                <ul className="p-2 truncate">
+                  {!userSessionData ? (
+                    <div>
+                      <Link to="/Sign-up">
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                          <img src={profile} alt="Arrow" className="h-[18px]" />
+                          <span className="truncate">Sign up</span>
+                        </li>
+                      </Link>
+                      <Link to="/sign-in">
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                          <img src={signIn} alt="Arrow" className="h-[18px]" />
+                          <span className="truncate">Sign in</span>
+                        </li>
+                      </Link>
+                    </div>
+                  ) : (
+                    <div>
+                      <Link to="/user-account">
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                          <img src={profile} alt="Arrow" className="h-[18px]" />
+                          <span className="truncate">My account</span>
+                        </li>
+                      </Link>
+                      <Link to="/user-account/message-center">
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                          <img src={message} alt="Arrow" className="h-[18px]" />
+                          <span className="truncate">Messages</span>
+                        </li>
+                      </Link>
+                      <Link to="user-account/order">
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                          <img src={receipt} alt="Arrow" className="h-[18px]" />
+                          <span className="truncate">Orders</span>
+                        </li>
+                      </Link>
+                      <Link to="/user-account/saved-styles">
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                          <img
+                            src={bookmark}
+                            alt="Arrow"
+                            className="h-[18px]"
+                          />
+                          <span className="truncate">Saved styles</span>
+                        </li>
+                      </Link>
+                      <Link to={"/user-account/sign-out"}>
+                        <li className="p-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer flex items-center gap-2 truncate">
+                          <img src={signout} alt="Arrow" className="h-[18px]" />
+                          <span className="truncate">Signout</span>
+                        </li>
+                      </Link>
+                    </div>
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
+          <Link
+            to={"/cart"}
+            className="flex items-end gap-1 font-semibold text-[13px] px-3 text-primary"
+          >
+            <img src={cartIcon} alt="Cart" className="h-5" />
+            <span>{cart.length}</span>
+          </Link>
+        </div>
       </div>
     </div>
   );
