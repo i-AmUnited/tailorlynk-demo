@@ -260,11 +260,11 @@ const Checkout = () => {
               </div>
             </div>
 
-            {/* <Button
+            <Button
               buttonText={"Send order"}
               otherStyles={"bg-primary text-white"}
               loading={loading}
-            /> */}
+            />
           </form>
 
           <form
@@ -281,14 +281,9 @@ const Checkout = () => {
             <input type="hidden" name="hash_algorithm" value="HMACSHA256" />
             <input type="hidden" name="checkoutoption" value="combinedpage" />
 
-            {/* <button type="submit">
+            <button type="submit">
               Pay Now
-            </button> */}
-            <Button
-              buttonText={"Send order"}
-              otherStyles={"bg-primary text-white"}
-              loading={loading}
-            />
+            </button>
           </form>
         </div>
         <div className="lg:col-span-4 bg-white border rounded-md overflow-hidden p-4">
