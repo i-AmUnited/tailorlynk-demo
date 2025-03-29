@@ -8,20 +8,24 @@ import Modal from "../../components/modal";
 import { useParams } from "react-router-dom";
 import { useVendorDetail, useVendorReviews } from "../reuseableEffects";
 import { useDispatch, useSelector } from "react-redux";
-import Spinner from "../../components/Spinners/Spinner";
+import Spinner from "../../components/Spinners/pageLoadingSpinner";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { vendorReport, writeReview } from "../../hooks/local/reducer";
 import Input from "../../components/input";
 import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 
 const TailorProfile = () => {
   const loading = useSelector((state) => state.user.loading);
   const dispatch = useDispatch();
 
   const { vendorID } = useParams();
-  const vendorDetail = useVendorDetail(vendorID);
-  const vendorReviews = useVendorReviews(vendorID);
+  const decodedVendorID = atob(vendorID);
+  const vendorDetail = useVendorDetail(decodedVendorID);
+  const vendorReviews = useVendorReviews(decodedVendorID);
 
   const totalRating = vendorReviews.reduce(
     (sum, review) => sum + review.rating,
@@ -60,7 +64,7 @@ const TailorProfile = () => {
 
   const sendReviewForm = useFormik({
     initialValues: {
-      vendor_id: vendorID,
+      vendor_id: decodedVendorID,
       rating: "",
       review: "",
       customer_name: username,
@@ -82,7 +86,7 @@ const TailorProfile = () => {
   const reportVendorForm = useFormik({
     initialValues: {
       email_address: email,
-      vendor_id: vendorID,
+      vendor_id: decodedVendorID,
       reason: "",
       description: "",
     },
@@ -114,11 +118,15 @@ const TailorProfile = () => {
                 <Back />
                 <span>{vendorPersonal?.businessName}</span>
               </div>
-              <img
+              <div className="w-full h-full aspect-video rounded-b-md overflow-hidden">
+                <LazyLoadImage
+                effect="blur"
                 src={vendorPersonal?.brandLogo}
                 alt=""
-                className="h-[250px] w-full object-cover"
+                placeholderSrc={placeholderImage}
+                className="object-cover object-center w-full h-full"
               />
+              </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
               <div className="grid">

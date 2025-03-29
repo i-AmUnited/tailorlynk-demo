@@ -5,16 +5,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import store from "./hooks/local/store";
 import { Provider } from "react-redux";
-import { initializeApiKey } from "./api/initializeApiKey";
-
-// Initialize the API key
-initializeApiKey();
+import { CartProvider } from "./components/cartContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <CartProvider>
+        <App />
+      </CartProvider>
     </Provider>
   </React.StrictMode>
 );

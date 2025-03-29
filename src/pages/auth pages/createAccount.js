@@ -78,6 +78,7 @@ const CreateAccount = () => {
       email: "",
       fullName: "",
       phoneNumber: "",
+      country_code: "+234",
       password: "",
       confirmPassword: "",
     },
@@ -90,19 +91,20 @@ const CreateAccount = () => {
         .oneOf([Yup.ref("password"), null], "Passwords must match"),
     }),
     onSubmit: async (values) => {
-      const { email, fullName, phoneNumber, password, confirmPassword } =
+      const { email, fullName, phoneNumber,country_code, password, confirmPassword } =
         values;
       let registrationData = {
         email_address: email,
         full_name: fullName,
         phone_number: phoneNumber,
+        country_code,
         password,
         confirm_password: confirmPassword,
       };
       const { payload } = await dispatch(
         completeUserRegistration(registrationData)
       );
-      console.log(payload, "hello");
+      // console.log(payload);
       if (payload.statusCode === 200) {
         setProvideEmail(false);
         setVerifyEmail(false);

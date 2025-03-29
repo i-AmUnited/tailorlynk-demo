@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logos/logo.svg";
 import Button from "../../components/button";
 import Input from "../../components/input";
-import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +33,6 @@ const SignIn = () => {
         if (payload.statusCode === 200) {
           navigate("/user-account")
           showSuccessMessage("sign in succesfull")
-          console.log(payload.statusCode, values)
         }
       },
     });

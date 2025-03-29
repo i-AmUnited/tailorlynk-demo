@@ -2,6 +2,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const base_url = "https://api-tailorlynk.stayandflight.com/api/v1/";
+export const base_url =
+  "https://api-tailorlynk.stayandflight.com/api/v1/customer";
 
 export const api_header = {
   "Content-Type": "application/json",

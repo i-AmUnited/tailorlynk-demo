@@ -24,7 +24,7 @@ export class apiEndPoints {
 
   static async signIn(data) {
     try {
-      return apiClient.post("customer/login", data);
+      return apiClient.post("/login", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -33,7 +33,7 @@ export class apiEndPoints {
 
   static async accountRegistration(data) {
     try {
-      return apiClient.post("customer/account-registration", data);
+      return apiClient.post("/account-registration", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -42,7 +42,7 @@ export class apiEndPoints {
 
   static async verifyEmail(data) {
     try {
-      return apiClient.post("customer/verify-email-address", data);
+      return apiClient.post("/verify-email-address", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -51,7 +51,7 @@ export class apiEndPoints {
 
   static async completeRegistration(data) {
     try {
-      return apiClient.post("customer/complete-registration", data);
+      return apiClient.post("/complete-registration", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -60,7 +60,7 @@ export class apiEndPoints {
 
   static async listVendors(data) {
     try {
-      return apiClient.get("customer/list-vendor", data);
+      return apiClient.get("/list-vendor", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -69,7 +69,7 @@ export class apiEndPoints {
 
   static async vendorDetail(vendorID) {
     try {
-      return apiClient.get(`customer/single-vendor?vendorId=${vendorID}`);
+      return apiClient.get(`/single-vendor?vendorId=${vendorID}`);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -78,7 +78,7 @@ export class apiEndPoints {
 
   static async vendorReviews(vendorID) {
     try {
-      return apiClient.get(`customer/vendor-rating-list?vendorId=${vendorID}`);
+      return apiClient.get(`/vendor-rating-list?vendorId=${vendorID}`);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -87,7 +87,7 @@ export class apiEndPoints {
 
   static async rateVendor(data) {
     try {
-      return apiClient.post("customer/rate-vendor", data);
+      return apiClient.post("/rate-vendor", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -96,7 +96,7 @@ export class apiEndPoints {
 
   static async reportVendor(data) {
     try {
-      return apiClient.post("customer/report-vendor", data);
+      return apiClient.post("/report-vendor", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -106,8 +106,35 @@ export class apiEndPoints {
   static async singleCatalogueMaterial(catalogueId) {
     try {
       return apiClient.get(
-        `customer/single-catalogue-material?id=${catalogueId}`
+        `/single-catalogue-material?id=${catalogueId}`
       );
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async passwordResetOtp(data) {
+    try {
+      return apiClient.post("/reset-password-otp", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async changePassword(data) {
+    try {
+      return apiClient.post("/change-password", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async createOrder(data) {
+    try {
+      return apiClient.post("/create-order", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
