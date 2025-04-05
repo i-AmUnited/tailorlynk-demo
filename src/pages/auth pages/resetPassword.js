@@ -6,14 +6,18 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { changePassword, resetPasswordOTP, verifyUserEmail } from "../../hooks/local/reducer";
+import {
+  changePassword,
+  resetPasswordOTP,
+  verifyUserEmail,
+} from "../../hooks/local/reducer";
 import { showSuccessMessage } from "../../hooks/constants";
 
 const ResetPassword = () => {
   const [provideEmail, setProvideEmail] = useState(true);
   const [verifyEmail, setVerifyEmail] = useState(false);
   const [createNewPassword, setCreateNewPassword] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const loading = useSelector((state) => state.user.loading);
@@ -38,7 +42,7 @@ const ResetPassword = () => {
         setProvideEmail(false);
         setVerifyEmail(true);
         setCreateNewPassword(false);
-        
+
         provideOTPForm.setFieldValue("email", email);
         resetPasswordForm.setFieldValue("email", email);
       }
@@ -86,7 +90,7 @@ const ResetPassword = () => {
       const { payload } = await dispatch(changePassword(changePasswordData));
       if (payload.statusCode === 200) {
         showSuccessMessage(payload.message);
-        navigate("/user-account")
+        navigate("/user-account");
       }
     },
   });
@@ -161,7 +165,12 @@ const ResetPassword = () => {
                 We’ve sent a verification code to your email address. Please
                 provide the code below.
               </p>
-              <Input label={"Email address:"} name={"email"} value={provideOTPForm.values.email} disabled={true}/>
+              <Input
+                label={"Email address:"}
+                name={"email"}
+                value={provideOTPForm.values.email}
+                disabled={true}
+              />
               <Input
                 label={"Verification code:"}
                 name={"code"}
@@ -169,8 +178,7 @@ const ResetPassword = () => {
                 onChange={provideOTPForm.handleChange}
                 onBlur={provideOTPForm.handleBlur}
                 onError={
-                  provideOTPForm.touched.code &&
-                  provideOTPForm.errors.code
+                  provideOTPForm.touched.code && provideOTPForm.errors.code
                     ? provideOTPForm.errors.code
                     : null
                 }
@@ -200,17 +208,26 @@ const ResetPassword = () => {
                 </Link>
               </div>
               <div className="grid gap-4">
-              <Input label={"Email address:"} name={"email"} value={resetPasswordForm.values.email} disabled={true}/>
+                <Input
+                  label={"Email address:"}
+                  name={"email"}
+                  value={resetPasswordForm.values.email}
+                  disabled={true}
+                />
                 <Input
                   label={"Password:"}
                   type={"password"}
                   isPassword={"true"}
                   name={"password"}
                   value={resetPasswordForm.values.password}
-                    onChange={resetPasswordForm.handleChange}
-                    onBlur={resetPasswordForm.handleBlur}
-                    onError={
-                    resetPasswordForm.touched.password && resetPasswordForm.errors.password ? resetPasswordForm.errors.password : null}
+                  onChange={resetPasswordForm.handleChange}
+                  onBlur={resetPasswordForm.handleBlur}
+                  onError={
+                    resetPasswordForm.touched.password &&
+                    resetPasswordForm.errors.password
+                      ? resetPasswordForm.errors.password
+                      : null
+                  }
                 />
                 <Input
                   label={"Confirm password:"}
@@ -218,10 +235,14 @@ const ResetPassword = () => {
                   isPassword={"true"}
                   name={"confirmPassword"}
                   value={resetPasswordForm.values.confirmPassword}
-                    onChange={resetPasswordForm.handleChange}
-                    onBlur={resetPasswordForm.handleBlur}
-                    onError={
-                    resetPasswordForm.touched.confirmPassword && resetPasswordForm.errors.confirmPassword ? resetPasswordForm.errors.confirmPassword : null}
+                  onChange={resetPasswordForm.handleChange}
+                  onBlur={resetPasswordForm.handleBlur}
+                  onError={
+                    resetPasswordForm.touched.confirmPassword &&
+                    resetPasswordForm.errors.confirmPassword
+                      ? resetPasswordForm.errors.confirmPassword
+                      : null
+                  }
                 />
               </div>
               <div className="mt-6 flex justify-center">
