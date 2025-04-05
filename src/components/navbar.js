@@ -11,6 +11,8 @@ import signIn from "../assets/icons/signIn.svg";
 import message from "../assets/icons/message.svg";
 import { useSelector } from "react-redux";
 import { useCart } from "./cartContext";
+import menuIcon from "../assets/icons/menu.svg";
+import blackProfile from "../assets/icons/blackProfile.svg";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -45,17 +47,23 @@ const Navbar = () => {
       </Link>
 
       <div className="border rounded py-2 flex items-center divide-x">
-        <div
-          className="flex items-center px-3 font-semibold cursor-pointer relative"
-          onClick={toggleDropdown}
-          ref={dropdownRef}
-        >
-          {!userSessionData ? <span>Guest</span> : <span>{username}</span>}
-          <img src={arrow} alt="Arrow" className="h-5" />
-
+        <div className="flex items-center px-3 font-semibold cursor-pointer relative" onClick={toggleDropdown} ref={dropdownRef} >
+          <div className="md:flex items-center hidden">
+            {!userSessionData ? <span>Guest</span> : <span>{username}</span>}
+            <img src={arrow} alt="Arrow" className="h-5" />
+          </div>
+          <img alt="" src={menuIcon} className="md:hidden"/>
           {showDropdown && (
-            <div className="absolute top-full mt-2 right-0 min-w-44 max-w-56 bg-white shadow-lg border rounded-lg z-10 font-medium">
+            <div className="absolute top-full mt-4 right-0 w-auto min-w-52 bg-white shadow-lg border rounded-lg z-10 font-medium">
               <ul className="p-2 truncate">
+                <li className="p-3 md:hidden flex items-center gap-2">
+                  <img src={blackProfile} alt="Arrow" className="h-[18px]" />
+                  {!userSessionData ? <span>Guest</span> : <span>{username}</span>}
+                </li>
+                <li className="p-3 md:hidden flex items-center gap-2">
+                  <img src={blackProfile} alt="Arrow" className="h-[18px]" />
+                  <div>Explore Casual wears</div>
+                </li>
                 {!userSessionData ? (
                   <div>
                     <Link to="/Sign-up">
