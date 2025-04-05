@@ -9,7 +9,11 @@ axiosInstance.interceptors.request.use(
     const apiKey = JSON.parse(localStorage.getItem("apiKey"));
     const { userSession } =
       JSON.parse(localStorage.getItem("userSession")) || {};
+
     const token = userSession?.data?.accessToken;
+
+    // Get the customerId from the userSession (assuming it's stored there)
+    const customerId = userSession?.data?.customerData?.customerId;
 
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -19,6 +23,13 @@ axiosInstance.interceptors.request.use(
       config.headers["x-api-key"] = apiKey;
     } else {
       console.error("API key is missing.");
+    }
+
+    // If the customerId is present, add it to the headers
+    if (customerId) {
+      config.headers["x-customer-id"] = customerId;
+    } else {
+      console.error("Customer ID is missing.");
     }
 
     return config;

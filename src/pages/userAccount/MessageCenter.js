@@ -37,8 +37,8 @@ export default function VendorChat() {
   }, [selectedVendor]);
 
   useEffect(() => {
-    const pusher = new Pusher("3d02be95059633abaaa3", {
-      cluster: "us3",
+    const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
+      cluster: process.env.REACT_APP_PUSHER_CLUSTER,
     });
     const channel = pusher.subscribe("chat");
 
@@ -59,13 +59,19 @@ export default function VendorChat() {
 
     const { userSession } = retrieveFromLocalStorage(["userSession"]);
     const token = userSession?.data?.accessToken;
+    const customerId = userSession?.data?.customerData?.customerId;
+
+    if (!customerId) {
+      console.error("Customer ID not found.");
+      return;
+    }
 
     axiosInstance
       .post(
         "/send-message",
         {
           vendor_id: selectedVendor.id,
-          customer_id: "IF52438",
+          customer_id: customerId,
           message: newMessage,
           sender_type: "vendor",
         },

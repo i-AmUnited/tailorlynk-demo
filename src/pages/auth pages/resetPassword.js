@@ -149,7 +149,7 @@ const ResetPassword = () => {
 
           {/* Verify email address */}
           {verifyEmail && (
-            <div>
+            <form onSubmit={provideOTPForm.handleSubmit}>
               <div className="flex justify-between items-center mb-2">
                 <div className="font-bold text-primary">
                   Verify email address
@@ -165,21 +165,37 @@ const ResetPassword = () => {
                 We’ve sent a verification code to your email address. Please
                 provide the code below.
               </p>
-              <Input label={"Verification code:"} />
+              <Input
+                label={"Email address:"}
+                name={"email"}
+                value={provideOTPForm.values.email}
+                disabled={true}
+              />
+              <Input
+                label={"Verification code:"}
+                name={"code"}
+                value={provideOTPForm.values.code}
+                onChange={provideOTPForm.handleChange}
+                onBlur={provideOTPForm.handleBlur}
+                onError={
+                  provideOTPForm.touched.code && provideOTPForm.errors.code
+                    ? provideOTPForm.errors.code
+                    : null
+                }
+              />
               <div className="mt-6 flex justify-center">
                 <Button
-                  buttonRole={"custom"}
-                  onClick={showCreateNewPassword}
                   buttonText={"Continue"}
                   otherStyles={"bg-primary text-white"}
+                  loading={loading}
                 />
               </div>
-            </div>
+            </form>
           )}
 
           {/* Create new password */}
           {createNewPassword && (
-            <div>
+            <form onSubmit={resetPasswordForm.handleSubmit}>
               <div className="flex justify-between items-center mb-10">
                 <div className="font-bold text-primary">
                   Create new password
@@ -193,23 +209,50 @@ const ResetPassword = () => {
               </div>
               <div className="grid gap-4">
                 <Input
+                  label={"Email address:"}
+                  name={"email"}
+                  value={resetPasswordForm.values.email}
+                  disabled={true}
+                />
+                <Input
                   label={"Password:"}
                   type={"password"}
                   isPassword={"true"}
+                  name={"password"}
+                  value={resetPasswordForm.values.password}
+                  onChange={resetPasswordForm.handleChange}
+                  onBlur={resetPasswordForm.handleBlur}
+                  onError={
+                    resetPasswordForm.touched.password &&
+                    resetPasswordForm.errors.password
+                      ? resetPasswordForm.errors.password
+                      : null
+                  }
                 />
                 <Input
                   label={"Confirm password:"}
                   type={"password"}
                   isPassword={"true"}
+                  name={"confirmPassword"}
+                  value={resetPasswordForm.values.confirmPassword}
+                  onChange={resetPasswordForm.handleChange}
+                  onBlur={resetPasswordForm.handleBlur}
+                  onError={
+                    resetPasswordForm.touched.confirmPassword &&
+                    resetPasswordForm.errors.confirmPassword
+                      ? resetPasswordForm.errors.confirmPassword
+                      : null
+                  }
                 />
               </div>
               <div className="mt-6 flex justify-center">
                 <Button
                   buttonText={"Reset password"}
                   otherStyles={"bg-primary text-white"}
+                  loading={loading}
                 />
               </div>
-            </div>
+            </form>
           )}
         </div>
       </div>

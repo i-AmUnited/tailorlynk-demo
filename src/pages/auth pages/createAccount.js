@@ -91,8 +91,14 @@ const CreateAccount = () => {
         .oneOf([Yup.ref("password"), null], "Passwords must match"),
     }),
     onSubmit: async (values) => {
-      const { email, fullName, phoneNumber,country_code, password, confirmPassword } =
-        values;
+      const {
+        email,
+        fullName,
+        phoneNumber,
+        country_code,
+        password,
+        confirmPassword,
+      } = values;
       let registrationData = {
         email_address: email,
         full_name: fullName,
