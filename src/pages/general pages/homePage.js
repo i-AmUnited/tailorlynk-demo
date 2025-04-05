@@ -6,16 +6,35 @@ import Accordion from "../../components/faq";
 // import Carousel from "./General pages components/homePageCarousel";
 import tailor_register from "../../assets/images/tailor_register.png";
 import { Link } from "react-router-dom";
+import casual_landing from "../../assets/images/casual_landing.jpg";
+import traditional_landing from "../../assets/images/traditional_landing.jpg";
+import { useState } from "react";
 
 const Home = () => {
+
+  const [tradionalHeroSection, setTraditionalHeroSection] = useState(true)
+  const [casualHeroSection, setCasualHeroSection] = useState(false)
+
+  const toggleTraditionalSection = () => {
+    setTraditionalHeroSection(true)
+    setCasualHeroSection(false)
+  };
+
+  const toggleCasualSection = () => {
+    setTraditionalHeroSection(false)
+    setCasualHeroSection(true)
+  };
  
   const img2 = "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826"  
+  
   return (
     <div className="grid gap-14">
+
+      {tradionalHeroSection &&
       <div className="h-[500px] md:h-[350px] relative rounded-lg overflow-hidden">
             <div>
                 <img
-                    src={tailor_register}
+                    src={traditional_landing}
                     alt=""
                     className="h-[550px] md:h-[350px] w-full object-cover"
                 />
@@ -33,11 +52,42 @@ const Home = () => {
                       <div className="mb-4 md:mb-0">
                         <Button buttonRole={"link"} destination={"/sign-up"} buttonText={"Get started"} otherStyles={"bg-primary text-white"}/>
                       </div>
-                      <div className="grid md:flex gap-2 md:gap-1 text-xs"><span>Looking for something modern? </span><span className="hover:text-primary hover:underline hover:cursor-pointer underline-offset-4 transition-all">[Switch to Casual Wear]</span></div>
+                      <div onClick={toggleCasualSection} className="grid md:flex gap-2 md:gap-1 text-xs"><span>Looking for something modern? </span><span className="hover:text-primary hover:underline hover:cursor-pointer underline-offset-4 transition-all">[Switch to Casual Wear]</span></div>
                     </div>
                 </div>
             </div>
-        </div>
+      </div>
+      }
+
+      {casualHeroSection &&
+      <div className="h-[500px] md:h-[350px] relative rounded-lg overflow-hidden">
+            <div>
+                <img
+                    src={casual_landing}
+                    alt=""
+                    className="h-[550px] md:h-[350px] w-full object-cover"
+                />
+            </div>
+            <div className="bg-black/50 absolute top-0 w-full h-full flex items-end justify-center text-white px-8 py-12 md:px-12 md:py-16">
+                <div>
+                    <div className="text-[10px] w-fit bg-black/20 backdrop-blur-md text-primary py-3 px-5 rounded-md">Casual wears</div>
+                    <div className="grid gap-3 text-pretty mt-4">
+                        <span className="font-semibold text-lg secondary-font md:w-3/4 lg:w-1/2">Your Everyday Style, Effortlessly You.</span>
+                        <span className="w-full md:w-3/4">
+                        Experience the perfect blend of comfort and contemporary fashion with our expertly designed casual outfits. Whether you're relaxing or on the move, our collections are crafted for versatility, so you always look and feel your best.
+                        </span>
+                    </div>
+                    <div className="mt-10 grid md:flex gap-6">
+                      <div className="mb-4 md:mb-0">
+                        <Button buttonRole={"link"} destination={"/sign-up"} buttonText={"Get started"} otherStyles={"bg-primary text-white"}/>
+                      </div>
+                      <div onClick={toggleTraditionalSection} className="grid md:flex gap-2 md:gap-1 text-xs"><span>Looking for something modern? </span><span className="hover:text-primary hover:underline hover:cursor-pointer underline-offset-4 transition-all">[Switch to Casual Wear]</span></div>
+                    </div>
+                </div>
+            </div>
+      </div>
+      }
+
       {/* <Carousel /> */}
       <RecommendedVendors />
       {/* Register */}

@@ -13,8 +13,6 @@ const ResetPassword = () => {
   const [provideEmail, setProvideEmail] = useState(true);
   const [verifyEmail, setVerifyEmail] = useState(false);
   const [createNewPassword, setCreateNewPassword] = useState(false);
-
-
   
   const navigate = useNavigate();
 
