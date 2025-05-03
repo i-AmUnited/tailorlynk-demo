@@ -176,6 +176,15 @@ export const placeOrder = createAsyncThunk(
   }
 );
 
+export const materialList = createAsyncThunk(
+  "user/listMaterials",
+  async (values) => {
+    const listMaterialEndPoint = await apiEndPoints.listmaterials(values);
+    const response = await listMaterialEndPoint.data;
+    return response;
+  }
+);
+
 const slice = createSlice({
   name: "user",
   initialState: initialState,
@@ -211,7 +220,8 @@ const slice = createSlice({
           listVendors.fulfilled,
           vendorDetail.fulfilled,
           vendorReviewList.fulfilled,
-          singleCatalogueDetail.fulfilled
+          singleCatalogueDetail.fulfilled,
+          materialList.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -262,6 +272,7 @@ const slice = createSlice({
           resetPasswordOTP.pending,
           changePassword.pending,
           placeOrder.pending,
+          materialList.pending,
         ),
         (state) => {
           state.loading = true;
@@ -285,6 +296,7 @@ const slice = createSlice({
           userSignIn.rejected,
           changePassword.rejected,
           placeOrder.rejected,
+          materialList.rejected
         ),
         (state, action) => {
           state.loading = false;

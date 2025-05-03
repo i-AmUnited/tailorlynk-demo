@@ -3,34 +3,35 @@ import RecommendedVendors from "./General pages components/recommendedVendors";
 import gramIcon from "../../assets/icons/instagram.svg";
 import EducationalResources from "./General pages components/educationalResources";
 import Accordion from "../../components/faq";
-// import Carousel from "./General pages components/homePageCarousel";
+import Carousel from "./General pages components/homePageCarousel";
 import tailor_register from "../../assets/images/tailor_register.png";
 import { Link } from "react-router-dom";
 import casual_landing from "../../assets/images/casual_landing.jpg";
 import traditional_landing from "../../assets/images/traditional_landing.jpg";
 import { useState } from "react";
+import RecommendedMaterials from "./General pages components/recommendedMaterials";
 
 const Home = () => {
 
-  const [tradionalHeroSection, setTraditionalHeroSection] = useState(true)
-  const [casualHeroSection, setCasualHeroSection] = useState(false)
+  // const [tradionalHeroSection, setTraditionalHeroSection] = useState(true)
+  // const [casualHeroSection, setCasualHeroSection] = useState(false)
 
-  const toggleTraditionalSection = () => {
-    setTraditionalHeroSection(true)
-    setCasualHeroSection(false)
-  };
+  // const toggleTraditionalSection = () => {
+  //   setTraditionalHeroSection(true)
+  //   setCasualHeroSection(false)
+  // };
 
-  const toggleCasualSection = () => {
-    setTraditionalHeroSection(false)
-    setCasualHeroSection(true)
-  };
+  // const toggleCasualSection = () => {
+  //   setTraditionalHeroSection(false)
+  //   setCasualHeroSection(true)
+  // };
  
   const img2 = "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826"  
   
   return (
     <div className="grid gap-14">
 
-      {tradionalHeroSection &&
+      {/* {tradionalHeroSection &&
       <div className="h-[500px] md:h-[350px] relative rounded-lg overflow-hidden">
             <div>
                 <img
@@ -86,9 +87,9 @@ const Home = () => {
                 </div>
             </div>
       </div>
-      }
+      } */}
 
-      {/* <Carousel /> */}
+      <Carousel />
       <RecommendedVendors />
       {/* Register */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-center">
@@ -116,6 +117,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <RecommendedMaterials />
       {/* Fashion inspiration */}
       <div className="flex justify-center">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-end gap-4">

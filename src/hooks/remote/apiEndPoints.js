@@ -140,4 +140,13 @@ export class apiEndPoints {
       throw error;
     }
   }
+
+  static async listmaterials(data) {
+    try {
+      return apiClient.get("/all-materials", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
 }
