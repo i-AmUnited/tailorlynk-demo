@@ -15,7 +15,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 
-const ProductDetail = () => {
+const MaterialDetail = () => {
   const loading = useSelector((state) => state.user.loading);
 
   const { addToCart, cart, removeFromCart } = useCart();
@@ -23,7 +23,6 @@ const ProductDetail = () => {
   const { catalogueId } = useParams();
   const decodedCatalogueID = atob(catalogueId);
   const productDetail = useCatalogueDetail(decodedCatalogueID);
-  console.log(productDetail);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -37,7 +36,7 @@ const ProductDetail = () => {
     setQuantity(value);
   };
 
-  const image1 = productDetail.styleImageOne ? productDetail.styleImageOne : productDetail.materialImageOne;
+  const image1 = productDetail?.styleImageOne;
   const image2 = productDetail?.styleImageTwo;
   const image3 = productDetail?.styleImageThree;
 
@@ -76,7 +75,7 @@ const ProductDetail = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
         <div className="lg:col-span-3 md:relative">
           <div className="md:sticky md:top-5">
-            <div className="aspect-square w-full relative rounded-lg overflow-hidden bg-black">
+            <div className="aspect-square w-full relative rounded-lg overflow-hidden">
               <LazyLoadImage
                 src={validImages[currentIndex]}
                 effect="blur"
@@ -117,31 +116,30 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-        <div className="lg:col-span-4 text-black">
-          <div>
-            <div className="font-semibold mb-1">{productDetail?.materialName}</div>
-            <div className="text-xs">Vendor: <span className="underline text-primary">{productDetail?.vendorData?.businessName}</span></div>
-          </div>
-          <div className="grid gap-1 my-5">
-            <span className="font-medium">Description</span>
-            <span className="text-xs">{productDetail?.description}</span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="grid gap-1 my-5">
-              <span className="font-medium">Material</span>
-              <span className="text-xs">{productDetail?.material}</span>
+        <div className="lg:col-span-4">
+          <div className="text-sm font-semibold mb-1">Product description:</div>
+          <div>{productDetail?.description}</div>
+          <div className="grid gap-6 mt-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid">
+                <div className="text-sm font-medium">Tailor</div>
+                <div className="text-black/80">
+                  {productDetail?.vendorData?.businessName}
+                </div>
+              </div>
+              <div className="grid">
+                <div className="text-sm font-medium">Price</div>
+                <div className="text-black/80">{productDetail?.cost}</div>
+              </div>
+              <div className="grid">
+                <div className="text-sm font-medium">Material type:</div>
+                <div className="text-black/80">{productDetail?.material}</div>
+              </div>
+              <div className="grid">
+                <div className="text-sm font-medium">Number of yards:</div>
+                <div className="text-black/80">{productDetail?.noOfYard}</div>
+              </div>
             </div>
-            <div className="grid gap-1 my-5">
-              <span className="font-medium">No. of yards needed</span>
-              <span className="text-xs">{productDetail?.noOfYard}</span>
-            </div>
-          </div>
-      
-          material{productDetail?.material}
-          no of yard{productDetail?.noOfYard}
-
-            
             <div className="grid grid-cols-1 md:grid-cols-2">
               {!isInCart && (
                 <Input
@@ -153,7 +151,7 @@ const ProductDetail = () => {
               )}
             </div>
             <div className="grid lg:flex gap-4 items-center">
-              <div className="grid grid-cols-2 md:flex gap-2 items-center">
+              <div className="grid grid-cols-2 md:flex gap-4 items-center">
                 <div>
                   <Button
                     buttonRole="custom"
@@ -171,7 +169,7 @@ const ProductDetail = () => {
                   />
                 </div>
                 <IconButton
-                  buttonText={"Save item"}
+                  buttonText={"Save this item"}
                   otherStyles={"bg-primary/20 text-primary"}
                   icon={save}
                 />
@@ -183,11 +181,11 @@ const ProductDetail = () => {
                 </div>
               </div>
             </div>
-
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default ProductDetail;
+export default MaterialDetail;
