@@ -14,9 +14,20 @@ import { useCart } from "../../components/cartContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
+import { showSuccessMessage } from "../../hooks/constants";
 
 const ProductDetail = () => {
   const loading = useSelector((state) => state.user.loading);
+  
+  const productLink = window.location.href;
+  const handleCopy = () => {
+    navigator.clipboard.writeText(productLink).then(() => {
+      showSuccessMessage("Product link copied!")
+    }).catch(err => {
+      console.error("Failed to copy: ", err);
+    });
+  };
+
 
   const { addToCart, cart, removeFromCart } = useCart();
 
@@ -61,16 +72,22 @@ const ProductDetail = () => {
     }
   };
 
+  
+
   return (
     <div>
       <Spinner loading={useSelector((state) => state.user).loading} />
-      
+
       <div className="flex items-center gap-4 mb-4">
         <div>
           <Back />
         </div>
         <div className="text-sm font-semibold line-clamp-1">
-          <div className="">{productDetail?.styleName}</div>
+          <div className="">
+            {productDetail.styleName
+              ? productDetail.styleName
+              : productDetail.materialName}
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
@@ -119,71 +136,106 @@ const ProductDetail = () => {
         </div>
         <div className="lg:col-span-4 text-black">
           <div>
-            <div className="font-semibold mb-1">{productDetail?.materialName}</div>
-            <div className="text-xs">Vendor: <span className="underline text-primary">{productDetail?.vendorData?.businessName}</span></div>
+            <div className="font-semibold mb-1">
+              {productDetail.styleName
+                ? productDetail.styleName
+                : productDetail.materialName}
+            </div>
+            <div className="text-xs">
+              Vendor:{" "}
+              <span className="underline text-primary">
+                {productDetail?.vendorData?.businessName}
+              </span>
+            </div>
           </div>
-          <div className="grid gap-1 my-5">
+          <div className="grid gap-1 mt-5">
             <span className="font-medium">Description</span>
             <span className="text-xs">{productDetail?.description}</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="grid gap-1 my-5">
-              <span className="font-medium">Material</span>
-              <span className="text-xs">{productDetail?.material}</span>
-            </div>
-            <div className="grid gap-1 my-5">
-              <span className="font-medium">No. of yards needed</span>
+          {!productDetail.category ? (
+            // Tailor catalogue details
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid gap-1">
+              <span className="font-medium">No of yards needed</span>
               <span className="text-xs">{productDetail?.noOfYard}</span>
             </div>
+            <div className="grid gap-1">
+              <span className="font-medium">Material used</span>
+              <span className="text-xs">{productDetail?.material}</span>
+            </div>
+            <div className="grid gap-1">
+              <span className="font-medium">Price</span>
+              <span className="font-bold text-sm secondary-font">{productDetail?.cost}</span>
+            </div>
           </div>
-      
-          material{productDetail?.material}
-          no of yard{productDetail?.noOfYard}
-
-            
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              {!isInCart && (
-                <Input
-                  label={"Quantity:"}
-                  type={"number"}
-                  value={quantity}
-                  onChange={handleQuantityChange}
-                />
-              )}
-            </div>
-            <div className="grid lg:flex gap-4 items-center">
-              <div className="grid grid-cols-2 md:flex gap-2 items-center">
-                <div>
-                  <Button
-                    buttonRole="custom"
-                    buttonText={isInCart ? "Remove from Cart" : "Add to Cart"}
-                    otherStyles={
-                      isInCart
-                        ? "text-red-500 bg-red-100"
-                        : "bg-primary text-white"
-                    }
-                    onClick={() =>
-                      isInCart
-                        ? removeFromCart(productDetail.catalogueId)
-                        : addToCart(productDetail, quantity)
-                    }
-                  />
-                </div>
-                <IconButton
-                  buttonText={"Save item"}
-                  otherStyles={"bg-primary/20 text-primary"}
-                  icon={save}
-                />
+          ) : productDetail.category === "Western" ||
+              productDetail.category === "Ready-Made" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid gap-1 my-5">
+                <span className="font-medium">Available colors</span>
+                <span className="text-xs">{productDetail?.color}</span>
               </div>
-              <div className="grid grid-cols-2">
-                <div className="cursor-pointer text-xs font-medium py-5 md:py-4 px-6 rounded flex items-center gap-2 bg-white text-primary w-fit">
-                  <img src={share} alt="" className="h-4" />
-                  <span className="md:hidden">Share item</span>
-                </div>
+              <div className="grid gap-1 my-5">
+                <span className="font-medium">Price</span>
+                <span className="font-bold text-sm secondary-font">{productDetail?.price}</span>
               </div>
             </div>
+          ) : (
+            // Ordinary cloth material details
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid gap-1 my-5">
+                <span className="font-medium">Available colors</span>
+                <span className="text-xs">{productDetail?.color}</span>
+              </div>
+              <div className="grid gap-1 my-5">
+                <span className="font-medium">Cost per yard</span>
+                <span className="font-bold text-sm secondary-font">{productDetail?.costPerYard}</span>
+              </div>
+            </div>
+          )}
 
+          <div className="grid grid-cols-1 md:grid-cols-2 mb-5">
+            {!isInCart && (
+              <Input
+                label={"Quantity:"}
+                type={"number"}
+                value={quantity}
+                onChange={handleQuantityChange}
+              />
+            )}
+          </div>
+          <div className="grid lg:flex gap-4 items-center">
+            <div className="grid grid-cols-2 md:flex gap-2 items-center">
+              <div>
+                <Button
+                  buttonRole="custom"
+                  buttonText={isInCart ? "Remove from Cart" : "Add to Cart"}
+                  otherStyles={
+                    isInCart
+                      ? "text-red-500 bg-red-100"
+                      : "bg-primary text-white"
+                  }
+                  onClick={() =>
+                    isInCart
+                      ? removeFromCart(productDetail.catalogueId)
+                      : addToCart(productDetail, quantity)
+                  }
+                />
+              </div>
+              <IconButton
+                buttonText={"Save item"}
+                otherStyles={"bg-primary/20 text-primary"}
+                icon={save}
+              />
+            </div>
+            <div className="grid grid-cols-2">
+              <div onClick={handleCopy} className="cursor-pointer text-xs font-medium py-5 md:py-4 px-6 rounded flex items-center gap-2 bg-white text-primary w-fit">
+                <img src={share} alt="" className="h-4" />
+                <span className="md:hidden">Share item</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

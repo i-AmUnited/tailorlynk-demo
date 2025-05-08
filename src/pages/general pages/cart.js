@@ -66,14 +66,14 @@ const handleDecrease = (id) => {
             </div>
             <div className="p-4">
               {cart.map((product) => (
-                <div key={product.catalogueId} className="grid md:flex gap-4 pb-4 border-b last:pb-0 mb-4">
+                <div key={product.catalogueId || product.materialId} className="grid md:flex gap-4 pb-4 border-b last:pb-0 mb-4">
                   <div className="rounded-md overflow-hidden size-32 bg-green-400 flex-shrink-0">
                     <img src={product.styleImageOne} alt="" className="object-cover h-full w-full" />
                   </div>
                   <div className="w-full">
                     <div className="mb-3 md:mb-2 grid md:flex gap-1 items-center justify-between">
                       <Link
-                        to={`/product-detail/${btoa(product.catalogueId)}`}
+                        to={`/product-detail/${btoa(product.catalogueId || product.materialId)}`}
                         className="font-semibold text-[14px] hover:underline hover:text-primary"
                       >
                         {product.styleName}
@@ -104,9 +104,9 @@ const handleDecrease = (id) => {
                         >
                           -
                         </span>
-                        <span className="w-8 text-center text-xs font-semibold">{quantity[product.catalogueId]}</span>
+                        <span className="w-8 text-center text-xs font-semibold">{quantity[product.catalogueId || product.catalogueId]}</span>
                         <div
-                          onClick={() => handleIncrease(product.catalogueId)}
+                          onClick={() => handleIncrease(product.catalogueId || product.materialId)}
                           className="rounded-md text-xs px-3 py-2 font-semibold bg-primary/30 text-primary cursor-pointer"
                         >
                           +

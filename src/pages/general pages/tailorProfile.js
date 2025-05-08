@@ -154,7 +154,9 @@ const TailorProfile = () => {
             </div>
             <div className="">
               <div className="font-bold secondary-font mb-4">Materials:</div>
-              <VendorCatalogue products={vendorMaterialList} />
+              <VendorCatalogue
+              vendorName = {vendorPersonal?.businessName}
+              products={vendorMaterialList} />
             </div>
           </div>
           <div className="bg-white border rounded-md p-4 flex items-center gap-6">
