@@ -122,7 +122,7 @@ const handleDecrease = (id) => {
               <div className="mt-4 grid md:flex gap-3 items-center">
                 <img alt="" src={info} />
                 <div className="text-xs leading-5">
-                  You haven’t added a clothing material to this purchase. Your tailor will need a material to work with.
+                  You have not added a clothing material to this purchase. Your tailor will need a material to work with.
                   <span className="text-primary underline underline-offset-2"> Explore “Traditional kampala” materials</span>
                 </div>
               </div>
