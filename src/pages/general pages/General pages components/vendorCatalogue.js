@@ -15,11 +15,11 @@ const VendorCatalogue = ({ products = [] }) => {
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {currentProducts.map((product) => (
-          <Link key={product.id} to={`/product-detail/${btoa(product.catalogueId)}`}>
-            <div className="grid content-between md:text-xs">
-              <LazyLoadImage effect="blur" src={product.styleImageOne} alt={product.name} className="w-full aspect-video md:aspect-square object-cover rounded-md" />
-              <div className="line-clamp-none md:line-clamp-1 mt-2 mb-1">{product.styleName}</div>
-              <div className="text-black/50 font-semibold">{product.cost}, {product.materialId}</div>
+          <Link key={product.id} to={`/product-detail/${btoa(product.catalogueId || product.materialId)}`}>
+            <div className="grid content-between">
+              <LazyLoadImage effect="blur" src={product.styleImageOne || product.materialImageOne} alt="image" className="w-full aspect-video md:aspect-square object-cover rounded-md" />
+              <div className="line-clamp-none md:line-clamp-1 mt-2">{product.styleName || product.materialName}</div>
+              <div className="secondary-font font-bold">{product.cost || product.price}</div>
             </div>
           </Link>
         ))}

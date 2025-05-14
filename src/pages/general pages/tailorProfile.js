@@ -36,7 +36,14 @@ const TailorProfile = () => {
 
   const vendorPersonal = vendorDetail?.vendorData;
   const vendorCatalogue = vendorDetail?.catalogueData;
-  const vendorMaterialList = vendorDetail?.materialData;
+  const vendorMaterialList = vendorDetail?.materialData || [];
+
+  // console.log (vendorMaterialList)
+
+  const readyMadeList = vendorMaterialList.filter(
+    (item) => item.availability === "AVAILABLE" &&
+    item.category === "Ready-made"
+  );
 
   const userSessionData = useSelector((state) => state.user.userSession);
   const username = userSessionData?.data?.customerData?.fullName;
@@ -144,7 +151,7 @@ const TailorProfile = () => {
               Orders are typically ready and shipped within 7 days
             </div>
           </div>
-          <div className="grid gap-6 mb-10">
+          <div className="grid gap-10 mb-10">
             <div className="">
               <div className="font-bold secondary-font mb-4">Catalogue:</div>
               <VendorCatalogue
@@ -153,8 +160,8 @@ const TailorProfile = () => {
               />
             </div>
             <div className="">
-              <div className="font-bold secondary-font mb-4">Materials:</div>
-              <VendorCatalogue products={vendorMaterialList} />
+              <div className="font-bold secondary-font mb-4">Ready-made styles:</div>
+              <VendorCatalogue products={readyMadeList} />
             </div>
           </div>
           <div className="bg-white border rounded-md p-4 flex items-center gap-6">

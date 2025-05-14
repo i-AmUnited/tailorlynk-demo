@@ -10,32 +10,48 @@ export const CartProvider = ({ children }) => {
   });
 
   useEffect(() => {
-      localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
+  const addToCart = (item, quantity = 1) => {
+    setCart((prevCart) => {
+      // Check if the item has catalogueId or materialId
+      const itemId = item.catalogueId || item.materialId;
+      const idType = item.catalogueId ? 'catalogueId' : 'materialId';
+      
+      if (!itemId) {
+        console.warn("Item has no catalogueId or materialId:", item);
+        return prevCart;
+      }
 
-const addToCart = (item, quantity = 1) => {
-  setCart((prevCart) => {
-    const existingItem = prevCart.find(
-      (cartItem) => cartItem.catalogueId === item.catalogueId
-    );
-
-    showSuccessMessage("Item added to cart")
-
-    if (existingItem) {
-      return prevCart.map((cartItem) =>
-        cartItem.catalogueId === item.catalogueId
-          ? { ...cartItem, quantity: cartItem.quantity + quantity }
-          : cartItem
+      // Find existing item by either catalogueId or materialId
+      const existingItem = prevCart.find(
+        (cartItem) => 
+          (cartItem.catalogueId && cartItem.catalogueId === item.catalogueId) || 
+          (cartItem.materialId && cartItem.materialId === item.materialId)
       );
-    } else {
-      return [...prevCart, { ...item, quantity }];
-    }
-  });
-};
+
+      showSuccessMessage("Item added to cart");
+
+      if (existingItem) {
+        return prevCart.map((cartItem) =>
+          (cartItem.catalogueId && cartItem.catalogueId === item.catalogueId) || 
+          (cartItem.materialId && cartItem.materialId === item.materialId)
+            ? { ...cartItem, quantity: cartItem.quantity + quantity }
+            : cartItem
+        );
+      } else {
+        return [...prevCart, { ...item, quantity }];
+      }
+    });
+  };
 
   const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.catalogueId !== id));
+    setCart((prevCart) => 
+      prevCart.filter((item) => 
+        item.catalogueId !== id && item.materialId !== id
+      )
+    );
   };
 
   const clearCart = () => {
@@ -46,14 +62,36 @@ const addToCart = (item, quantity = 1) => {
   const updateCartQuantity = (id, newQuantity) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.catalogueId === id ? { ...item, quantity: newQuantity } : item
+        item.catalogueId === id || item.materialId === id
+          ? { ...item, quantity: newQuantity }
+          : item
       )
     );
   };
-  
 
+  const getCartItemById = (id) => {
+    return cart.find(item => 
+      item.catalogueId === id || item.materialId === id
+    );
+  };
+
+  const getCartTotal = () => {
+    return cart.reduce((total, item) => {
+      const price = parseFloat(item.price || 0);
+      return total + (price * item.quantity);
+    }, 0);
+  };
+  
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, updateCartQuantity }}>
+    <CartContext.Provider value={{ 
+      cart, 
+      addToCart, 
+      removeFromCart, 
+      clearCart, 
+      updateCartQuantity,
+      getCartItemById,
+      getCartTotal
+    }}>
       {children}
     </CartContext.Provider>
   );

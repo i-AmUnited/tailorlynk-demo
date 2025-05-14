@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import starIcon from "../assets/icons/star.svg";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import placeholderImage from "../assets/images/placeholder-tailorlynk.png";
 
-const ProductCard = ({ vendorID, vendorName, vendorLocation, coverPhoto, cardScrolls, loadingPlaceholderImage, ratingSection, rating }) => {
+const ProductCard = ({ vendorID, vendorName, vendorLocation, coverPhoto, cardScrolls, ratingSection, rating }) => {
   return (
     <Link to={`/tailor-profile/${btoa(vendorID)}`} className="grid gap-2">
       <div
@@ -12,7 +11,6 @@ const ProductCard = ({ vendorID, vendorName, vendorLocation, coverPhoto, cardScr
           cardScrolls === "true" ? "w-64 lg:w-full h-[150px]" : "w-full h-[250px] md:h-[150px]"
         } rounded-lg overflow-hidden relative bg-brandGreen/10`}
       >
-        {/* <LazyLoadImage src={coverPhoto === null ? placeholderImage : coverPhoto} effect="blur" alt="" placeholderSrc={loadingPlaceholderImage} className={`${cardScrolls === "true" ? "w-64 lg:w-full h-[150px]" : "w-full h-[250px] md:h-[150px]"} object-cover`}/> */}
         <img src={coverPhoto === null ? placeholderImage : coverPhoto} alt="brand_image" className={`${cardScrolls === "true" ? "w-64 lg:w-full h-[150px]" : "w-full h-[250px] md:h-[150px]"} object-cover`}/>
         <div className="absolute inset-0 flex justify-end items-end p-2 hover:bg-black/40 transition-all cursor-pointer">
           <div className={`${ratingSection === false ? "hidden" : "p-2 rounded-md bg-white/5 backdrop-blur-md flex items-center gap-1 text-white"}`}>

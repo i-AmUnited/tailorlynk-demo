@@ -10,6 +10,7 @@ import AllProducts from "./general pages/Products";
 import Checkout from "./general pages/checkout";
 import PrivacyPolicy from "./general pages/privacyPolicy";
 import Western from "./general pages/westernStyleLanding";
+import AllMaterialProducts from "./general pages/allMaterial";
 
 const Structure = () => {
   return (
@@ -20,6 +21,7 @@ const Structure = () => {
         <Route index element={<Home />} />
             <Route path="tailor-profile/:vendorID" element={<TailorProfile />} />
             <Route path="all-products" element={<AllProducts />} />
+            <Route path="all-materials" element={<AllMaterialProducts />} />
             <Route path="product-detail/:catalogueId" element={<ProductDetail />} />
             <Route path="western" element={<Western />} />
             <Route path="cart" element={<Cart />} />
