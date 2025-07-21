@@ -2,9 +2,10 @@ import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import {
   retrieveFromLocalStorage,
   showErrorMessage,
-  showSuccessMessage,
+  showSuccessMessage,APP_SECRET_KEY
 } from "../constants";
 import { apiEndPoints } from "../remote/apiEndPoints";
+import CryptoJS from "crypto-js";
 
 const initialState = {
   users: null,
@@ -14,8 +15,13 @@ const initialState = {
   ...retrieveFromLocalStorage(["userSession"]),
 };
 
+// const saveToLocalStorage = (key, data) => {
+//   localStorage.setItem(key, data);
+// };
+
 const saveToLocalStorage = (key, data) => {
-  localStorage.setItem(key, data);
+  const encryptedData = CryptoJS.AES.encrypt(data, APP_SECRET_KEY).toString();
+  localStorage.setItem(key, encryptedData);
 };
 
 export const userSignIn = createAsyncThunk("user/signIn",
@@ -23,7 +29,9 @@ export const userSignIn = createAsyncThunk("user/signIn",
     try{
       const signInEndPoint = await apiEndPoints.signIn(values);
       const response = await signInEndPoint.data;
-      saveToLocalStorage("userSession", JSON.stringify(response));
+      saveToLocalStorage("userSession", JSON.stringify(response.data.customerData));
+      saveToLocalStorage("token", JSON.stringify(response.data.accessToken));
+      // console.log(response.data.accessToken)
       return response;
     }
     catch(error){
@@ -185,6 +193,120 @@ export const materialList = createAsyncThunk(
   }
 );
 
+export const addItemToCart = createAsyncThunk(
+  "user/addToCart",
+  async (values) => {
+    const addToCartEndPoint = await apiEndPoints.addToCart(values);
+    const response = await addToCartEndPoint.data;
+    return response;
+  }
+);
+
+export const updateDetails = createAsyncThunk(
+  "user/changeProfile",
+  async (values) => {
+    try {
+      const updateDetailsEndPoint = await apiEndPoints.updateProfileDetails(values);
+      const response = await updateDetailsEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const profileDetails = createAsyncThunk(
+  "user/profile",
+  async (values) => {
+    try {
+      const profileDetailsEndPoint = await apiEndPoints.profileDetails(values);
+      const response = await profileDetailsEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const userMeasurements = createAsyncThunk(
+  "user/measurements",
+  async (values) => {
+    try {
+      const userMeasurementsEndPoint = await apiEndPoints.measurements(values);
+      const response = await userMeasurementsEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const updateMeasurements = createAsyncThunk(
+  "user/updateMeasurements",
+  async (values) => {
+    try {
+      const updateMeasurementsEndPoint = await apiEndPoints.updateMeasurementDetails(values);
+      const response = await updateMeasurementsEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const userShippingAddress = createAsyncThunk(
+  "user/shippingAddress",
+  async (values) => {
+    try {
+      const userAddressEndPoint = await apiEndPoints.shippingAddress(values);
+      const response = await userAddressEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const updateUserShippingAddress = createAsyncThunk(
+  "user/updateshippingAddress",
+  async (values) => {
+    try {
+      const updateAddressEndPoint = await apiEndPoints.updateShippingAddress(values);
+      const response = await updateAddressEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const updateUserPassword = createAsyncThunk(
+  "user/updatePassword",
+  async (values) => {
+    try {
+      const updatePasswordEndPoint = await apiEndPoints.updatePassword(values);
+      const response = await updatePasswordEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const submitFeedback = createAsyncThunk(
+  "user/submitFeedback",
+  async (values) => {
+    try {
+      const feedbackEndPoint = await apiEndPoints.feedback(values);
+      const response = await feedbackEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+
 const slice = createSlice({
   name: "user",
   initialState: initialState,
@@ -222,6 +344,9 @@ const slice = createSlice({
           vendorReviewList.fulfilled,
           singleCatalogueDetail.fulfilled,
           materialList.fulfilled,
+          profileDetails.fulfilled,
+          userMeasurements.fulfilled,
+          userShippingAddress.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -243,16 +368,24 @@ const slice = createSlice({
           vendorReport.fulfilled,
           resetPasswordOTP.fulfilled,
           changePassword.fulfilled,
+          addItemToCart.fulfilled,
           placeOrder.fulfilled,
+          updateDetails.fulfilled,
+          updateMeasurements.fulfilled,
+          updateUserShippingAddress.fulfilled,
+          updateUserPassword.fulfilled,
+          submitFeedback.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
           if (action.payload.statusCode === 200) {
             state.users = action.payload;
             showSuccessMessage(action.payload.message);
+            // console.log(action.payload)
           } else {
             state.error = action.payload.message;
             showErrorMessage(action.payload.message);
+            // console.log(action.payload)
           }
         }
       )
@@ -273,6 +406,15 @@ const slice = createSlice({
           changePassword.pending,
           placeOrder.pending,
           materialList.pending,
+          addItemToCart.pending,
+          updateDetails.pending,
+          profileDetails.pending,
+          userMeasurements.pending,
+          updateMeasurements.pending,
+          userShippingAddress.pending,
+          updateUserShippingAddress.pending,
+          updateUserPassword.pending,
+          submitFeedback.pending,
         ),
         (state) => {
           state.loading = true;
@@ -296,7 +438,16 @@ const slice = createSlice({
           userSignIn.rejected,
           changePassword.rejected,
           placeOrder.rejected,
-          materialList.rejected
+          materialList.rejected,
+          addItemToCart.rejected,
+          updateDetails.rejected,
+          profileDetails.rejected,
+          userMeasurements.rejected,
+          updateMeasurements.rejected,
+          userShippingAddress.rejected,
+          updateUserShippingAddress.rejected,
+          updateUserPassword.rejected,
+          submitFeedback.rejected,
         ),
         (state, action) => {
           state.loading = false;

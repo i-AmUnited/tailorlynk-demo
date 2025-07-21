@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Route, Routes, NavLink } from "react-router-dom";
-import { HiMenuAlt4, HiOutlineX } from "react-icons/hi";
+import { HiMenuAlt2, HiOutlineX } from "react-icons/hi";
 import SavedItems from "./savedItems";
 import ChangePassword from "./changePassword";
 import Measurements from "./Measurements";
@@ -33,26 +33,16 @@ function UserAccount() {
   };
 
   const userSessionData = useSelector((state) => state.user.userSession);
+  // console.log(userSessionData)
   if (!userSessionData) {
     return <SignOut />;
   }
 
+
   return (
     <div className="">
-      {/* mobile nav icons */}
-      <button
-        className="lg:hidden flex self-end"
-        onClick={() => setMobileNav(!mobileNav)}
-      >
-        {mobileNav ? (
-          <HiOutlineX className="text-xl text-primary" />
-        ) : (
-          <HiMenuAlt4 className="text-xl text-primary" />
-        )}
-      </button>
-
       {/* Main content with sidebar and routes */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 relative">
         {/* Sidebar */}
         <div className="lg:col-span-3 bg-white border rounded-md hidden lg:block h-fit">
           <div className="px-4 py-6 border-b">
@@ -61,57 +51,33 @@ function UserAccount() {
             </Link>
           </div>
 
-          <nav className="">
-            <ul className="px-4 py-5 grid gap-5">
-              {SideLinks.map(({ id, url, text }) => (
-                <li key={id} className="">
-                  <NavLink
-                    to={url}
-                    end={url === "/user-account"}
-                    onClick={handleNavLinkClick}
-                    className={({ isActive }) =>
-                      isActive ? "text-black font-semibold" : "text-gray-400"
-                    }
-                  >
-                    {text}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-
-        {/* nav sidebar */}
-        <div
-          className={` ${
-            mobileNav ? "left-0" : "-left-full"
-          } fixed top-0 bottom-0 w-[60vw] lg:hidden transition-all bg-white shadow-md pt-10`}
-        >
-          <div className="">
-            <Link to="/" className="font-bold">
-              <p className="text-primary"> [Back to homepage] </p>
-            </Link>
-          </div>
-
-          <nav className="mt-4">
-            <ul className="mt-4 space-y-3">
-              {SideLinks.map(({ id, url, text }) => (
-                <li key={id} className="hover:bg-gray-100 rounded-md">
-                  <NavLink
-                    to={url}
-                    onClick={handleNavLinkClick}
-                    className="block px-4 py-2 text-gray-700 hover:text-black"
-                  >
-                    {text}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <ul className="px-4 py-5 grid gap-5">
+            {SideLinks.map(({ id, url, text }) => (
+              <li key={id} className="">
+                <NavLink
+                  to={url}
+                  end={url === "/user-account"}
+                  onClick={handleNavLinkClick}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "text-black font-semibold text-xs"
+                      : "text-gray-700 text-xs"
+                  }
+                >
+                  {text}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Content */}
         <div className="w-full bg-white border rounded-md lg:col-span-9">
+          <div className="px-4 pt-6 -mb-4 lg:hidden">
+            <button onClick={() => setMobileNav(!mobileNav)}>
+              <HiMenuAlt2 className="text-xl text-primary" />
+            </button>
+          </div>
           <Routes>
             <Route index element={<Overview />} />
             <Route path="saved-items" element={<SavedItems />} />
@@ -127,6 +93,38 @@ function UserAccount() {
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
+
+        {mobileNav && (
+        <div className="lg:hidden bg-white/60 border backdrop-blur-lg rounded fixed top-0 left-0 right-0 px-4 py-6">
+          <div>
+            <div className="">
+              <button onClick={() => setMobileNav(!mobileNav)}>
+                  <HiOutlineX className="text-xl text-primary" />
+              </button>
+            </div>
+
+            <ul className="grid gap-5 mt-5">
+              {SideLinks.map(({ id, url, text }) => (
+                <li key={id} className="">
+                  <NavLink
+                    to={url}
+                    end={url === "/user-account"}
+                    onClick={handleNavLinkClick}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-black font-semibold text-xs"
+                        : "text-gray-700 text-xs"
+                    }
+                  >
+                    {text}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        )}
+
       </div>
     </div>
   );

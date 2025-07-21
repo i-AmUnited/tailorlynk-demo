@@ -9,15 +9,20 @@ import share from "../../assets/icons/share.svg";
 import { useParams } from "react-router-dom";
 import { useCatalogueDetail } from "../reuseableEffects";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useCart } from "../../components/cartContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
-import { showSuccessMessage } from "../../hooks/constants";
+import { showErrorMessage, showSuccessMessage } from "../../hooks/constants";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { addItemToCart } from "../../hooks/local/reducer";
+
 
 const ProductDetail = () => {
   const loading = useSelector((state) => state.user.loading);
+  const dispatch = useDispatch();
 
   const productURL = window.location.href;
   const handleCopy = () => {
@@ -33,6 +38,7 @@ const ProductDetail = () => {
   const { catalogueId } = useParams();
   const decodedCatalogueID = atob(catalogueId);
   const productDetail = useCatalogueDetail(decodedCatalogueID);
+  console.log(productDetail)
 
   const [quantity, setQuantity] = useState(1);
   
@@ -46,11 +52,47 @@ const ProductDetail = () => {
       (item.materialId && productDetail?.materialId && item.materialId === productDetail.materialId)
   );
 
-  // Handle input change
-  const handleQuantityChange = (e) => {
-    const value = Math.max(1, parseInt(e.target.value, 10) || 1); // Ensure at least 1
-    setQuantity(value);
-  };
+const handleQuantityChange = (e) => {
+  setQuantity(e.target.value);
+};
+
+const handleQuantityBlur = () => {
+  const value = parseInt(quantity, 10);
+  if (isNaN(value) || value < 1) {
+    setQuantity("1");
+  } else {
+    setQuantity(value.toString());
+  }
+};
+
+
+// console.log(productDetail?.category, productDetail?.materialId)
+
+// add to cart API
+const addToCartWithAPI = useFormik({
+      initialValues: {
+        classification: productDetail?.category || "",
+        classification_id: productDetail?.catalogueId || productDetail?.materialId || "",
+      },
+      // validationSchema: Yup.object({
+      //   email: Yup.string()
+      //     .required("Please provide an email address")
+      //     .email("Please enter a valid email address"),
+      //   password: Yup.string().required("Please enter a password"),
+      // }),
+      onSubmit: async (values) => {
+        
+        const { payload } = await dispatch(addItemToCart(values));
+        if (payload?.statusCode === 200) {
+      showSuccessMessage("Item added to cart");
+    } else {
+      showErrorMessage("Failed to add item to cart");
+    }
+      },
+    });
+
+
+
 
   const image1 = productDetail?.styleImageOne || productDetail?.materialImageOne;
   const image2 = productDetail?.styleImageTwo || productDetail?.materialImageTwo;
@@ -138,72 +180,76 @@ const ProductDetail = () => {
           <div className="text-xs font-semibold mb-2">Product description:</div>
           <div className="text-xs leading-5">{productDetail?.description}</div>
           <div className="grid gap-6 mt-6">
-            
             {!productDetail?.category ? (
               <div className="grid grid-cols-2 gap-4">
-              <div className="grid">
-                <div className="text-xs font-semibold">Tailor</div>
-                <div className="">
-                  {productDetail?.vendorData?.businessName}
+                <div className="grid">
+                  <div className="text-xs font-semibold">Tailor</div>
+                  <div className="">
+                    {productDetail?.vendorData?.businessName}
+                  </div>
+                </div>
+                <div className="grid">
+                  <div className="text-xs font-semibold">Price</div>
+                  <div className="">{productDetail?.cost}</div>
+                </div>
+                <div className="grid">
+                  <div className="text-xs font-semibold">Material type:</div>
+                  <div className="">{productDetail?.material}</div>
+                </div>
+                <div className="grid">
+                  <div className="text-xs font-semibold">Number of yards:</div>
+                  <div className="">{productDetail?.noOfYard}</div>
                 </div>
               </div>
-              <div className="grid">
-                <div className="text-xs font-semibold">Price</div>
-                <div className="">{productDetail?.cost}</div>
-              </div>
-              <div className="grid">
-                <div className="text-xs font-semibold">Material type:</div>
-                <div className="">{productDetail?.material}</div>
-              </div>
-              <div className="grid">
-                <div className="text-xs font-semibold">Number of yards:</div>
-                <div className="">{productDetail?.noOfYard}</div>
-              </div>
-              </div>
-            ) : productDetail?.category === "Western" || productDetail?.category === "Ready-made" ? (
+            ) : productDetail?.category === "Western" ||
+              productDetail?.category === "Ready-made" ? (
               <div className="grid grid-cols-2 gap-4">
-              <div className="grid">
-                <div className="text-xs font-semibold">Vendor</div>
-                <div className="">
-                  {productDetail?.vendorData?.businessName}
+                <div className="grid">
+                  <div className="text-xs font-semibold">Vendor</div>
+                  <div className="">
+                    {productDetail?.vendorData?.businessName}
+                  </div>
                 </div>
-              </div>
-              <div className="grid">
-                <div className="text-xs font-semibold">Available colors:</div>
-                <div className="">{productDetail?.color}</div>
-              </div>
-              <div className="grid">
-                <div className="text-xs font-semibold">Price</div>
-                <div className="secondary-font font-bold">{productDetail?.price}</div>
-              </div>
-              
+                <div className="grid">
+                  <div className="text-xs font-semibold">Available colors:</div>
+                  <div className="">{productDetail?.color}</div>
+                </div>
+                <div className="grid">
+                  <div className="text-xs font-semibold">Price</div>
+                  <div className="secondary-font font-bold">
+                    {productDetail?.price}
+                  </div>
+                </div>
               </div>
             ) : productDetail?.category === "Material" ? (
               <div className="grid grid-cols-2 gap-4">
-              <div className="grid">
-                <div className="text-xs font-semibold">Vendor</div>
-                <div className="">
-                  {productDetail?.vendorData?.businessName}
+                <div className="grid">
+                  <div className="text-xs font-semibold">Vendor</div>
+                  <div className="">
+                    {productDetail?.vendorData?.businessName}
+                  </div>
                 </div>
-              </div>
-              <div className="grid">
-                <div className="text-xs font-semibold">Available colors:</div>
-                <div className="">{productDetail?.color}</div>
-              </div>
-              <div className="grid">
-                <div className="text-xs font-semibold">Cost per yard</div>
-                <div className="secondary-font font-bold">{productDetail?.costPerYard}</div>
-              </div>
+                <div className="grid">
+                  <div className="text-xs font-semibold">Available colors:</div>
+                  <div className="">{productDetail?.color}</div>
+                </div>
+                <div className="grid">
+                  <div className="text-xs font-semibold">Cost per yard</div>
+                  <div className="secondary-font font-bold">
+                    {productDetail?.costPerYard}
+                  </div>
+                </div>
               </div>
             ) : null}
 
             <div className="grid grid-cols-1 md:grid-cols-2">
               {!isInCart && (
                 <Input
-                  label={"Quantity:"}
-                  type={"number"}
+                  label="Quantity:"
+                  type="number"
                   value={quantity}
                   onChange={handleQuantityChange}
+                  onBlur={handleQuantityBlur}
                 />
               )}
             </div>
@@ -224,6 +270,7 @@ const ProductDetail = () => {
                         : addToCart(productDetail, quantity)
                     }
                   />
+                  
                 </div>
                 <IconButton
                   buttonText={"Save this item"}
@@ -232,7 +279,10 @@ const ProductDetail = () => {
                 />
               </div>
               <div className="grid grid-cols-2">
-                <div onClick={handleCopy} className="cursor-pointer text-xs font-medium py-5 md:py-4 px-6 rounded flex items-center gap-2 bg-white text-primary w-fit">
+                <div
+                  onClick={handleCopy}
+                  className="cursor-pointer text-xs font-medium py-5 md:py-4 px-6 rounded flex items-center gap-2 bg-white text-primary w-fit"
+                >
                   <img src={share} alt="" className="h-4" />
                   <span className="md:hidden">Share item</span>
                 </div>

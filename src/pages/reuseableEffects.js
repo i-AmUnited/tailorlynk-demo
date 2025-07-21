@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { listVendors, materialList, singleCatalogueDetail, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
+import { listVendors, materialList, profileDetails, singleCatalogueDetail, userMeasurements, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])
@@ -86,4 +86,55 @@ export function useVendorReviews(vendorID) {
     }, [dispatch]);
   
     return listMaterial;
+  }
+
+  export function useProfileDetails() {
+    const [profileDetail, setProfileDetail] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchProfileDetails = async() => {
+        try {
+            const {payload} = await dispatch(profileDetails());
+            setProfileDetail(payload.data);
+        }
+        catch(e){}
+      }
+      fetchProfileDetails();
+    }, [dispatch]);
+  
+    return profileDetail;
+  }
+
+  export function useMeasurements() {
+    const [measurementDetail, setMeasurementDetail] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchMeasurementDetails = async() => {
+        try {
+            const {payload} = await dispatch(userMeasurements());
+            setMeasurementDetail(payload.data);
+        }
+        catch(e){}
+      }
+      fetchMeasurementDetails();
+    }, [dispatch]);
+  
+    return measurementDetail;
+  }
+
+  export function useShippingAddress() {
+    const [shippingAddress, setShippingAddress] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchShippingAddress = async() => {
+        try {
+            const {payload} = await dispatch(userShippingAddress());
+            setShippingAddress(payload.data);
+        }
+        catch(e){}
+      }
+      fetchShippingAddress();
+    }, [dispatch]);
+  
+    return shippingAddress;
   }

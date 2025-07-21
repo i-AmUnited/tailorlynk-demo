@@ -86,6 +86,7 @@ const TailorProfile = () => {
       const { payload } = await dispatch(writeReview(sendReviewData));
       if (payload.statusCode === 200) {
         setReportModal(false);
+
       }
     },
   });
@@ -126,13 +127,7 @@ const TailorProfile = () => {
                 <span>{vendorPersonal?.businessName}</span>
               </div>
               <div className="w-full h-full aspect-video rounded-b-md overflow-hidden">
-                <LazyLoadImage
-                  effect="blur"
-                  src={vendorPersonal?.brandLogo}
-                  alt=""
-                  placeholderSrc={placeholderImage}
-                  className="object-cover object-center w-full h-full"
-                />
+                <img src={vendorPersonal?.brandLogo} alt="" className="object-cover object-center w-full h-full"/>
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
@@ -147,21 +142,19 @@ const TailorProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="text-xs">
-              Orders are typically ready and shipped within 7 days
-            </div>
+          
           </div>
           <div className="grid gap-10 mb-10">
             <div className="">
               <div className="font-bold secondary-font mb-4">Catalogue:</div>
-              <VendorCatalogue
+             {vendorCatalogue?.length === 0 ? <div className="text-md font-bold text-[#c4c4c4]">Tailor hasn't added any products yet</div> : <VendorCatalogue
                 vendorName={vendorPersonal?.businessName}
                 products={vendorCatalogue}
-              />
+              />}
             </div>
             <div className="">
               <div className="font-bold secondary-font mb-4">Ready-made styles:</div>
-              <VendorCatalogue products={readyMadeList} />
+              {readyMadeList?.length === 0 ? <div className="text-md font-bold text-[#c4c4c4]">Tailor hasn't added any products yet</div> : <VendorCatalogue products={readyMadeList} />}
             </div>
           </div>
           <div className="bg-white border rounded-md p-4 flex items-center gap-6">

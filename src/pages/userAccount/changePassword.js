@@ -1,148 +1,99 @@
-import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import axiosInstance from "../../api/axiosInstance";
-import { retrieveFromLocalStorage } from "../../hooks/constants";
+import Input from "../../components/input";
+import Button from "../../components/button";
+import { useDispatch, useSelector } from "react-redux";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { updateUserPassword } from "../../hooks/local/reducer";
+import { showSuccessMessage } from "../../hooks/constants";
 
-function ChangePassword() {
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showOldPassword, setShowOldPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const ChangePassword = () => {
+  const loading = useSelector((state) => state.user.loading);
+  const dispatch = useDispatch();
 
-    if (newPassword !== confirmPassword) {
-      toast.error("New password and confirmation do not match.");
-      return;
-    }
-
-    if (!oldPassword || !newPassword || !confirmPassword) {
-      toast.error("All fields are required.");
-      return;
-    }
-
-    // Retrieve session data
-    const { userSession } = retrieveFromLocalStorage(["userSession"]);
-    const token = userSession?.data?.accessToken;
-    const apiKey = userSession?.data?.apiKey;
-
-    try {
-      const response = await axiosInstance.post(
-        "/customer/update-password",
-        {
-          old_password: oldPassword,
-          new_password: newPassword,
-          confirm_password: confirmPassword,
-        },
-        {
-          headers: {
-            "x-api-key": apiKey,
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        toast.success("Password updated successfully!");
-      } else {
-        toast.error(response.data.message || "Failed to update password.");
+    const changePasswordForm = useFormik({
+    initialValues: {
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      },
+    enableReinitialize: true,
+    validationSchema: Yup.object({
+      oldPassword: Yup.string().required("Please provide your old password"),
+      newPassword: Yup.string().required("Please provide your password"),
+      confirmPassword: Yup.string()
+        .required("Please confirm your password")
+        .oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
+    }),
+    onSubmit: async (values) => {
+      const { oldPassword, newPassword, confirmPassword } = values;
+      let changePasswordData = { oldPassword, newPassword, confirmPassword };
+      const { payload } = await dispatch(updateUserPassword(changePasswordData));
+      // console.log(changePasswordData)
+      if (payload.statusCode === 200) {
+        showSuccessMessage(payload.message);
       }
-    } catch (error) {
-      toast.error("An error occurred. Please try again.");
-    }
-  };
+    },
+  });
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 h-full">
-      <h2 className="text-xl font-semibold mb-4">Change Password</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="relative">
-          <label className="block text-gray-700">Old Password:</label>
-          <div className="relative">
-            <input
-              type={showOldPassword ? "text" : "password"} // Toggle visibility
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              placeholder="Enter old password"
-              className="w-full p-2 pr-10 border border-gray-300 rounded" // Added 'pr-10' for icon space
+    <div className="rounded-lg bg-white">
+      <div className="px-4 py-6 border-b text-md font-bold">Change Password</div>
+      <form onSubmit={changePasswordForm.handleSubmit} className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <Input
+              label="Old password"
+              type={"password"}
+              isPassword={"true"}
+              name="oldPassword"
+              value={changePasswordForm.values.oldPassword}
+              onChange={changePasswordForm.handleChange}
+              onBlur={changePasswordForm.handleBlur}
+              onError={
+                changePasswordForm.touched.oldPassword && changePasswordForm.errors.oldPassword
+                  ? changePasswordForm.errors.oldPassword
+                  : null
+              }
             />
-            <button
-              type="button"
-              onClick={() => setShowOldPassword(!showOldPassword)}
-              className="absolute inset-y-0 right-3 flex items-center"
-            >
-              <FontAwesomeIcon
-                icon={showOldPassword ? faEyeSlash : faEye}
-                className="text-gray-500"
-              />
-            </button>
-          </div>
+          <Input
+            label="New password"
+            type={"password"}
+            isPassword={"true"}
+            name="newPassword"
+            value={changePasswordForm.values.newPassword}
+            onChange={changePasswordForm.handleChange}
+            onBlur={changePasswordForm.handleBlur}
+            onError={
+              changePasswordForm.touched.newPassword && changePasswordForm.errors.newPassword
+                ? changePasswordForm.errors.newPassword
+                : null
+            }
+          />
+          <Input
+            label="Confirm password"
+            type={"password"}
+            isPassword={"true"}
+            name="confirmPassword"
+            value={changePasswordForm.values.confirmPassword}
+            onChange={changePasswordForm.handleChange}
+            onBlur={changePasswordForm.handleBlur}
+            onError={
+              changePasswordForm.touched.confirmPassword && changePasswordForm.errors.confirmPassword
+                ? changePasswordForm.errors.confirmPassword
+                : null
+            }
+          />
+          
         </div>
-
-        <div className="relative">
-          <label className="block text-gray-700">New Password:</label>
-          <div className="relative">
-            <input
-              type={showNewPassword ? "text" : "password"} // Toggle visibility
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Enter new password"
-              className="w-full p-2 pr-10 border border-gray-300 rounded"
-            />
-            <button
-              type="button"
-              onClick={() => setShowNewPassword(!showNewPassword)}
-              className="absolute inset-y-0 right-3 flex items-center"
-            >
-              <FontAwesomeIcon
-                icon={showNewPassword ? faEyeSlash : faEye}
-                className="text-gray-500"
-              />
-            </button>
-          </div>
-        </div>
-
-        <div className="relative">
-          <label className="block text-gray-700">Confirm New Password:</label>
-          <div className="relative">
-            <input
-              type={showConfirmPassword ? "text" : "password"} // Toggle visibility
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm new password"
-              className="w-full p-2 pr-10 border border-gray-300 rounded"
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute top-2 right-2"
-            >
-              <FontAwesomeIcon
-                icon={showConfirmPassword ? faEyeSlash : faEye}
-                className="text-gray-500"
-              />
-            </button>
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          className="bg-[#CB997E] text-white py-2 px-4 rounded hover:bg-[#B5838D]"
-        >
-          Update Password
-        </button>
+        <Button
+          buttonRole="submit"
+          buttonText="Update password"
+          otherStyles="mt-4 bg-primary text-white"
+          loading={loading}
+        />
       </form>
-
-      {/* Toast container to display the messages */}
-      <ToastContainer />
     </div>
   );
-}
+};
 
 export default ChangePassword;

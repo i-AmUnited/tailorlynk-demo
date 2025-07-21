@@ -1,129 +1,103 @@
-import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import axiosInstance from "../../api/axiosInstance";
-import { retrieveFromLocalStorage } from "../../hooks/constants";
+import { useDispatch, useSelector } from "react-redux";
+import Button from "../../components/button";
+import Input from "../../components/input";
+import SelectInput from "../../components/select";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { showSuccessMessage } from "../../hooks/constants";
+import { submitFeedback } from "../../hooks/local/reducer";
 
 const Feedback = () => {
-  const [feedbackType, setFeedbackType] = useState("Positive feedback");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState("");
+  const loading = useSelector((state) => state.user.loading);
+  const dispatch = useDispatch();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    // Retrieve session data using helper function
-    const { userSession } = retrieveFromLocalStorage(["userSession"]);
-    const token = userSession?.data?.accessToken;
-    const apiKey = userSession?.data?.apiKey;
-
-    console.log("Access Token:", token);
-
-    // Validate feedbackType and message before sending
-    if (!feedbackType || !message) {
-      toast.error("Please fill in all fields.", { autoClose: 3000 });
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const payload = {
-        type: feedbackType,
-        message,
-      };
-
-      console.log("Payload:", payload);
-
-      const response = await axiosInstance.post(
-        "/customer/submit-feedback",
-        payload,
-        {
-          headers: {
-            "x-api-key": apiKey,
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setLoading(false);
-
-      if (response.status === 200) {
-        toast.success("Thank you for your feedback! 🎉", { autoClose: 3000 });
-        setMessage("");
+    const submitFeedbackForm = useFormik({
+    initialValues: {
+        type: "",
+        message: "",
+      },
+    enableReinitialize: true,
+    validationSchema: Yup.object({
+      type: Yup.string().required("Please select a feedback type"),
+      message: Yup.string().required("Please type your message"),
+    }),
+    onSubmit: async (values) => {
+      const { type, message } = values;
+      let feedbackData = { type, message };
+      const { payload } = await dispatch(submitFeedback(feedbackData));
+      // console.log(changePasswordData)
+      if (payload.statusCode === 200) {
+        showSuccessMessage(payload.message);
       }
-    } catch (error) {
-      setLoading(false);
-      console.error("Error submitting feedback:", error);
-
-      const errorMessage =
-        error.response?.data?.message || "Failed to submit feedback.";
-      toast.error(errorMessage, { autoClose: 3000 });
-    }
-  };
-
+    },
+  });
   return (
-    <div className="rounded-lg  bg-white">
-      <ToastContainer />
-      <div className="px-4 py-6 border-b font-bold secondary-font">
-        Feedback
+    <div className="rounded-lg bg-white">
+      <div className="px-4 py-6 border-b text-md font-bold">Feedback</div>
+      <div className="px-6 pt-6 grid gap-1 text-xs">
+        <span className="text-primary font-bold">We Value Your Feedback!</span>
+        <span className="text-black/50">
+          Thank you for choosing Tailorlynk. We strive to provide the best
+          experience for our customers, and your feedback is essential in
+          helping us achieve that goal. Whether you had an exceptional
+          experience or there are areas where we can improve, we want to hear
+          from you.
+        </span>
       </div>
-      <p className="text-[#CB997E] font-medium mb-1">We Value Your Feedback!</p>
-      <p className="text-gray-600 mb-6 text-xs">
-        Thank you for choosing Tailorlynk. We strive to provide the best
-        experience for our customers, and your feedback is essential in helping
-        us achieve that goal. Whether you had an exceptional experience or there
-        are areas where we can improve, we want to hear from you.
-      </p>
-      <form onSubmit={handleSubmit} className="px-4 py-6">
-        <div className="">
-          <label
-            htmlFor="feedbackType"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Feedback type:
-          </label>
-          <select
-            id="feedbackType"
-            value={feedbackType}
-            onChange={(e) => setFeedbackType(e.target.value)}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#CB997E] focus:border-[#CB997E] sm:text-sm"
-          >
-            <option>Positive feedback</option>
-            <option>Neutral feedback</option>
-            <option>Negative feedback</option>
-          </select>
+      <form onSubmit={submitFeedbackForm.handleSubmit} className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="md:col-span-2">
+            <SelectInput
+              label="Feedback type"
+              name="type"
+              value={submitFeedbackForm.values.type}
+              onChange={submitFeedbackForm.handleChange}
+              onBlur={submitFeedbackForm.handleBlur}
+              onError={
+                submitFeedbackForm.touched.type && submitFeedbackForm.errors.type
+                  ? submitFeedbackForm.errors.type
+                  : null
+              }
+              options={[
+                { value: "", label: "Select feedback type" },
+                { value: "product_quality", label: "Product Quality" },
+                { value: "sizing_issues", label: "Sizing Issues" },
+                { value: "order_delivery", label: "Order & Delivery" },
+                { value: "return_refund", label: "Return & Refund" },
+                { value: "website_experience", label: "Website Experience" },
+                { value: "customer_service", label: "Customer Service" },
+                { value: "style_suggestions", label: "Style Suggestions" },
+                { value: "pricing_discounts", label: "Pricing & Discounts" },
+                { value: "account_login", label: "Account & Login" },
+                { value: "other", label: "Other" },
+              ]}
+            />
+          </div>
+          <div className="md:col-span-3">
+            <Input
+              label="Your message"
+              name="message"
+              value={submitFeedbackForm.values.message}
+              onChange={submitFeedbackForm.handleChange}
+              onBlur={submitFeedbackForm.handleBlur}
+              onError={
+                submitFeedbackForm.touched.message &&
+                submitFeedbackForm.errors.message
+                  ? submitFeedbackForm.errors.message
+                  : null
+              }
+            />
+          </div>
         </div>
-
-        <div className="mb-6">
-          <label
-            htmlFor="message"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Your message:
-          </label>
-          <textarea
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Start typing..."
-            rows="4"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#CB997E] focus:border-[#CB997E] sm:text-sm resize-none"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-[20%] bg-primary text-white py-2 rounded-lg"
-          disabled={loading}
-        >
-          {loading ? "Sending feedback..." : "Send feedback"}
-        </button>
+        <Button
+          buttonRole="submit"
+          buttonText="Update password"
+          otherStyles="mt-4 bg-primary text-white"
+          loading={loading}
+        />
       </form>
     </div>
   );
-};
+}
 
 export default Feedback;

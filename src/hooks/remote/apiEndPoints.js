@@ -1,5 +1,5 @@
 import { showErrorMessage } from "../constants";
-import { apiClient } from "./apiClient";
+import { apiClient, apiClientWithToken } from "./apiClient";
 
 export class apiEndPoints {
   static extractError(error) {
@@ -149,4 +149,88 @@ export class apiEndPoints {
       throw error;
     }
   }
+
+  //cart endpoints
+  static async addToCart(data) {
+    try {
+      return apiClient.post("/add-to-cart", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  //user-account endpoints
+  static async profileDetails(data) {
+    try {
+      return await apiClientWithToken.get("/profile-details", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async updateProfileDetails(data) {
+    try {
+      return await apiClientWithToken.post("/update-profile", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async measurements(data) {
+    try {
+      return await apiClientWithToken.get("/fetch-measurement", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+   static async updateMeasurementDetails(data) {
+    try {
+      return await apiClientWithToken.post("/update-measurement", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async shippingAddress(data) {
+    try {
+      return await apiClientWithToken.get("/shipping-address", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+   static async updateShippingAddress(data) {
+    try {
+      return await apiClientWithToken.post("/create-shipping-address", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+ static async updatePassword(data) {
+    try {
+      return await apiClientWithToken.post("/update-password", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async feedback(data) {
+    try {
+      return await apiClientWithToken.post("/submit-feedback", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
 }
