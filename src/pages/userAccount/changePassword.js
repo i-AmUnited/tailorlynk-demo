@@ -13,25 +13,26 @@ const ChangePassword = () => {
 
     const changePasswordForm = useFormik({
     initialValues: {
-        oldPassword: "",
-        newPassword: "",
-        confirmPassword: "",
+        old_password: "",
+        new_password: "",
+        confirm_password: "",
       },
     enableReinitialize: true,
     validationSchema: Yup.object({
-      oldPassword: Yup.string().required("Please provide your old password"),
-      newPassword: Yup.string().required("Please provide your password"),
-      confirmPassword: Yup.string()
+      old_password: Yup.string().required("Please provide your old password"),
+      new_password: Yup.string().required("Please provide your password"),
+      confirm_password: Yup.string()
         .required("Please confirm your password")
-        .oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
+        .oneOf([Yup.ref("new_password"), null], "Passwords must match"),
     }),
-    onSubmit: async (values) => {
-      const { oldPassword, newPassword, confirmPassword } = values;
-      let changePasswordData = { oldPassword, newPassword, confirmPassword };
+    onSubmit: async (values, {resetForm}) => {
+      const { old_password, new_password, confirm_password } = values;
+      let changePasswordData = { old_password, new_password, confirm_password };
       const { payload } = await dispatch(updateUserPassword(changePasswordData));
       // console.log(changePasswordData)
       if (payload.statusCode === 200) {
-        showSuccessMessage(payload.message);
+        // showSuccessMessage(payload.message);
+        resetForm();
       }
     },
   });
@@ -45,13 +46,13 @@ const ChangePassword = () => {
               label="Old password"
               type={"password"}
               isPassword={"true"}
-              name="oldPassword"
-              value={changePasswordForm.values.oldPassword}
+              name="old_password"
+              value={changePasswordForm.values.old_password}
               onChange={changePasswordForm.handleChange}
               onBlur={changePasswordForm.handleBlur}
               onError={
-                changePasswordForm.touched.oldPassword && changePasswordForm.errors.oldPassword
-                  ? changePasswordForm.errors.oldPassword
+                changePasswordForm.touched.old_password && changePasswordForm.errors.old_password
+                  ? changePasswordForm.errors.old_password
                   : null
               }
             />
@@ -59,13 +60,13 @@ const ChangePassword = () => {
             label="New password"
             type={"password"}
             isPassword={"true"}
-            name="newPassword"
-            value={changePasswordForm.values.newPassword}
+            name="new_password"
+            value={changePasswordForm.values.new_password}
             onChange={changePasswordForm.handleChange}
             onBlur={changePasswordForm.handleBlur}
             onError={
-              changePasswordForm.touched.newPassword && changePasswordForm.errors.newPassword
-                ? changePasswordForm.errors.newPassword
+              changePasswordForm.touched.new_password && changePasswordForm.errors.new_password
+                ? changePasswordForm.errors.new_password
                 : null
             }
           />
@@ -73,13 +74,13 @@ const ChangePassword = () => {
             label="Confirm password"
             type={"password"}
             isPassword={"true"}
-            name="confirmPassword"
-            value={changePasswordForm.values.confirmPassword}
+            name="confirm_password"
+            value={changePasswordForm.values.confirm_password}
             onChange={changePasswordForm.handleChange}
             onBlur={changePasswordForm.handleBlur}
             onError={
-              changePasswordForm.touched.confirmPassword && changePasswordForm.errors.confirmPassword
-                ? changePasswordForm.errors.confirmPassword
+              changePasswordForm.touched.confirm_password && changePasswordForm.errors.confirm_password
+                ? changePasswordForm.errors.confirm_password
                 : null
             }
           />

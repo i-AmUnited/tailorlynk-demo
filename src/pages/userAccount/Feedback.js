@@ -21,13 +21,14 @@ const Feedback = () => {
       type: Yup.string().required("Please select a feedback type"),
       message: Yup.string().required("Please type your message"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, {resetForm}) => {
       const { type, message } = values;
       let feedbackData = { type, message };
       const { payload } = await dispatch(submitFeedback(feedbackData));
       // console.log(changePasswordData)
       if (payload.statusCode === 200) {
-        showSuccessMessage(payload.message);
+        // showSuccessMessage(payload.message);
+        resetForm();
       }
     },
   });
@@ -91,7 +92,7 @@ const Feedback = () => {
         </div>
         <Button
           buttonRole="submit"
-          buttonText="Update password"
+          buttonText="Submit feedback"
           otherStyles="mt-4 bg-primary text-white"
           loading={loading}
         />

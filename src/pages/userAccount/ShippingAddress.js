@@ -49,10 +49,10 @@ const ShippingAddress = () => {
         .required("Please enter your city"),
       house_number: Yup.string()
         .required("Please enter your house number/address"),
-      postal_code: Yup.string()
-        .required("Please enter your postal code"),
-      locality: Yup.string()
-        .required("Please enter your locality/area"),
+      // postal_code: Yup.string()
+      //   .required("Please enter your postal code"),
+      // locality: Yup.string()
+      //   .required("Please enter your locality/area"),
     }),
     onSubmit: async (values) => {
       const { location, country, city, house_number, postal_code, locality } = values;
@@ -84,8 +84,12 @@ const ShippingAddress = () => {
 
   return (
     <div className="rounded-lg bg-white">
-      <div className="px-4 py-6 border-b text-md font-bold">Shipping Address</div>
-      <form onSubmit={shippingAddressForm.handleSubmit} className="p-6">
+      <div className="px-4 py-6 border-b text-md font-bold">
+        Shipping Address
+      </div>
+      {/* check if all items inside shippingAddress is emty */}
+      {Object.values(shippingAddress || {}).every((value) => value === "") ? (
+        <form onSubmit={shippingAddressForm.handleSubmit} className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <SelectInput
             label="Location"
@@ -94,7 +98,8 @@ const ShippingAddress = () => {
             onChange={shippingAddressForm.handleChange}
             onBlur={shippingAddressForm.handleBlur}
             onError={
-              shippingAddressForm.touched.location && shippingAddressForm.errors.location
+              shippingAddressForm.touched.location &&
+              shippingAddressForm.errors.location
                 ? shippingAddressForm.errors.location
                 : null
             }
@@ -112,7 +117,8 @@ const ShippingAddress = () => {
             onChange={shippingAddressForm.handleChange}
             onBlur={shippingAddressForm.handleBlur}
             onError={
-              shippingAddressForm.touched.country && shippingAddressForm.errors.country
+              shippingAddressForm.touched.country &&
+              shippingAddressForm.errors.country
                 ? shippingAddressForm.errors.country
                 : null
             }
@@ -127,7 +133,8 @@ const ShippingAddress = () => {
             onChange={shippingAddressForm.handleChange}
             onBlur={shippingAddressForm.handleBlur}
             onError={
-              shippingAddressForm.touched.city && shippingAddressForm.errors.city
+              shippingAddressForm.touched.city &&
+              shippingAddressForm.errors.city
                 ? shippingAddressForm.errors.city
                 : null
             }
@@ -141,21 +148,23 @@ const ShippingAddress = () => {
             onChange={shippingAddressForm.handleChange}
             onBlur={shippingAddressForm.handleBlur}
             onError={
-              shippingAddressForm.touched.locality && shippingAddressForm.errors.locality
+              shippingAddressForm.touched.locality &&
+              shippingAddressForm.errors.locality
                 ? shippingAddressForm.errors.locality
                 : null
             }
             placeholder="Enter your locality or area"
           />
           <Input
-            label="House Number/Address"
+            label="House Address"
             type="text"
             name="house_number"
             value={shippingAddressForm.values.house_number}
             onChange={shippingAddressForm.handleChange}
             onBlur={shippingAddressForm.handleBlur}
             onError={
-              shippingAddressForm.touched.house_number && shippingAddressForm.errors.house_number
+              shippingAddressForm.touched.house_number &&
+              shippingAddressForm.errors.house_number
                 ? shippingAddressForm.errors.house_number
                 : null
             }
@@ -169,7 +178,8 @@ const ShippingAddress = () => {
             onChange={shippingAddressForm.handleChange}
             onBlur={shippingAddressForm.handleBlur}
             onError={
-              shippingAddressForm.touched.postal_code && shippingAddressForm.errors.postal_code
+              shippingAddressForm.touched.postal_code &&
+              shippingAddressForm.errors.postal_code
                 ? shippingAddressForm.errors.postal_code
                 : null
             }
@@ -183,6 +193,34 @@ const ShippingAddress = () => {
           loading={loading}
         />
       </form>
+      ) : (
+        <div className={`p-6 grid grid-cols-2 md:grid-cols-3 gap-4 ${shippingAddress?.location === "" ? "" : ""}`}>
+        <div className="grid gap-1">
+          <span className="text-xs text-gray-500">Location:</span>
+          <span>{shippingAddress?.location}</span>
+        </div>
+        <div className="grid gap-1">
+          <span className="text-xs text-gray-500">Location:</span>
+          <span>{shippingAddress?.country}</span>
+        </div>
+        <div className="grid gap-1">
+          <span className="text-xs text-gray-500">Location:</span>
+          <span>{shippingAddress?.city}</span>
+        </div>
+        <div className="grid gap-1">
+          <span className="text-xs text-gray-500">Location:</span>
+          <span>{shippingAddress?.locality}</span>
+        </div>
+        <div className="grid gap-1 col-span-2">
+          <span className="text-xs text-gray-500">Location:</span>
+          <span>{shippingAddress?.houseNumber}</span>
+        </div>
+        <div className="grid gap-1">
+          <span className="text-xs text-gray-500">Location:</span>
+          <span>{shippingAddress?.postalCode}</span>
+        </div>
+        </div>
+      )}      
     </div>
   );
 };

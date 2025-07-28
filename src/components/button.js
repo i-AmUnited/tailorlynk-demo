@@ -4,7 +4,7 @@ const Button = ({onClick, buttonText, buttonRole, destination, icon, otherStyles
     return ( 
         <div>
             { buttonRole === "link" ?
-            <Link to={destination} className={`${otherStyles} text-xs py-5 md:py-4 px-8 rounded truncate`}>
+            <Link to={destination} target="__blank" className={`${otherStyles} text-xs py-5 md:py-4 px-8 rounded truncate`}>
               {buttonText}
             </Link>
             : buttonRole === "externalLink" ?

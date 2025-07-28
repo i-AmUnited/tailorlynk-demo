@@ -190,7 +190,7 @@ const addToCartWithAPI = useFormik({
                 </div>
                 <div className="grid">
                   <div className="text-xs font-semibold">Price</div>
-                  <div className="">{productDetail?.cost}</div>
+                  <div className="">£{productDetail?.cost}</div>
                 </div>
                 <div className="grid">
                   <div className="text-xs font-semibold">Material type:</div>
@@ -217,7 +217,7 @@ const addToCartWithAPI = useFormik({
                 <div className="grid">
                   <div className="text-xs font-semibold">Price</div>
                   <div className="secondary-font font-bold">
-                    {productDetail?.price}
+                    £{productDetail?.price}
                   </div>
                 </div>
               </div>
@@ -236,7 +236,7 @@ const addToCartWithAPI = useFormik({
                 <div className="grid">
                   <div className="text-xs font-semibold">Cost per yard</div>
                   <div className="secondary-font font-bold">
-                    {productDetail?.costPerYard}
+                    £{productDetail?.costPerYard}
                   </div>
                 </div>
               </div>

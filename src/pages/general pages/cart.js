@@ -91,8 +91,8 @@ const Cart = () => {
                         >
                           {product.styleName || product.materialName}
                         </Link>
-                        <div className="font-medium">
-                          <span className="text-black/50 font-bold">NGN</span>
+                        <div className="font-bold secondary-font text-xs">
+                          £
                           {!product.category
                             ? product.cost
                             : product.category === "Ready-made" ||

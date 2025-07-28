@@ -7,11 +7,14 @@ import Carousel from "./General pages components/homePageCarousel";
 import tailor_register from "../../assets/images/tailor_register.png";
 import { Link } from "react-router-dom";
 import RecommendedMaterials from "./General pages components/recommendedMaterials";
+import { useState } from "react";
+import close from "../../assets/icons/close.svg";
 
-const Home = () => {
- 
+const Home = () => { 
   const img2 = "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826"  
   
+  const [reportModal, setReportModal] = useState(false);
+
   return (
     <div className="grid gap-14">
 
@@ -31,10 +34,11 @@ const Home = () => {
            
             <Button
               buttonRole={"link"}
-              destination={"/sign-in"}
+              destination={"https://calendly.com/tobiamusa/30min"}
               buttonText={"Get started"}
               otherStyles={"bg-primary text-white"}
             />
+
           </div>
           <div className="mt-6 md:mt-0 border">
           <div className="w-full aspect-video rounded-md overflow-hidden">
@@ -104,6 +108,22 @@ const Home = () => {
           <Accordion />
         </div>
       </div>
+      
+      {/* {reportModal && (
+      <div className="fixed inset-0 bg-black/80">
+        <div className="flex items-center justify-center h-[100vh]">
+          <div className="bg-white  px-8 rounded-lg w-[90%] grid h-[90%] overflow-y-scroll relative">
+            <div className="flex justify-between items-center mb-6">
+              <div className="font-bold text-[15px]">Book an appointment</div>
+              <div onClick={() => setReportModal(false)} className="size-8 rounded-md bg-primary/15 flex items-center justify-center cursor-pointer">
+                <img src={close} alt="" className="h-4 rotate-90" />
+              </div>
+            </div>
+            <iframe src="https://calendly.com/tobiamusa/30min" className="h-full w-full" title="W3Schools Free Online Web Tutorials"></iframe>
+          </div>
+        </div>
+      </div>
+      )} */}
     </div>
   );
 }
