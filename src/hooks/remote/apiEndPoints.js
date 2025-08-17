@@ -134,7 +134,7 @@ export class apiEndPoints {
 
   static async createOrder(data) {
     try {
-      return apiClient.post("/create-order", data);
+      return apiClientWithToken.post("/create-order", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -150,10 +150,37 @@ export class apiEndPoints {
     }
   }
 
+  static async addToWishList(data) {
+    try {
+      return apiClientWithToken.post("/add-to-wish-list", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async removeFromWishList(catalogueId) {
+    try {
+      return apiClientWithToken.get(`/delete-wish-list/${catalogueId}`);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async listSavedItems(data) {
+    try {
+      return apiClientWithToken.get("/list-user-wish-list", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
   //cart endpoints
   static async addToCart(data) {
     try {
-      return apiClient.post("/add-to-cart", data);
+      return apiClientWithToken.post("/add-to-cart", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -161,7 +188,7 @@ export class apiEndPoints {
   }
 
   //user-account endpoints
-  static async profileDetails(data) {
+  static async userProfileDetails(data) {
     try {
       return await apiClientWithToken.get("/profile-details", data);
     } catch (error) {

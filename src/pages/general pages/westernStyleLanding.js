@@ -11,6 +11,7 @@ const Western = () => {
   const loading = useSelector((state) => state.user.loading);
 
   const listMaterial = useMaterialList();
+  console.log(listMaterial)
   const westernMaterials = listMaterial.filter(
     (item) => item.category?.toLowerCase() === "western"
   );

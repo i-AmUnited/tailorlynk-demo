@@ -14,9 +14,7 @@ import * as Yup from "yup";
 import { vendorReport, writeReview } from "../../hooks/local/reducer";
 import Input from "../../components/input";
 import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 
 const TailorProfile = () => {
   const loading = useSelector((state) => state.user.loading);
@@ -147,7 +145,7 @@ const TailorProfile = () => {
           <div className="grid gap-10 mb-10">
             <div className="">
               <div className="font-bold secondary-font mb-4">Catalogue:</div>
-             {vendorCatalogue?.length === 0 ? <div className="text-md font-bold text-[#c4c4c4]">Tailor hasn't added any products yet</div> : <VendorCatalogue
+              {vendorCatalogue?.length === 0 ? <div className="text-md font-bold text-[#c4c4c4]">Tailor hasn't added any products yet</div> : <VendorCatalogue
                 vendorName={vendorPersonal?.businessName}
                 products={vendorCatalogue}
               />}

@@ -216,10 +216,10 @@ export const updateDetails = createAsyncThunk(
 );
 
 export const profileDetails = createAsyncThunk(
-  "user/profile",
+  "user/profileDetails",
   async (values) => {
     try {
-      const profileDetailsEndPoint = await apiEndPoints.profileDetails(values);
+      const profileDetailsEndPoint = await apiEndPoints.userProfileDetails(values);
       const response = await profileDetailsEndPoint.data;
       return response;
     } catch (error) {
@@ -306,6 +306,41 @@ export const submitFeedback = createAsyncThunk(
   }
 );
 
+export const saveItem = createAsyncThunk(
+  "user/saveItem",
+  async (values) => {
+    try {
+      const saveItemEndPoint = await apiEndPoints.addToWishList(values);
+      const response = await saveItemEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const removeItem = createAsyncThunk(
+  "user/removeItem",
+  async (values) => {
+    try {
+      const removeItemEndPoint = await apiEndPoints.removeFromWishList(values);
+      const response = await removeItemEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const savedItemsList = createAsyncThunk(
+  "user/listItems",
+  async (values) => {
+    const listSavedItemsEndPoint = await apiEndPoints.listSavedItems(values);
+    const response = await listSavedItemsEndPoint.data;
+    return response;
+  }
+);
+
 
 const slice = createSlice({
   name: "user",
@@ -347,6 +382,7 @@ const slice = createSlice({
           profileDetails.fulfilled,
           userMeasurements.fulfilled,
           userShippingAddress.fulfilled,
+          savedItemsList.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -375,6 +411,8 @@ const slice = createSlice({
           updateUserShippingAddress.fulfilled,
           updateUserPassword.fulfilled,
           submitFeedback.fulfilled,
+          saveItem.fulfilled,
+          removeItem.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -415,6 +453,9 @@ const slice = createSlice({
           updateUserShippingAddress.pending,
           updateUserPassword.pending,
           submitFeedback.pending,
+          saveItem.pending,
+          removeItem.pending,
+          savedItemsList.pending
         ),
         (state) => {
           state.loading = true;
@@ -448,6 +489,9 @@ const slice = createSlice({
           updateUserShippingAddress.rejected,
           updateUserPassword.rejected,
           submitFeedback.rejected,
+          saveItem.rejected,
+          removeItem.rejected,
+          savedItemsList.rejected
         ),
         (state, action) => {
           state.loading = false;

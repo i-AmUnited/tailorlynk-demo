@@ -17,7 +17,7 @@ import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 import { showErrorMessage, showSuccessMessage } from "../../hooks/constants";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { addItemToCart } from "../../hooks/local/reducer";
+import { addItemToCart, saveItem } from "../../hooks/local/reducer";
 
 
 const ProductDetail = () => {
@@ -38,12 +38,14 @@ const ProductDetail = () => {
   const { catalogueId } = useParams();
   const decodedCatalogueID = atob(catalogueId);
   const productDetail = useCatalogueDetail(decodedCatalogueID);
-  console.log(productDetail)
+
+  // console.log(productDetail)
 
   const [quantity, setQuantity] = useState(1);
   
   // Get the product ID (either catalogueId or materialId)
-  const productId = productDetail?.catalogueId || productDetail?.materialId;
+  const productId = productDetail?.catalogueId || productDetail?.materialId || "";
+  const productCategory = productDetail?.category || "";
 
   // Check if product is in cart by checking both ID types
   const isInCart = cart.some(
@@ -65,34 +67,50 @@ const handleQuantityBlur = () => {
   }
 };
 
-
-// console.log(productDetail?.category, productDetail?.materialId)
-
 // add to cart API
 const addToCartWithAPI = useFormik({
-      initialValues: {
-        classification: productDetail?.category || "",
-        classification_id: productDetail?.catalogueId || productDetail?.materialId || "",
-      },
-      // validationSchema: Yup.object({
-      //   email: Yup.string()
-      //     .required("Please provide an email address")
-      //     .email("Please enter a valid email address"),
-      //   password: Yup.string().required("Please enter a password"),
-      // }),
-      onSubmit: async (values) => {
-        
-        const { payload } = await dispatch(addItemToCart(values));
-        if (payload?.statusCode === 200) {
+  initialValues: {
+    classification: productDetail?.category || "",
+    classification_id:
+      productDetail?.catalogueId || productDetail?.materialId || "",
+  },
+  // validationSchema: Yup.object({
+  //   email: Yup.string()
+  //     .required("Please provide an email address")
+  //     .email("Please enter a valid email address"),
+  //   password: Yup.string().required("Please enter a password"),
+  // }),
+  onSubmit: async (values) => {
+    const { payload } = await dispatch(addItemToCart(values));
+    if (payload?.statusCode === 200) {
       showSuccessMessage("Item added to cart");
     } else {
       showErrorMessage("Failed to add item to cart");
     }
-      },
-    });
+  },
+});
 
-
-
+const addToWishList = useFormik({
+  initialValues: {
+    classification: productCategory,
+    classification_id: productId ,
+  },
+  onSubmit: async (values) => {
+    // const { classification, classification_id } = values;
+    // let addToWishListData = { classification, classification_id };
+    const addToWishListData = {
+      classification: productDetail?.category || "",
+      classification_id: productDetail?.catalogueId || productDetail?.materialId || ""
+    };
+    const { payload } = await dispatch(saveItem(addToWishListData));
+    console.log(addToWishListData)
+    if (payload?.statusCode === 200) {
+      showSuccessMessage("Item added to wishlist");
+    } else {
+      showErrorMessage("Failed to save item");
+    }
+  },
+});
 
   const image1 = productDetail?.styleImageOne || productDetail?.materialImageOne;
   const image2 = productDetail?.styleImageTwo || productDetail?.materialImageTwo;
@@ -276,6 +294,7 @@ const addToCartWithAPI = useFormik({
                   buttonText={"Save this item"}
                   otherStyles={"bg-primary/20 text-primary"}
                   icon={save}
+                  onClick={addToWishList.handleSubmit}
                 />
               </div>
               <div className="grid grid-cols-2">

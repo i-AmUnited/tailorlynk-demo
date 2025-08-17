@@ -10,13 +10,12 @@ const RecommendedMaterials = () => {
     const listMaterial = useMaterialList();
     
     const [recommendedMaterials, setRecomendedMaterials] = useState([]);
-// console.log(recommendedMaterials)
     const loading = useSelector((state) => state.user.loading);
 
     useEffect(() => {
         const availableMaterials = listMaterial.filter(
           (item) => item.availability === "AVAILABLE" &&
-          item.category === "Material"
+          item.category === "Ready_Made"
         );
         const selected = availableMaterials.slice(0, 4);
       
@@ -47,7 +46,7 @@ const RecommendedMaterials = () => {
                 materialName={material.materialName}
                 materialPhoto={material.materialImageOne}
                 materialID={material.materialId}
-                price={material.costPerYard}
+                price={material.price}
                 cardScrolls={"true"}
               />
             ))}

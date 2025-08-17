@@ -13,7 +13,7 @@ const Overview = () => {
   const loading = useSelector((state) => state.user.loading);
   const profileInfo = useProfileDetails()
 
-  // console.log(username, countryCode);
+  console.log(profileInfo)
 
   const dispatch = useDispatch();
 

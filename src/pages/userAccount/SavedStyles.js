@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import arrow from "../../assets/icons/arrow.svg";
 import { Link } from "react-router-dom";
-
+import { useListSavedItems } from "../reuseableEffects";
 
 function SavedItems() {
   const [savedStylesDisplay, setSavedStylesDisplay] = useState(true);
 const [savedMaterialsDisplay, setSavedMaterialsDisplay] = useState(false);
+
+const wishList = useListSavedItems()
+console.log(wishList)
 
 const showSavedStyles = () => { 
   setSavedStylesDisplay(true)

@@ -8,7 +8,7 @@ import arrow from "../../assets/icons/arrow.svg";
 import { useVendorList } from "../reuseableEffects";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
-const AllProducts = () => {
+const AllVendors = () => {
   const vendorList = useVendorList();
   const loading = useSelector((state) => state.user.loading);
 
@@ -37,8 +37,8 @@ const AllProducts = () => {
       <div className="grid md:flex items-center md:justify-between gap-4 mb-4">
         <div className="flex items-center gap-4">
           <Back />
-          <div className="text-sm font-semibold">
-            Tailors -{" "}
+          <div className="text-sm font-bold secondary-font">
+            Vendors -{" "}
             <span className="text-black/60 font-medium text-xs">
               [{searchQuery ? filteredList.length : vendorList.length}]
             </span>
@@ -117,4 +117,4 @@ const AllProducts = () => {
   );
 };
 
-export default AllProducts;
+export default AllVendors;

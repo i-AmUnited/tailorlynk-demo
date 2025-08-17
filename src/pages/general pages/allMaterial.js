@@ -19,10 +19,13 @@ const AllMaterialProducts = () => {
 
   // Filtered vendor list
   const filteredList = listMaterial
-  .filter((material) => material.category?.toLowerCase() === "material")
+  .filter((material) => material.category === "Ready_Made") 
   .filter((material) =>
     material.materialName.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  console.log(listMaterial)
+  console.log(filteredList)
 
   // Pagination logic
   const totalPages = Math.ceil(filteredList.length / itemsPerPage);
@@ -60,7 +63,7 @@ const AllMaterialProducts = () => {
       </div>
 
       {filteredList.length === 0 ? (
-        <div>No vendor matches your search result.</div>
+        <div>No style matches your search result.</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {currentVendors.map((material) => (

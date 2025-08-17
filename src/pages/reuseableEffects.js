@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { listVendors, materialList, profileDetails, singleCatalogueDetail, userMeasurements, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
+import { listVendors, materialList, profileDetails, savedItemsList, singleCatalogueDetail, userMeasurements, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])
@@ -89,22 +89,26 @@ export function useVendorReviews(vendorID) {
   }
 
   export function useProfileDetails() {
-    const [profileDetail, setProfileDetail] = useState([])
+    const [profileDetail, setProfileDetail] = useState([]);
     const dispatch = useDispatch();
+    
     useEffect(() => {
-      const fetchProfileDetails = async() => {
-        try {
-            const {payload} = await dispatch(profileDetails());
-            setProfileDetail(payload.data);
-        }
-        catch(e){}
-      }
-      fetchProfileDetails();
+        const fetchProfileDetails = async () => {
+            try {
+                const { payload } = await dispatch(profileDetails());
+                setProfileDetail(payload.data);
+            } catch (e) {
+                console.error('Error fetching profile details:', e);
+                // Optionally set to empty array or keep previous state
+                setProfileDetail([]);
+            }
+        };
+        
+        fetchProfileDetails();
     }, [dispatch]);
-  
-    return profileDetail;
-  }
 
+    return profileDetail;
+}
   export function useMeasurements() {
     const [measurementDetail, setMeasurementDetail] = useState([])
     const dispatch = useDispatch();
@@ -137,4 +141,21 @@ export function useVendorReviews(vendorID) {
     }, [dispatch]);
   
     return shippingAddress;
+  }
+
+  export function useListSavedItems() {
+    const [wishList, setWishList] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchWishList = async() => {
+        try {
+            const {payload} = await dispatch(savedItemsList());
+            setWishList(payload.data);
+        }
+        catch(e){}
+      }
+      fetchWishList();
+    }, [dispatch]);
+  
+    return wishList;
   }

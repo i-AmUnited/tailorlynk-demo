@@ -6,11 +6,11 @@ import TailorProfile from "./general pages/tailorProfile";
 import ProductDetail from "./general pages/productPage";
 import Cart from "./general pages/cart";
 import UserAccount from "./userAccount/userAccount";
-import AllProducts from "./general pages/Products";
 import Checkout from "./general pages/checkout";
 import PrivacyPolicy from "./general pages/privacyPolicy";
 import Western from "./general pages/westernStyleLanding";
 import AllMaterialProducts from "./general pages/allMaterial";
+import AllVendors from "./general pages/Products";
 
 const Structure = () => {
   return (
@@ -20,7 +20,7 @@ const Structure = () => {
         <Routes>
           <Route index element={<Home />} />
           <Route path="tailor-profile/:vendorID" element={<TailorProfile />} />
-          <Route path="all-products" element={<AllProducts />} />
+          <Route path="all-vendors" element={<AllVendors />} />
           <Route path="all-materials" element={<AllMaterialProducts />} />
           <Route path="product-detail/:catalogueId" element={<ProductDetail />} />
           <Route path="western" element={<Western />} />

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import RecommendedMaterials from "./General pages components/recommendedMaterials";
 import { useState } from "react";
 import close from "../../assets/icons/close.svg";
+import MaterialFeed from "./General pages components/materialFeed";
 
 const Home = () => { 
   const img2 = "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826"  
@@ -17,65 +18,92 @@ const Home = () => {
 
   return (
     <div className="grid gap-14">
-
       <Carousel />
       <RecommendedVendors />
       {/* Register */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          <div className="grid gap-10">
-            <div className="grid gap-4">
-              <p className="font-bold text-[16px] secondary-font">
-                Register as a Tailor Today!
-              </p>
-              <p className="text-pretty">
-              Join TailorLynk to showcase your skills, attract more clients, and grow your business. Set your own terms, receive custom orders, and enjoy seamless bookings and payments—all in one place. Sign up now and take your tailoring career to the next level! 
-              </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 items-center">
+        <div className="lg:col-span-3 grid gap-6">
+          <div className="grid gap-2">
+            <div className="font-bold secondary-font">
+              Register as a <span className="text-primary">vendor</span> today!
             </div>
-           
-            <Button
-              buttonRole={"link"}
-              destination={"https://calendly.com/tobiamusa/30min"}
-              buttonText={"Get started"}
-              otherStyles={"bg-primary text-white"}
-            />
-
+            <p className="text-pretty text-[13px]">
+              Join TailorLynk to showcase your skills, attract more clients, and
+              grow your business. Set your own terms, receive custom orders, and
+              enjoy seamless bookings and payments—all in one place. Sign up now
+              and take your tailoring career to the next level!
+            </p>
           </div>
-          <div className="mt-6 md:mt-0 border">
+
+          <Button
+            buttonRole={"link"}
+            destination={"https://calendly.com/tobiamusa/30min"}
+            buttonText={"Get started"}
+            otherStyles={"bg-primary text-white"}
+          />
+        </div>
+        <div className="lg:col-span-2">
           <div className="w-full aspect-video rounded-md overflow-hidden">
-            <img src={tailor_register} alt="" className="w-full h-full object-cover" />
+            <img
+              src={tailor_register}
+              alt=""
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </div>
-      <RecommendedMaterials />
+      <MaterialFeed />
+      {/* <RecommendedMaterials /> */}
       {/* Fashion inspiration */}
       <div className="flex justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-end gap-4">
-            <div className="relative lg:col-span-1">
-              <img
-                alt=""
-                src={img2}
-                className="aspect-square w-full object-cover rounded-lg"
-              />
-              <div className="absolute top-0 w-full h-full p-4 flex items-end">
-                <div className="bg-black/10 backdrop-blur-md p-3 rounded text-xs w-fit text-white flex items-center gap-2">
-                  <img alt="" src={gramIcon} className="h-5" />
-                  <span>@styled_by_Mariam</span>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-end gap-4">
+          <div className="relative lg:col-span-1">
+            <img
+              alt=""
+              src={img2}
+              className="aspect-square w-full object-cover rounded-lg"
+            />
+            <div className="absolute top-0 w-full h-full p-4 flex items-end">
+              <div className="bg-black/10 backdrop-blur-md p-3 rounded text-xs w-fit text-white flex items-center gap-2">
+                <img alt="" src={gramIcon} className="h-5" />
+                <span>@styled_by_Mariam</span>
               </div>
-            </div>
-            <div className="lg:col-span-2">
-              <div className="grid gap-2">
-                <span className="font-bold text-[16px] secondary-font"> Fashion inspiration of the month! </span>
-                <span className="text-primary">[January]</span>
-              </div>
-              <div className="mt-4"> Elegance, culture, and style—this month's fashion inspiration is a tribute to the richness of African heritage. From bold prints to intricate designs, every outfit tells a story of tradition and modern sophistication.
-              <div className="my-4 text-gray-500">
-                At TailorLynk, we celebrate the creativity and craftsmanship that bring fashion to life. Want to be featured in our next post? Share your best looks and use the tag <span className="font-bold text-primary">#TailorLynkFashion</span> to get noticed! Let’s inspire the world—one stunning outfit at a time. ✨👗🌍
-              </div>
-              <Link to={"https://www.instagram.com/tailor.lynk/"} target="__blank" className="text-primary underline">Follow Tailorlynk on Instagram</Link>
-            </div>
             </div>
           </div>
+          <div className="lg:col-span-2">
+            <div className="grid gap-2">
+              <span className="font-bold text-[16px] secondary-font">
+                {" "}
+                Fashion inspiration of the month!{" "}
+              </span>
+              <span className="text-primary">[January]</span>
+            </div>
+            <div className="mt-4">
+              {" "}
+              Elegance, culture, and style—this month's fashion inspiration is a
+              tribute to the richness of African heritage. From bold prints to
+              intricate designs, every outfit tells a story of tradition and
+              modern sophistication.
+              <div className="my-4 text-gray-500">
+                At TailorLynk, we celebrate the creativity and craftsmanship
+                that bring fashion to life. Want to be featured in our next
+                post? Share your best looks and use the tag{" "}
+                <span className="font-bold text-primary">
+                  #TailorLynkFashion
+                </span>{" "}
+                to get noticed! Let’s inspire the world—one stunning outfit at a
+                time. ✨👗🌍
+              </div>
+              <Link
+                to={"https://www.instagram.com/tailor.lynk/"}
+                target="__blank"
+                className="text-primary underline"
+              >
+                Follow Tailorlynk on Instagram
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
       <EducationalResources />
       <div className="bg-white rounded-lg border p-5 grid gap-8 text-brandGreen">
@@ -108,7 +136,7 @@ const Home = () => {
           <Accordion />
         </div>
       </div>
-      
+
       {/* {reportModal && (
       <div className="fixed inset-0 bg-black/80">
         <div className="flex items-center justify-center h-[100vh]">
