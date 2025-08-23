@@ -4,7 +4,7 @@ import gramIcon from "../../assets/icons/instagram.svg";
 import EducationalResources from "./General pages components/educationalResources";
 import Accordion from "../../components/faq";
 import Carousel from "./General pages components/homePageCarousel";
-import tailor_register from "../../assets/images/tailor_register.png";
+import tailor_register from "../../assets/images/tailor_register.jpg";
 import { Link } from "react-router-dom";
 import RecommendedMaterials from "./General pages components/recommendedMaterials";
 import { useState } from "react";
@@ -28,10 +28,7 @@ const Home = () => {
               Register as a <span className="text-primary">vendor</span> today!
             </div>
             <p className="text-pretty text-[13px]">
-              Join TailorLynk to showcase your skills, attract more clients, and
-              grow your business. Set your own terms, receive custom orders, and
-              enjoy seamless bookings and payments—all in one place. Sign up now
-              and take your tailoring career to the next level!
+              TailorLynk is your online storefront for custom fashion. Display your designs, reach more customers, and manage orders with ease. Set your prices, and enjoy secure payments—all in one platform. Start selling today and grow your tailoring business online.
             </p>
           </div>
 

@@ -220,7 +220,7 @@ const addToWishList = useFormik({
                 </div>
               </div>
             ) : productDetail?.category === "Western" ||
-              productDetail?.category === "Ready-made" ? (
+              productDetail?.category === "Ready_Made" ? (
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid">
                   <div className="text-xs font-semibold">Vendor</div>
@@ -231,6 +231,14 @@ const addToWishList = useFormik({
                 <div className="grid">
                   <div className="text-xs font-semibold">Available colors:</div>
                   <div className="">{productDetail?.color}</div>
+                </div>
+                <div className="grid">
+                  <div className="text-xs font-semibold">Available sizes:</div>
+                  <div className="">{productDetail?.size === null ? "Free size" : productDetail?.size}</div>
+                </div>
+                <div className="grid">
+                  <div className="text-xs font-semibold">Stock:</div>
+                  <div className="">{productDetail?.stock}</div>
                 </div>
                 <div className="grid">
                   <div className="text-xs font-semibold">Price</div>

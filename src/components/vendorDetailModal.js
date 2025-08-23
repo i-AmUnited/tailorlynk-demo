@@ -1,11 +1,16 @@
 import { useVendorDetail } from "../pages/reuseableEffects";
 import { useEffect } from "react";
 import Spinner from "../components/Spinners/Spinner";
+import Button from "./button";
+import { useSelector } from "react-redux";
 
 const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
     const vendorDetail = useVendorDetail(vendorId);
     const vendorData = vendorDetail?.vendorData;
     const materialData = vendorDetail?.materialData;
+
+    
+  const userSessionData = useSelector((state) => state.user.userSession);
 
     const getRandomItems = (array, count) => {
       if (!array || array.length === 0) return [];
@@ -22,7 +27,7 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
     const readyMadeItems = materialData?.filter(item => item.category === "Ready_Made") || [];
 
     const vendorPreview = getRandomItems(readyMadeItems, 2);
-    console.log(materialData, readyMadeItems);
+    // console.log(materialData, readyMadeItems);
 
     useEffect(() => {
         const handleEscape = (e) => {
@@ -140,11 +145,11 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
                       {vendorPreview.map((material, index) => (
                         <div key={index} className="">
                         {material.description && (
-                          <img src={material.materialImageOne} alt=""/>
+                          <img src={material.materialImageOne} alt="" className="aspect-video object-cover rounded-md"/>
                         )}
                         {material.price && (
-                            <p className="text-sm font-semibold mt-1">
-                              ${material.price}
+                            <p className="text-sm font-bold mt-1 secondary-font">
+                              £{material.price}
                             </p>
                         )}
                         </div>
@@ -155,15 +160,18 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-3 pt-4">
-                  <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-                    Contact Vendor
-                  </button>
-                  <button
-                    onClick={onClose}
-                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
-                  >
-                    Close
-                  </button>
+                  
+                  <Button 
+                    buttonText={"View full profile"}
+                    otherStyles={"bg-primary text-white"}
+                    // destination={`/tailor-profile/${btoa(vendorID)}`}
+                  />
+                  <div className={`${!userSessionData ? "hidden" : ""}`}>
+                    <Button
+                      buttonText={"Chat with vendor"}
+                      otherStyles={"bg-primary/10 text-primary"}
+                    />
+                  </div>
                 </div>
               </div>
             )}

@@ -40,7 +40,7 @@ const TailorProfile = () => {
 
   const readyMadeList = vendorMaterialList.filter(
     (item) => item.availability === "AVAILABLE" &&
-    item.category === "Ready-made"
+    item.category === "Ready_Made"
   );
 
   const userSessionData = useSelector((state) => state.user.userSession);
@@ -143,13 +143,13 @@ const TailorProfile = () => {
           
           </div>
           <div className="grid gap-10 mb-10">
-            <div className="">
+            {/* <div className="">
               <div className="font-bold secondary-font mb-4">Catalogue:</div>
               {vendorCatalogue?.length === 0 ? <div className="text-md font-bold text-[#c4c4c4]">Tailor hasn't added any products yet</div> : <VendorCatalogue
                 vendorName={vendorPersonal?.businessName}
                 products={vendorCatalogue}
               />}
-            </div>
+            </div> */}
             <div className="">
               <div className="font-bold secondary-font mb-4">Ready-made styles:</div>
               {readyMadeList?.length === 0 ? <div className="text-md font-bold text-[#c4c4c4]">Tailor hasn't added any products yet</div> : <VendorCatalogue products={readyMadeList} />}
@@ -158,7 +158,7 @@ const TailorProfile = () => {
           <div className="bg-white border rounded-md p-4 flex items-center gap-6">
             <img src={chat} alt="" className="size-12" />
             <div className="text-xs text-pretty leading-5">
-              Can’t find a style that you like? Share your idea with the tailor.{" "}
+              Can’t find a style that you like? Share your idea with the vendor.{" "}
               <span className="text-primary underline font-medium">
                 Start chat
               </span>
@@ -204,7 +204,7 @@ const TailorProfile = () => {
               <div>
                 {vendorReviews.length === 0 ? (
                   <div className="p-4 border-y-[12px] border-white">
-                    This Tailor hasn't been reviewed yet
+                    {vendorPersonal?.businessName} hasn't been reviewed yet. <br/> Sign in to write a review.
                   </div>
                 ) : (
                   <div className="px-4 max-h-[400px] overflow-y-scroll border-y-[12px] border-white">

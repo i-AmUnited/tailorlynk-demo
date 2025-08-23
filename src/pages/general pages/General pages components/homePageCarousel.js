@@ -10,16 +10,16 @@ const slides = [
     image: image1,
     title: "Meet Expert Tailors Across Africa",
     description: "Connect with verified African tailors and enjoy custom-made outfits crafted with precision, style, and your exact measurements.",
-    buttonText: "hello",
-    destination: "/sign-up",
+    buttonText: "Coming soon...",
+    destination: "/",
   },
   {
     image: image2,
     title: "Shop Fabrics from Trusted Material Sellers",
     description:
       "Browse a wide variety of high-quality fabrics — lace, Ankara, silk, and more — directly from reputable vendors.",
-    buttonText: "world",
-    destination: "/sign-up",
+    buttonText: "Coming soon...",
+    destination: "/",
   },
   {
     image: image3,

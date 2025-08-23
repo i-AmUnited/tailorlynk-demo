@@ -24,8 +24,8 @@ const AllMaterialProducts = () => {
     material.materialName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  console.log(listMaterial)
-  console.log(filteredList)
+  // console.log(listMaterial)
+  // console.log(filteredList)
 
   // Pagination logic
   const totalPages = Math.ceil(filteredList.length / itemsPerPage);
@@ -41,7 +41,7 @@ const AllMaterialProducts = () => {
         <div className="flex items-center gap-4">
           <Back />
           <div className="text-sm font-semibold">
-            Materials
+            Styles
             <span className="text-black/60 font-medium text-xs">
               [{searchQuery ? filteredList.length : filteredList.length}]
             </span>
