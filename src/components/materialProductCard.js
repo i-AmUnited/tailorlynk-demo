@@ -14,7 +14,7 @@ const MaterialProductCard = ({ materialID, materialPhoto, cardScrolls, materialN
       </div>
       <div className="truncate">
         <div className="line-clamp-1 mb-1">{materialName}</div>
-        <div><span className="font-bold secondary-font">£{price}</span> <span className={`${materialCategory === "Western" || materialCategory === "Ready_Made" ? "hidden" : ""} text-xs font-medium `}>/ yard</span></div>
+        <div><span className="font-bold">£{price}</span> <span className={`${materialCategory === "Western" || materialCategory === "Ready_Made" ? "hidden" : ""} text-xs font-medium `}></span></div>
       </div>
     </Link>
   );

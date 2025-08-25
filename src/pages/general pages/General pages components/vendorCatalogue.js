@@ -19,7 +19,7 @@ const VendorCatalogue = ({ products = [] }) => {
             <div className="grid content-between">
               <LazyLoadImage effect="blur" src={product.styleImageOne || product.materialImageOne} alt="image" className="w-full aspect-video md:aspect-square object-cover rounded-md" />
               <div className="line-clamp-none md:line-clamp-1 mt-2">{product.styleName || product.materialName}</div>
-              <div className="secondary-font font-bold">£{product.cost || product.price}</div>
+              <div className="font-bold">£{product.cost || product.price}</div>
             </div>
           </Link>
         ))}

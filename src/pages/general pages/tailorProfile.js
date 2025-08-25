@@ -122,7 +122,7 @@ const TailorProfile = () => {
             <div className="bg-white rounded-md overflow-hidden border">
               <div className="p-4 font-medium flex items-center gap-4">
                 <Back />
-                <span>{vendorPersonal?.businessName}</span>
+                <span className="secondary-font font-bold">{vendorPersonal?.businessName}</span>
               </div>
               <div className="w-full h-full aspect-video rounded-b-md overflow-hidden">
                 <img src={vendorPersonal?.brandLogo} alt="" className="object-cover object-center w-full h-full"/>
@@ -130,12 +130,12 @@ const TailorProfile = () => {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
               <div className="grid">
-                <div>Category:</div>
-                <div className=" text-black/50">Male clothing</div>
+                <div className="text-xs font-medium">Category:</div>
+                <div className="text-black/50 font-medium">Male clothing</div>
               </div>
               <div className="grid md:col-span-2">
-                <div>Location:</div>
-                <div className="text-black/50">
+                <div className="text-xs font-medium">Location:</div>
+                <div className="text-black/50 font-medium truncate">
                   {vendorPersonal?.businessAddress}
                 </div>
               </div>
@@ -152,7 +152,7 @@ const TailorProfile = () => {
             </div> */}
             <div className="">
               <div className="font-bold secondary-font mb-4">Ready-made styles:</div>
-              {readyMadeList?.length === 0 ? <div className="text-md font-bold text-[#c4c4c4]">Tailor hasn't added any products yet</div> : <VendorCatalogue products={readyMadeList} />}
+              {readyMadeList?.length === 0 ? <div className="text-md font-bold text-[#c4c4c4]">Vendor hasn't added any products yet</div> : <VendorCatalogue products={readyMadeList} />}
             </div>
           </div>
           <div className="bg-white border rounded-md p-4 flex items-center gap-6">

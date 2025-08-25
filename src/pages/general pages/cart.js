@@ -89,7 +89,7 @@ const Cart = () => {
                           >
                             {product.styleName || product.materialName}
                           </Link>
-                          <div className="font-bold secondary-font text-xs">
+                          <div className="font-bold text-xs">
                             £
                             {!product.category
                               ? product.cost
@@ -168,29 +168,25 @@ const Cart = () => {
               <div className="p-4 grid gap-6">
                 <div className="flex justify-between">
                   <div className="text-[#c4c4c4]">Transaction code:</div>
-                  <div className="secondary-font text-xs font-bold">VC115665</div>
+                  <div className="text-xs font-bold">VC115665</div>
                 </div>
                 <div className="grid gap-2">
                   <div className="flex justify-between">
-                    <div className="text-[#c4c4c4]">Tailor charge:</div>
-                    <div className="secondary-font text-xs font-bold">£25,000 </div>
+                    <div className="text-[#c4c4c4]">Buyers protection fee:</div>
+                    <div className="text-xs font-bold">£2,500 </div>
                   </div>
                   <div className="flex justify-between">
-                    <div className="text-[#c4c4c4]">Material:</div>
-                    <div className="secondary-font text-xs font-bold">£5,000 </div>
+                    <div className="text-[#c4c4c4]">Vendor charge:</div>
+                    <div className="text-xs font-bold">£25,000 </div>
                   </div>
                   <div className="flex justify-between">
                     <div className="text-[#c4c4c4]">Delivery:</div>
-                    <div className="secondary-font text-xs font-bold">£2,500 </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="text-[#c4c4c4]">Insurance:</div>
-                    <div className="secondary-font text-xs font-bold">£2,500 </div>
+                    <div className="text-xs font-bold">£2,500 </div>
                   </div>
                 </div>
                 <div className="flex justify-between text-primary text-sm font-semibold">
                   <div>Total:</div>
-                  <div className="secondary-font font-bold">£35,000 </div>
+                  <div className="font-bold">£35,000 </div>
                 </div>
                 {/* <Link to={"/checkout"}>Checkout</Link> */}
               </div>

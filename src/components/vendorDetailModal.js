@@ -3,12 +3,12 @@ import { useEffect } from "react";
 import Spinner from "../components/Spinners/Spinner";
 import Button from "./button";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
     const vendorDetail = useVendorDetail(vendorId);
     const vendorData = vendorDetail?.vendorData;
     const materialData = vendorDetail?.materialData;
-
     
   const userSessionData = useSelector((state) => state.user.userSession);
 
@@ -51,18 +51,12 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
 
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <div
-          className="absolute inset-0 bg-black bg-opacity-50"
-          onClick={onClose}
-        />
+        <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}/>
         <div className="relative bg-white rounded-lg mx-4 w-full md:w-1/3 max-h-[90vh] overflow-y-auto">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl z-10"
-          >
+          <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl z-10">
             ×
           </button>
-          <div className="p-6">
+          <div className="p-5">
             {!vendorDetail ? (
               <div className="flex items-center justify-center gap-4 py-8">
                 <Spinner />{" "}
@@ -73,102 +67,59 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
             ) : (
               <div className="space-y-4">
                 {/* Vendor Header */}
-                <div className="border-b pb-4 flex items-center gap-2">
-                  {vendorData?.brandLogo && (
-                    <div className="flex justify-center">
-                      <img
-                        src={vendorData.brandLogo}
-                        alt={`${vendorData.businessName} logo`}
-                        className="size-12 object-cover rounded-full"
-                      />
-                    </div>
-                  )}
-                  <div className="truncate max-w-[80%]">
-                    <p className="font-bold">{vendorData?.businessName}</p>
-                    {vendorData?.businessAddress && (
-                      <p className="text-gray-600 text-xs truncate">
-                        {vendorData.businessAddress}
-                      </p>
+                <div className="border-b pb-1">
+                  <Link to={`/tailor-profile/${btoa(vendorId)}`} className="flex items-center gap-2 w-fit">
+                    {vendorData?.brandLogo && (
+                      <div className="flex justify-center">
+                        <img
+                          src={vendorData.brandLogo}
+                          alt={`${vendorData.businessName} logo`}
+                          className="size-12 object-cover rounded-full"
+                        />
+                      </div>
                     )}
-                  </div>
-                  {/* <div className="flex">
-                    {(() => {
-                      const rating = vendorData?.rating;
-                      if (!rating || rating === 0) {
-                        return (
-                          <>
-                            <span className="">❓</span>
-                            <span className="">
-                              Unrated
-                            </span>
-                          </>
-                        );
-                      } else if (rating >= 4.0) {
-                        return (
-                          <>
-                            <span className="">🔥</span>
-                            <span className="">
-                              {rating}
-                            </span>
-                          </>
-                        );
-                      } else if (rating >= 3.0) {
-                        return (
-                          <>
-                            <span className="">💪🏽</span>
-                            <span className="">
-                              {rating}
-                            </span>
-                          </>
-                        );
-                      } else {
-                        return (
-                          <>
-                            <span className="">😬</span>
-                            <span className="">
-                              {rating}
-                            </span>
-                          </>
-                        );
-                      }
-                    })()}
-                  </div> */}
+                    <div className="truncate max-w-[80%]">
+                      <p className="font-bold">{vendorData?.businessName}</p>
+                      {vendorData?.businessAddress && (
+                        <p className="text-gray-600 text-xs truncate">
+                          {vendorData.businessAddress}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
                 </div>
+
+                {readyMadeItems.length === 0 ? <div>This vendor hasn't uploaded any products yet</div> : ""}
 
                 {/* Material Data */}
                 {vendorPreview && vendorPreview.length > 0 && (
                   <div className="grid gap-2">
-                    <span className="text-gray-700 font-medium">
-                      Preview products
-                    </span>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {vendorPreview.map((material, index) => (
-                        <div key={index} className="">
-                        {material.description && (
+                        <Link to={`/product-detail/${btoa(material.materialId)}`} key={index} className="">
                           <img src={material.materialImageOne} alt="" className="aspect-video object-cover rounded-md"/>
-                        )}
                         {material.price && (
-                            <p className="text-sm font-bold mt-1 secondary-font">
+                            <p className="text-xs font-bold mt-1">
                               £{material.price}
                             </p>
                         )}
-                        </div>
+                        </Link>
                       ))}
                     </div>
                   </div>
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 pt-4">
-                  
+                <div className="flex gap-3 py-4 items-center">
                   <Button 
                     buttonText={"View full profile"}
                     otherStyles={"bg-primary text-white"}
-                    // destination={`/tailor-profile/${btoa(vendorID)}`}
+                    buttonRole ={"link"}
+                    destination={`/tailor-profile/${btoa(vendorId)}`}
                   />
                   <div className={`${!userSessionData ? "hidden" : ""}`}>
                     <Button
-                      buttonText={"Chat with vendor"}
+                      buttonText={"Chat"}
                       otherStyles={"bg-primary/10 text-primary"}
                     />
                   </div>

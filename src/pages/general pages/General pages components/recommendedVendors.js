@@ -52,7 +52,7 @@ const RecommendedVendors = () => {
             ) : (
                 <div className="flex gap-6 overflow-x-auto overflow-y-hidden items-center">
                     {recommendedVendors.map((vendor) => (
-                        <div key={vendor.vendorId} onClick={() => handleVendorClick(vendor.vendorId)}>
+                        <div key={vendor.vendorId} onClick={() => handleVendorClick(vendor.vendorId)} className="cursor-pointer">
                             <VendorCard
                                 vendorName={vendor.businessName}
                                 vendorLocation={vendor.businessAddress}

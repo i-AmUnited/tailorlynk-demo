@@ -21,14 +21,14 @@ const slides = [
     buttonText: "Coming soon...",
     destination: "/",
   },
-  {
-    image: image3,
-    title: "Explore Western Styles",
-    description:
-      "From sharp suits to elegant dresses, discover tailors who specialize in creating modern Western wear that fits and flatters.",
-    buttonText: "Explore Western",
-    destination: "/western",
-  },
+  // {
+  //   image: image3,
+  //   title: "Explore Western Styles",
+  //   description:
+  //     "From sharp suits to elegant dresses, discover tailors who specialize in creating modern Western wear that fits and flatters.",
+  //   buttonText: "Explore Western",
+  //   destination: "/western",
+  // },
 ];
 
 const Carousel = () => {

@@ -34,7 +34,7 @@ const Home = () => {
 
           <Button
             buttonRole={"link"}
-            destination={"https://calendly.com/tobiamusa/30min"}
+            destination={"https://tailorlynk-dash.netlify.app/log-in"}
             buttonText={"Get started"}
             otherStyles={"bg-primary text-white"}
           />
@@ -61,35 +61,29 @@ const Home = () => {
               className="aspect-square w-full object-cover rounded-lg"
             />
             <div className="absolute top-0 w-full h-full p-4 flex items-end">
-              <div className="bg-black/10 backdrop-blur-md p-3 rounded text-xs w-fit text-white flex items-center gap-2">
+              <Link to={"https://www.instagram.com/tailor.lynk/"} className="bg-black/10 backdrop-blur-md p-3 rounded text-xs w-fit text-white flex items-center gap-2">
                 <img alt="" src={gramIcon} className="h-5" />
                 <span>@styled_by_Mariam</span>
-              </div>
+              </Link>
             </div>
           </div>
           <div className="lg:col-span-2">
             <div className="grid gap-2">
               <span className="font-bold text-[16px] secondary-font">
                 {" "}
-                Fashion inspiration of the month!{" "}
+                Fashion inspiration of the week!{" "}
               </span>
-              <span className="text-primary">[January]</span>
+              {/* <span className="text-primary">[January]</span> */}
             </div>
             <div className="mt-4">
               {" "}
-              Elegance, culture, and style—this month's fashion inspiration is a
-              tribute to the richness of African heritage. From bold prints to
-              intricate designs, every outfit tells a story of tradition and
-              modern sophistication.
-              <div className="my-4 text-gray-500">
+              This month’s fashion picks celebrate the beauty of African heritage. From bold prints to detailed designs, each piece blends tradition with modern style, carrying a story of elegance and culture.
+              <div className="my-4 text-gray-500 italic">
                 At TailorLynk, we celebrate the creativity and craftsmanship
-                that bring fashion to life. Want to be featured in our next
-                post? Share your best looks and use the tag{" "}
-                <span className="font-bold text-primary">
-                  #TailorLynkFashion
-                </span>{" "}
+                that brings fashion to life. Want to be featured in our next
+                post? Share your best looks and tag the official Taiorlynk instagram account
                 to get noticed! Let’s inspire the world—one stunning outfit at a
-                time. ✨👗🌍
+                time.
               </div>
               <Link
                 to={"https://www.instagram.com/tailor.lynk/"}
@@ -109,7 +103,7 @@ const Home = () => {
             Tailorlynk
           </span>{" "}
           is a platform that affords you the opportunity to dive into the
-          dazzling realm of Nigerian fashion with affordable tailor-made pieces,
+          dazzling realm of African fashion with affordable tailor-made pieces,
           delivered to your doorstep.
         </div>
         <div className="grid gap-1">

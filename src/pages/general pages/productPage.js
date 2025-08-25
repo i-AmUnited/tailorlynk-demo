@@ -154,13 +154,14 @@ const addToWishList = useFormik({
         <div className="lg:col-span-3 md:relative">
           <div className="md:sticky md:top-5">
             <div className="aspect-square w-full relative rounded-lg overflow-hidden">
-              <LazyLoadImage
+              {/* <LazyLoadImage
                 src={validImages[currentIndex]}
                 effect="blur"
                 alt=""
                 placeholderSrc={placeholderImage}
                 className="object-cover object-center w-full h-full"
-              />
+              /> */}
+              <img src={validImages[currentIndex]} alt="" className="w-full h-full object-cover"/>
               <div className="absolute top-0 w-full h-full flex items-end justify-center text-white px-4 pb-6">
                 <div className="p-2 rounded bg-brandGreen/20 w-fit backdrop-blur-md flex gap-[6px]">
                   {validImages.map((_, index) => (
@@ -176,16 +177,12 @@ const addToWishList = useFormik({
               {validImages.length > 1 && (
                 <div className="absolute top-0 w-full h-full flex items-center px-6">
                   <div className="flex justify-between w-full">
-                    <div
-                      onClick={goToPrevious}
-                      className="size-8 rounded-md bg-white/20 backdrop-blur-md flex items-center justify-center cursor-pointer"
-                    >
+                    <div onClick={goToPrevious} className="size-8 rounded-md bg-black/30 backdrop-blur-md flex items-center justify-center cursor-pointer">
                       <img src={arrow} alt="" className="h-4 rotate-90" />
                     </div>
                     <div
                       onClick={goToNext}
-                      className="size-8 rounded-md bg-white/20 backdrop-blur-md flex items-center justify-center cursor-pointer"
-                    >
+                      className="size-8 rounded-md bg-black/30 backdrop-blur-md flex items-center justify-center cursor-pointer">
                       <img src={arrow} alt="" className="h-4 -rotate-90" />
                     </div>
                   </div>
@@ -242,7 +239,7 @@ const addToWishList = useFormik({
                 </div>
                 <div className="grid">
                   <div className="text-xs font-semibold">Price</div>
-                  <div className="secondary-font font-bold">
+                  <div className="font-bold text-lg">
                     £{productDetail?.price}
                   </div>
                 </div>
