@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { chatMessages, listChat, listVendors, materialList, profileDetails, savedItemsList, singleCatalogueDetail, userMeasurements, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
+import { chatMessages, getOrder, listChat, listVendors, materialList, profileDetails, savedItemsList, singleCatalogueDetail, userMeasurements, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])
@@ -159,6 +159,23 @@ export function useVendorReviews(vendorID) {
     }, [dispatch]);
   
     return wishList;
+  }
+
+  export function useListCustomerOrders() {
+    const [customerOrders, setCustomerOrders] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchCustomerOrders = async() => {
+        try {
+            const {payload} = await dispatch(getOrder());
+            setCustomerOrders(payload.data);
+        }
+        catch(e){}
+      }
+      fetchCustomerOrders();
+    }, [dispatch]);
+  
+    return customerOrders;
   }
 
   export function useListChat() {

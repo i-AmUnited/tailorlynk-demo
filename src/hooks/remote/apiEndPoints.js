@@ -141,6 +141,15 @@ export class apiEndPoints {
     }
   }
 
+  static async customerOrder(data) {
+    try {
+      return apiClientWithToken.get("/customer/get-customer-order", data);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
   static async listmaterials(data) {
     try {
       return apiClient.get("/customer/all-materials", data);

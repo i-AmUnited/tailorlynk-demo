@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Pusher from 'pusher-js';
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
 import Input from "../../components/input";
 import { useChatMessages, useListChat } from "../reuseableEffects";
@@ -23,9 +24,76 @@ const MessageCenter = () => {
   const [selectedVendorID, setSelectedVendorID] = useState("RS0UWmpIJLltD");
   const [selectedVendorName, setSelectedVendorName] = useState("TechFlow Solutions");
   const [showMessages, setShowMessages] = useState(false);
+  const [realtimeMessages, setRealtimeMessages] = useState([]);
   
   const messages = useChatMessages(selectedVendorID);
   const dispatch = useDispatch();
+  const pusherRef = useRef(null);
+  const channelRef = useRef(null);
+
+  // Initialize Pusher
+  useEffect(() => {
+    // Initialize Pusher with your credentials
+    pusherRef.current = new Pusher('22bcae7f02729d546285', {
+      cluster: 'mt1',
+      encrypted: true,
+      // For custom host configuration (if needed)
+      // wsHost: 'your-custom-host',
+      // wsPort: 6001,
+      // wssPort: 6001,
+      // forceTLS: false,
+    });
+
+    // Cleanup on unmount
+    return () => {
+      if (pusherRef.current) {
+        pusherRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  // Subscribe to chat channel when vendor changes
+  useEffect(() => {
+    if (!pusherRef.current || !selectedVendorID) return;
+
+    // Unsubscribe from previous channel
+    if (channelRef.current) {
+      channelRef.current.unbind_all();
+      pusherRef.current.unsubscribe(channelRef.current.name);
+    }
+
+    // Subscribe to new channel for selected vendor
+    const channelName = `chat-${selectedVendorID}`;
+    channelRef.current = pusherRef.current.subscribe(channelName);
+
+    // Listen for new messages
+    channelRef.current.bind('new-message', (data) => {
+      console.log('New message received:', data);
+      
+      // Add the new message to realtime messages
+      setRealtimeMessages(prev => [...prev, {
+        id: data.id || Date.now(),
+        message: data.message,
+        sender: data.sender_type,
+        vendor_id: data.vendor_id,
+        customer_id: data.customer_id,
+        timestamp: data.timestamp || new Date().toISOString()
+      }]);
+    });
+
+    // Reset realtime messages when switching vendors
+    setRealtimeMessages([]);
+
+    return () => {
+      if (channelRef.current) {
+        channelRef.current.unbind_all();
+        pusherRef.current.unsubscribe(channelName);
+      }
+    };
+  }, [selectedVendorID]);
+
+  // Combine initial messages with realtime messages
+  const allMessages = [...messages, ...realtimeMessages];
 
   const sendMessageForm = useFormik({
     initialValues: {
@@ -40,8 +108,19 @@ const MessageCenter = () => {
       let sendMessageData = { vendor_id, customer_id, message, sender_type };
       const { payload } = await dispatch(sendChat(sendMessageData));
       if (payload.statusCode === 200) {
-       showSuccessMessage("message sent!");
-       resetForm();
+        showSuccessMessage("message sent!");
+        resetForm();
+        
+        // Optionally add the sent message immediately to UI for better UX
+        // (if your backend doesn't immediately broadcast it back)
+        // setRealtimeMessages(prev => [...prev, {
+        //   id: Date.now(),
+        //   message: message,
+        //   sender: sender_type,
+        //   vendor_id: vendor_id,
+        //   customer_id: customer_id,
+        //   timestamp: new Date().toISOString()
+        // }]);
       }
     },
   });
@@ -108,7 +187,7 @@ const MessageCenter = () => {
               {selectedVendorName}
             </div>
             <div className="p-4 grid gap-1">
-              {messages.map((chat, index) => (
+              {allMessages.map((chat, index) => (
                 <div key={index} className={`flex ${chat.sender === "customer" ? "justify-end" : "justify-start"}`}>
                   <div className={`flex flex-col max-w-[60%] ${ chat.sender === "customer" ? "items-end" : "items-start"}`}>
                     <div className={`p-2 rounded-md w-fit text-xs ${ chat.sender === "customer" ? "bg-primary/10 text-primary" : "bg-brandGreen/10 text-brandGreen" }`}>{chat.message}</div>
@@ -172,7 +251,7 @@ const MessageCenter = () => {
             {selectedVendorName}
           </div>
           <div className="p-4 grid gap-1">
-            {messages.map((chat, index) => (
+            {allMessages.map((chat, index) => (
               <div key={index} className={`flex ${chat.sender === "customer" ? "justify-end" : "justify-start"}`}>
                 <div className={`flex flex-col max-w-[60%] ${ chat.sender === "customer" ? "items-end" : "items-start"}`}>
                   <div className={`p-2 rounded-md w-fit text-xs ${ chat.sender === "customer" ? "bg-primary/10 text-primary" : "bg-brandGreen/10 text-brandGreen" }`}>{chat.message}</div>

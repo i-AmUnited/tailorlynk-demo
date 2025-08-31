@@ -184,6 +184,19 @@ export const placeOrder = createAsyncThunk(
   }
 );
 
+export const getOrder = createAsyncThunk(
+  "user/customerOrder",
+  async (values) => {
+    try {
+      const getOrderEndPoint = await apiEndPoints.customerOrder(values);
+      const response = await getOrderEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
 export const materialList = createAsyncThunk(
   "user/listMaterials",
   async (values) => {
@@ -319,8 +332,8 @@ export const saveItem = createAsyncThunk(
   }
 );
 
-export const removeItem = createAsyncThunk(
-  "user/removeItem",
+export const removeSavedItem = createAsyncThunk(
+  "user/removeSavedItem",
   async (values) => {
     try {
       const removeItemEndPoint = await apiEndPoints.removeFromWishList(values);
@@ -419,7 +432,8 @@ const slice = createSlice({
           savedItemsList.fulfilled,
           listChat.fulfilled,
           chatMessages.fulfilled,
-          sendChat.fulfilled
+          sendChat.fulfilled,
+          getOrder.fulfilled
         ),
         (state, action) => {
           state.loading = false;
@@ -449,7 +463,7 @@ const slice = createSlice({
           updateUserPassword.fulfilled,
           submitFeedback.fulfilled,
           saveItem.fulfilled,
-          removeItem.fulfilled,
+          removeSavedItem.fulfilled,
         ),
         (state, action) => {
           state.loading = false;
@@ -491,11 +505,12 @@ const slice = createSlice({
           updateUserPassword.pending,
           submitFeedback.pending,
           saveItem.pending,
-          removeItem.pending,
+          removeSavedItem.pending,
           savedItemsList.pending,
           listChat.pending,
           chatMessages.pending,
-          sendChat.pending
+          sendChat.pending,
+          getOrder.pending
         ),
         (state) => {
           state.loading = true;
@@ -530,11 +545,12 @@ const slice = createSlice({
           updateUserPassword.rejected,
           submitFeedback.rejected,
           saveItem.rejected,
-          removeItem.rejected,
+          removeSavedItem.rejected,
           savedItemsList.rejected,
           listChat.rejected,
           chatMessages.rejected,
-          sendChat.rejected
+          sendChat.rejected,
+          getOrder.rejected
         ),
         (state, action) => {
           state.loading = false;
