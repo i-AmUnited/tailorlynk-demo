@@ -6,11 +6,17 @@ import store from "../../assets/icons/store.svg";
 import material from "../../assets/icons/material.svg";
 import { useState, useEffect } from "react";
 import Back from "../../components/goBack";
+import Button from "../../components/button";
 
 const Cart = () => {
   const { cart, removeFromCart, clearCart, updateCartQuantity } = useCart();
 
-  console.log(cart)
+  // console.log(cart)
+
+  const orderTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const deliveryFee = 10;
+  const insuranceFee = 10;
+  const totalPrice = orderTotal + deliveryFee + insuranceFee;
   
   // Track individual product quantities - handles both catalogueId and materialId
   const [quantity, setQuantity] = useState(() => {
@@ -67,16 +73,26 @@ const Cart = () => {
                   <Back />
                   <div>My cart</div>
                 </div>
-                <button onClick={clearCart} className="text-red-600 text-xs font-semibold underline underline-offset-2 cursor-pointer">Clear Cart</button>
+                <button
+                  onClick={clearCart}
+                  className="text-red-600 text-xs font-semibold underline underline-offset-2 cursor-pointer"
+                >
+                  Clear Cart
+                </button>
               </div>
               <div className="p-4">
                 {cart.map((product) => {
                   const productId = getProductId(product);
                   return (
-                    <div key={productId} className="grid md:flex gap-4 pb-4 border-b mb-4">
+                    <div
+                      key={productId}
+                      className="grid md:flex gap-4 pb-4 border-b mb-4"
+                    >
                       <div className="rounded-md overflow-hidden size-32 bg-green-400 flex-shrink-0">
                         <img
-                          src={product.styleImageOne || product.materialImageOne}
+                          src={
+                            product.styleImageOne || product.materialImageOne
+                          }
                           alt=""
                           className="object-cover h-full w-full"
                         />
@@ -165,30 +181,34 @@ const Cart = () => {
               <div className="bg-primary text-white px-4 py-6 border-b">
                 <div className="font-bold secondary-font">Summary</div>
               </div>
-              <div className="p-4 grid gap-6">
-                <div className="flex justify-between">
-                  <div className="text-[#c4c4c4]">Transaction code:</div>
-                  <div className="text-xs font-bold">VC115665</div>
-                </div>
-                <div className="grid gap-2">
+              <div className="p-4">
+                <div className="grid gap-3">
                   <div className="flex justify-between">
-                    <div className="text-[#c4c4c4]">Buyers protection fee:</div>
-                    <div className="text-xs font-bold">£2,500 </div>
+                    <div className="text-[#c4c4c4]">Order amount:</div>
+                    <div className="text-xs font-bold">£{orderTotal}</div>
                   </div>
                   <div className="flex justify-between">
-                    <div className="text-[#c4c4c4]">Vendor charge:</div>
-                    <div className="text-xs font-bold">£25,000 </div>
+                    <div className="text-[#c4c4c4]">Insurance fee:</div>
+                    <div className="text-xs font-bold">£{insuranceFee} </div>
                   </div>
                   <div className="flex justify-between">
                     <div className="text-[#c4c4c4]">Delivery:</div>
-                    <div className="text-xs font-bold">£2,500 </div>
+                    <div className="text-xs font-bold">£{deliveryFee} </div>
                   </div>
                 </div>
-                <div className="flex justify-between text-primary text-sm font-semibold">
+                <div className="flex justify-between text-primary text-sm font-semibold border-t mt-5 pt-5">
                   <div>Total:</div>
-                  <div className="font-bold">£35,000 </div>
+                  <div className="font-bold">£{totalPrice} </div>
                 </div>
                 {/* <Link to={"/checkout"}>Checkout</Link> */}
+                <div className="mt-10 mb-4 flex justify-end">
+                  <Button
+                    buttonRole={"link"}
+                    destination={"/checkout"}
+                    buttonText={"Checkout"}
+                    otherStyles={"bg-primary/30 text-primary w-full"}
+                  />
+                </div>
               </div>
             </div>
           </div>

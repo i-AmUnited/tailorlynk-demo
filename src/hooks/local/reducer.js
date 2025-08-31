@@ -341,6 +341,40 @@ export const savedItemsList = createAsyncThunk(
   }
 );
 
+export const listChat = createAsyncThunk(
+  "user/listChat",
+  async (values) => {
+    const listChatEndPoint = await apiEndPoints.chatlist(values);
+    const response = await listChatEndPoint.data;
+    return response;
+  }
+);
+
+export const chatMessages = createAsyncThunk(
+  "user/chatMessages",
+  async (values) => {
+    try {
+      const chatMessagesEndPoint = await apiEndPoints.chatDetails(values);
+      const response = await chatMessagesEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const sendChat = createAsyncThunk(
+  "user/sendChat",
+  async (values) => {
+    try {
+      const sendChatEndPoint = await apiEndPoints.sendMessage(values);
+      const response = await sendChatEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
 
 const slice = createSlice({
   name: "user",
@@ -383,6 +417,9 @@ const slice = createSlice({
           userMeasurements.fulfilled,
           userShippingAddress.fulfilled,
           savedItemsList.fulfilled,
+          listChat.fulfilled,
+          chatMessages.fulfilled,
+          sendChat.fulfilled
         ),
         (state, action) => {
           state.loading = false;
@@ -419,11 +456,11 @@ const slice = createSlice({
           if (action.payload.statusCode === 200) {
             state.users = action.payload;
             showSuccessMessage(action.payload.message);
-            // console.log(action.payload)
+            console.log(action.payload)
           } else {
             state.error = action.payload.message;
             showErrorMessage(action.payload.message);
-            // console.log(action.payload)
+            console.log(action.payload)
           }
         }
       )
@@ -455,7 +492,10 @@ const slice = createSlice({
           submitFeedback.pending,
           saveItem.pending,
           removeItem.pending,
-          savedItemsList.pending
+          savedItemsList.pending,
+          listChat.pending,
+          chatMessages.pending,
+          sendChat.pending
         ),
         (state) => {
           state.loading = true;
@@ -491,7 +531,10 @@ const slice = createSlice({
           submitFeedback.rejected,
           saveItem.rejected,
           removeItem.rejected,
-          savedItemsList.rejected
+          savedItemsList.rejected,
+          listChat.rejected,
+          chatMessages.rejected,
+          sendChat.rejected
         ),
         (state, action) => {
           state.loading = false;

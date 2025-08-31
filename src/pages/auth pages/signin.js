@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { userSignIn } from "../../hooks/local/reducer";
 import { showSuccessMessage } from "../../hooks/constants";
+import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
 const SignIn = () => {
 
@@ -38,6 +39,7 @@ const SignIn = () => {
     });
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
+      <Spinner loading={useSelector((state) => state.user).loading} />
       <div className="w-full md:w-[50%] lg:w-[35%] grid gap-4">
         <div className="grid gap-2 text-center">
           <img src={logo} alt="" className="h-14 justify-self-center" />

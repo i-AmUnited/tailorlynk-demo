@@ -7,8 +7,7 @@ function SavedItems() {
   const [savedStylesDisplay, setSavedStylesDisplay] = useState(true);
 const [savedMaterialsDisplay, setSavedMaterialsDisplay] = useState(false);
 
-const wishList = useListSavedItems()
-console.log(wishList)
+const savedStyles = useListSavedItems()
 
 const showSavedStyles = () => { 
   setSavedStylesDisplay(true)
@@ -19,17 +18,17 @@ const showSavedMaterials = () => {
   setSavedStylesDisplay(false)
 }
 
-const savedStyles = [
-  { id: 1, name: "Traditional agbada with Kampala material", price: "320,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
-  { id: 2, name: "Casual Ankara shirt", price: "45,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
-  { id: 3, name: "Kente gown", price: "120,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
-  { id: 4, name: "Igbo traditional wear", price: "90,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
-  { id: 5, name: "Yoruba buba and sokoto", price: "75,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
-  { id: 6, name: "Modern agbada", price: "150,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
-  { id: 7, name: "Wedding gown", price: "400,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
-  { id: 8, name: "Casual native wear", price: "50,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
-  { id: 9, name: "Igbo wrapper and blouse", price: "85,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
-];
+// const savedStyles = [
+//   { id: 1, name: "Traditional agbada with Kampala material", price: "320,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
+//   { id: 2, name: "Casual Ankara shirt", price: "45,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
+//   { id: 3, name: "Kente gown", price: "120,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
+//   { id: 4, name: "Igbo traditional wear", price: "90,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
+//   { id: 5, name: "Yoruba buba and sokoto", price: "75,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
+//   { id: 6, name: "Modern agbada", price: "150,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
+//   { id: 7, name: "Wedding gown", price: "400,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
+//   { id: 8, name: "Casual native wear", price: "50,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
+//   { id: 9, name: "Igbo wrapper and blouse", price: "85,000 naira", image: "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826" },
+// ];
 
 const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
@@ -83,17 +82,17 @@ const [currentPage, setCurrentPage] = useState(1);
           <div>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {currentProducts.map((product) => (
-              <Link to={"/product-detail"}>
-                <div key={product.id} className="grid content-between md:text-xs">
+              <Link to={`/product-detail/${btoa(product.productData.materialId)}`}>
+                <div key={product.productData.materialId} className="grid content-between md:text-xs">
                   <div>
                     <img
-                      src={product.image}
-                      alt={product.name}
+                      src={product?.productData.materialImageOne}
+                      alt={product?.productData.materialName}
                       className="w-full aspect-video md:aspect-square object-cover rounded-md"
                     />
-                    <div className="line-clamp-none md:line-clamp-1 mt-2 mb-1">{product.name}</div>
+                    <div className="line-clamp-none md:line-clamp-1 mt-2 mb-1">{product?.productData.materialName}kkk</div>
                   </div>
-                  <div className="text-black/50 font-semibold">{product.price}</div>
+                  <div className="text-black/50 font-semibold">£{product?.productData.price}</div>
                 </div>
               </Link>
             ))}

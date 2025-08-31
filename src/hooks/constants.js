@@ -3,8 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CryptoJS from 'crypto-js';
 
 // export const base_url = 'http://192.34.59.231/api/v1/customer';
-export const base_url = 'https://test.tailorlynk.com/api/v1/customer';
-
+export const base_url = 'https://test.tailorlynk.com/api/v1';
 
 export const api_header = {
   "Content-Type": "application/json",

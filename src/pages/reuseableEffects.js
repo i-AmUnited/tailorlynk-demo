@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { listVendors, materialList, profileDetails, savedItemsList, singleCatalogueDetail, userMeasurements, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
+import { chatMessages, listChat, listVendors, materialList, profileDetails, savedItemsList, singleCatalogueDetail, userMeasurements, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])
@@ -109,6 +109,7 @@ export function useVendorReviews(vendorID) {
 
     return profileDetail;
 }
+
   export function useMeasurements() {
     const [measurementDetail, setMeasurementDetail] = useState([])
     const dispatch = useDispatch();
@@ -158,4 +159,39 @@ export function useVendorReviews(vendorID) {
     }, [dispatch]);
   
     return wishList;
+  }
+
+  export function useListChat() {
+    const [chatList, setChatList] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchChatList = async() => {
+        try {
+            const {payload} = await dispatch(listChat());
+            setChatList(payload.data);
+        }
+        catch(e){}
+      }
+      fetchChatList();
+    }, [dispatch]);
+  
+    return chatList;
+  }
+
+  export function useChatMessages(vendorID) {
+    const [chats, setChats] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchChatMessages = async() => {
+        try {
+            const {payload} = await dispatch(chatMessages(vendorID));
+            setChats(payload.data);
+            // console.log(payload.data)
+        }
+        catch(e){}
+      }
+      fetchChatMessages();
+    }, [dispatch, vendorID]);
+  
+    return chats;
   }

@@ -11,6 +11,9 @@ import PrivacyPolicy from "./general pages/privacyPolicy";
 import Western from "./general pages/westernStyleLanding";
 import AllMaterialProducts from "./general pages/allMaterial";
 import AllVendors from "./general pages/Products";
+import Title from "../components/pageTitleEffect";
+import MeasurementGuide from "./general pages/measurementsGuide";
+import PaymentStatus from "./general pages/paymentStatus";
 
 const Structure = () => {
   return (
@@ -18,16 +21,18 @@ const Structure = () => {
       <div className="px-4 md:px-16 lg:px-48 grid gap-4 mb-5">
         <Navbar />
         <Routes>
-          <Route index element={<Home />} />
-          <Route path="tailor-profile/:vendorID" element={<TailorProfile />} />
-          <Route path="all-vendors" element={<AllVendors />} />
-          <Route path="all-materials" element={<AllMaterialProducts />} />
-          <Route path="product-detail/:catalogueId" element={<ProductDetail />} />
-          <Route path="western" element={<Western />} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="checkout" element={<Checkout />} />
-          <Route path="user-account/*" element={<UserAccount />} />
+          <Route index element={<Title title="Home"><Home /></Title>} />
+          <Route path="tailor-profile/:vendorID" element={<Title title="Tailor Profile"><TailorProfile /></Title>} />
+          <Route path="all-vendors" element={<Title title="Vendors"><AllVendors /></Title>} />
+          <Route path="all-materials" element={<Title title="Materials"><AllMaterialProducts /></Title>} />
+          <Route path="product-detail/:catalogueId" element={<Title title="Product Detail"><ProductDetail /></Title>} />
+          <Route path="western" element={<Title title="Western Styles"><Western /></Title>} />
+          <Route path="cart" element={<Title title="Cart"><Cart /></Title>} />
+          <Route path="privacy-policy" element={<Title title="Privacy Policy"><PrivacyPolicy /></Title>} />
+          <Route path="measurement-guide" element={<Title title="Measurements Guide"><MeasurementGuide /></Title>} />
+          <Route path="checkout" element={<Title title="Checkout"><Checkout /></Title>} />
+          <Route path="payment-status" element={<Title title="Payment Status"><PaymentStatus /></Title>} />
+          <Route path="user-account/*" element={<Title title="My Account"><UserAccount /></Title>} />
         </Routes>
       </div>
       <Footer />

@@ -1,5 +1,5 @@
 import Back from "../../components/goBack";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import arrow from "../../assets/icons/whiteArrow.svg";
 import Input from "../../components/input";
 import Button from "../../components/button";
@@ -11,18 +11,17 @@ import { useCatalogueDetail } from "../reuseableEffects";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
 import { useDispatch, useSelector } from "react-redux";
 import { useCart } from "../../components/cartContext";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 import { showErrorMessage, showSuccessMessage } from "../../hooks/constants";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { addItemToCart, saveItem } from "../../hooks/local/reducer";
 
 
 const ProductDetail = () => {
-  const loading = useSelector((state) => state.user.loading);
   const dispatch = useDispatch();
+  
+  const userSessionData = useSelector((state) => state.user.userSession);
 
   const productURL = window.location.href;
   const handleCopy = () => {
@@ -92,18 +91,14 @@ const addToCartWithAPI = useFormik({
 
 const addToWishList = useFormik({
   initialValues: {
-    classification: productCategory,
-    classification_id: productId ,
+    classification: "material",
+    classification_id: productId,
   },
+  enableReinitialize: true,
   onSubmit: async (values) => {
-    // const { classification, classification_id } = values;
-    // let addToWishListData = { classification, classification_id };
-    const addToWishListData = {
-      classification: productDetail?.category || "",
-      classification_id: productDetail?.catalogueId || productDetail?.materialId || ""
-    };
-    const { payload } = await dispatch(saveItem(addToWishListData));
-    console.log(addToWishListData)
+    const { payload } = await dispatch(saveItem(values));
+    // console.log(values);
+
     if (payload?.statusCode === 200) {
       showSuccessMessage("Item added to wishlist");
     } else {
@@ -154,13 +149,6 @@ const addToWishList = useFormik({
         <div className="lg:col-span-3 md:relative">
           <div className="md:sticky md:top-5">
             <div className="aspect-square w-full relative rounded-lg overflow-hidden">
-              {/* <LazyLoadImage
-                src={validImages[currentIndex]}
-                effect="blur"
-                alt=""
-                placeholderSrc={placeholderImage}
-                className="object-cover object-center w-full h-full"
-              /> */}
               <img src={validImages[currentIndex]} alt="" className="w-full h-full object-cover"/>
               <div className="absolute top-0 w-full h-full flex items-end justify-center text-white px-4 pb-6">
                 <div className="p-2 rounded bg-brandGreen/20 w-fit backdrop-blur-md flex gap-[6px]">
@@ -276,8 +264,8 @@ const addToWishList = useFormik({
                 />
               )}
             </div>
-            <div className="grid lg:flex gap-4 items-center">
-              <div className="grid grid-cols-2 md:flex gap-4 items-center">
+            <div className="grid lg:flex gap-2 items-center">
+              <div className="grid grid-cols-2 md:flex gap-2 items-center">
                 <div>
                   <Button
                     buttonRole="custom"
@@ -297,7 +285,7 @@ const addToWishList = useFormik({
                 </div>
                 <IconButton
                   buttonText={"Save this item"}
-                  otherStyles={"bg-primary/20 text-primary"}
+                  otherStyles={`bg-primary/20 text-primary ${!userSessionData? "hidden" : ""}`}
                   icon={save}
                   onClick={addToWishList.handleSubmit}
                 />
