@@ -13,7 +13,6 @@ import { useSelector } from "react-redux";
 import { useCart } from "./cartContext";
 import menuIcon from "../assets/icons/menu.svg";
 import blackProfile from "../assets/icons/blackProfile.svg";
-import { useProfileDetails } from "../pages/reuseableEffects";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -38,9 +37,9 @@ const Navbar = () => {
     };
   }, []);
 
-  const userSessionData = useSelector((state) => state.user.userSession);
-  const profileInfo = useProfileDetails()
-  const username = profileInfo?.fullName;
+  const userSessionData = useSelector((state) => state.user.userSession)
+  const username = userSessionData?.fullName;
+
 
   return (
     <div className="flex justify-between items-end py-4 border-b border-b-[#c4c4c432] relative">

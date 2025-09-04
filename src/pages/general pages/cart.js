@@ -13,10 +13,20 @@ const Cart = () => {
 
   // console.log(cart)
 
-  const orderTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const deliveryFee = 10;
-  const insuranceFee = 10;
-  const totalPrice = orderTotal + deliveryFee + insuranceFee;
+  const rawOrderTotal = cart.reduce((sum, item) => {
+  const price = parseFloat(item.price.replace(/,/g, ''));
+  return sum + (price * item.quantity);
+}, 0);
+
+const deliveryFee = 10;
+const insuranceFee = 10;
+
+// Keep as numbers for calculation
+const totalPrice = rawOrderTotal + deliveryFee + insuranceFee;
+
+// Format only when you need to display them
+const formattedOrderTotal = rawOrderTotal.toLocaleString();
+const formattedTotalPrice = totalPrice.toLocaleString();
   
   // Track individual product quantities - handles both catalogueId and materialId
   const [quantity, setQuantity] = useState(() => {
@@ -185,7 +195,7 @@ const Cart = () => {
                 <div className="grid gap-3">
                   <div className="flex justify-between">
                     <div className="text-[#c4c4c4]">Order amount:</div>
-                    <div className="text-xs font-bold">£{orderTotal}</div>
+                    <div className="text-xs font-bold">£{formattedOrderTotal}</div>
                   </div>
                   <div className="flex justify-between">
                     <div className="text-[#c4c4c4]">Insurance fee:</div>
@@ -198,7 +208,7 @@ const Cart = () => {
                 </div>
                 <div className="flex justify-between text-primary text-sm font-semibold border-t mt-5 pt-5">
                   <div>Total:</div>
-                  <div className="font-bold">£{totalPrice} </div>
+                  <div className="font-bold">£{formattedTotalPrice} </div>
                 </div>
                 {/* <Link to={"/checkout"}>Checkout</Link> */}
                 <div className="mt-10 mb-4 flex justify-end">

@@ -31,7 +31,6 @@ export const userSignIn = createAsyncThunk("user/signIn",
       const response = await signInEndPoint.data;
       saveToLocalStorage("userSession", JSON.stringify(response.data.customerData));
       saveToLocalStorage("token", JSON.stringify(response.data.accessToken));
-      // console.log(response.data.accessToken)
       return response;
     }
     catch(error){
@@ -42,6 +41,7 @@ export const userSignIn = createAsyncThunk("user/signIn",
 const signOutSession = () => {
   localStorage.removeItem("users");
   localStorage.removeItem("userSession");
+  localStorage.removeItem("token");
 };
 
 export const signOut = createAsyncThunk("user/signOut", async () => {
@@ -228,12 +228,12 @@ export const updateDetails = createAsyncThunk(
   }
 );
 
-export const profileDetails = createAsyncThunk(
-  "user/profileDetails",
-  async (values) => {
+export const userProfileDetails = createAsyncThunk(
+  "user/userProfileDetails",
+  async () => {
     try {
-      const profileDetailsEndPoint = await apiEndPoints.userProfileDetails(values);
-      const response = await profileDetailsEndPoint.data;
+      const userProfileDetailsEndPoint = await apiEndPoints.profileDetails();
+      const response = await userProfileDetailsEndPoint.data;
       return response;
     } catch (error) {
       return error.response.data;
@@ -426,7 +426,7 @@ const slice = createSlice({
           vendorReviewList.fulfilled,
           singleCatalogueDetail.fulfilled,
           materialList.fulfilled,
-          profileDetails.fulfilled,
+          userProfileDetails.fulfilled,
           userMeasurements.fulfilled,
           userShippingAddress.fulfilled,
           savedItemsList.fulfilled,
@@ -442,6 +442,7 @@ const slice = createSlice({
           } else {
             state.error = action.payload.message;
             showErrorMessage(action.payload.message);
+            
           }
         }
       )
@@ -497,7 +498,7 @@ const slice = createSlice({
           materialList.pending,
           addItemToCart.pending,
           updateDetails.pending,
-          profileDetails.pending,
+          userProfileDetails.pending,
           userMeasurements.pending,
           updateMeasurements.pending,
           userShippingAddress.pending,
@@ -537,7 +538,7 @@ const slice = createSlice({
           materialList.rejected,
           addItemToCart.rejected,
           updateDetails.rejected,
-          profileDetails.rejected,
+          userProfileDetails.rejected,
           userMeasurements.rejected,
           updateMeasurements.rejected,
           userShippingAddress.rejected,

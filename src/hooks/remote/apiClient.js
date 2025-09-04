@@ -30,3 +30,31 @@ apiClientWithToken.interceptors.request.use(
         return Promise.reject(error);
       },
 )
+
+// apiClientWithToken.interceptors.request.use(
+//     (config) => {
+//         const encryptedToken = localStorage.getItem("token");
+        
+//         if (encryptedToken) {
+//             try {
+//                 const decryptedData = CryptoJS.AES.decrypt(encryptedToken, APP_SECRET_KEY).toString(CryptoJS.enc.Utf8);
+//                 console.log(decryptedData);
+                
+//                 if (decryptedData) {
+//                     const parsedData = JSON.parse(decryptedData); 
+//                     if (parsedData) {
+//                         config.headers["Authorization"] = `Bearer ${parsedData}`;
+//                     }
+//                 }
+//             } catch (error) {
+//                 console.error("Token decryption failed:", error);
+//                 localStorage.removeItem("token");
+//             }
+//         }
+        
+//         return config;
+//     },
+//     (error) => {
+//         return Promise.reject(error);
+//     },
+// )

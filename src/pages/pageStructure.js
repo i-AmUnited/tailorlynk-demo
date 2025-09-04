@@ -14,8 +14,10 @@ import AllVendors from "./general pages/Products";
 import Title from "../components/pageTitleEffect";
 import MeasurementGuide from "./general pages/measurementsGuide";
 import PaymentStatus from "./general pages/paymentStatus";
+import AboutUs from "./general pages/about";
 
 const Structure = () => {
+
   return (
     <div className="grid content-between min-h-screen gap-4">
       <div className="px-4 md:px-16 lg:px-48 grid gap-4 mb-5">
@@ -29,6 +31,7 @@ const Structure = () => {
           <Route path="western" element={<Title title="Western Styles"><Western /></Title>} />
           <Route path="cart" element={<Title title="Cart"><Cart /></Title>} />
           <Route path="privacy-policy" element={<Title title="Privacy Policy"><PrivacyPolicy /></Title>} />
+          <Route path="about-us" element={<Title title="About US"><AboutUs /></Title>} />
           <Route path="measurement-guide" element={<Title title="Measurements Guide"><MeasurementGuide /></Title>} />
           <Route path="checkout" element={<Title title="Checkout"><Checkout /></Title>} />
           <Route path="payment-status" element={<Title title="Payment Status"><PaymentStatus /></Title>} />

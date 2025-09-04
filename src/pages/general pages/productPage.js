@@ -266,7 +266,14 @@ const addToWishList = useFormik({
             </div>
             <div className="grid lg:flex gap-2 items-center">
               <div className="grid grid-cols-2 md:flex gap-2 items-center">
-                <div>
+                <div className={`${productDetail?.stock === "0" ? "" : "hidden"}`}>
+                  <Button 
+                    buttonRole={"custom"}
+                    buttonText={"item out of stock"}
+                    otherStyles={"text-red-500 bg-red-100"}
+                  />
+                </div>
+                <div className={`${productDetail?.stock === "0" ? "hidden" : ""}`}>
                   <Button
                     buttonRole="custom"
                     buttonText={isInCart ? "Remove from Cart" : "Add to Cart"}
@@ -281,7 +288,6 @@ const addToWishList = useFormik({
                         : addToCart(productDetail, quantity)
                     }
                   />
-                  
                 </div>
                 <IconButton
                   buttonText={"Save this item"}

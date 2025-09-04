@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { chatMessages, getOrder, listChat, listVendors, materialList, profileDetails, savedItemsList, singleCatalogueDetail, userMeasurements, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
+import { chatMessages, getOrder, listChat, listVendors, materialList, savedItemsList, singleCatalogueDetail, userMeasurements, userProfileDetails, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])
@@ -88,27 +88,23 @@ export function useVendorReviews(vendorID) {
     return listMaterial;
   }
 
-  export function useProfileDetails() {
-    const [profileDetail, setProfileDetail] = useState([]);
+  export function useProfile() {
+    const [profileDetails, setProfileDetails] = useState([])
     const dispatch = useDispatch();
-    
     useEffect(() => {
-        const fetchProfileDetails = async () => {
-            try {
-                const { payload } = await dispatch(profileDetails());
-                setProfileDetail(payload.data);
-            } catch (e) {
-                console.error('Error fetching profile details:', e);
-                // Optionally set to empty array or keep previous state
-                setProfileDetail([]);
-            }
-        };
-        
-        fetchProfileDetails();
+      const fetchProfileDetails = async() => {
+        try {
+            const {payload} = await dispatch(userProfileDetails());
+            setProfileDetails(payload.data);
+            // console.log(payload)
+        }
+        catch(e){}
+      }
+      fetchProfileDetails();
     }, [dispatch]);
-
-    return profileDetail;
-}
+  
+    return profileDetails;
+  }
 
   export function useMeasurements() {
     const [measurementDetail, setMeasurementDetail] = useState([])

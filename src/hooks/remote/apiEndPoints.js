@@ -197,9 +197,9 @@ export class apiEndPoints {
   }
 
   //user-account endpoints
-  static async userProfileDetails(data) {
+  static async profileDetails() {
     try {
-      return await apiClientWithToken.get("/customer/profile-details", data);
+      return await apiClientWithToken.get("/customer/profile-details");
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;

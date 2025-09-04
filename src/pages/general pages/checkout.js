@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { useCart } from "../../components/cartContext";
 import Back from "../../components/goBack";
 import Input from "../../components/input";
-// import SelectInput from "../../components/select";
+import SelectInput from "../../components/select";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { placeOrder } from "../../hooks/local/reducer";
@@ -14,13 +14,20 @@ const Checkout = () => {
   const { cart } = useCart();
   const dispatch = useDispatch();
 
-  const orderTotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-  const deliveryFee = 10;
-  const insuranceFee = 10;
-  const totalPrice = orderTotal + deliveryFee + insuranceFee;
+  const rawOrderTotal = cart.reduce((sum, item) => {
+  const price = parseFloat(item.price.replace(/,/g, ''));
+  return sum + (price * item.quantity);
+}, 0);
+
+const deliveryFee = 10;
+const insuranceFee = 10;
+
+// Keep as numbers for calculation
+const totalPrice = rawOrderTotal + deliveryFee + insuranceFee;
+
+// Format only when you need to display them
+const formattedOrderTotal = rawOrderTotal.toLocaleString();
+const formattedTotalPrice = totalPrice.toLocaleString();
 
   const loading = useSelector((state) => state.user.loading);
 
@@ -31,7 +38,7 @@ const Checkout = () => {
     setIsSignedIn(!!userSessionData);
   }, [userSessionData]);
 
-  // console.log(cart);
+  console.log(userSessionData);
 
   const customerID = userSessionData?.data?.customerData?.customerId || "";
   const phone = userSessionData?.data?.customerData?.phoneNumber || "";
@@ -40,7 +47,7 @@ const Checkout = () => {
   const [firstName, ...lastNameParts] = fullName.split(" ");
   const lastName = lastNameParts.join(" ");
 
-  const [createAccount, setCreateAccount] = useState(true);
+  const [createAccount, setCreateAccount] = useState(userSessionData ? false : true);
 
   const transformedOrders = cart.map((item) => ({
     classification_id: item.materialId,
@@ -53,6 +60,7 @@ const Checkout = () => {
   }));
 
   const createOrderForm = useFormik({
+    enableReinitialize: true,
     initialValues: {
       is_signed_in: isSignedIn,
       customer_id: customerID,
@@ -61,7 +69,7 @@ const Checkout = () => {
       first_name: firstName,
       last_name: lastName,
       phone_number: phone,
-      total_amount: totalPrice,
+      total_amount: formattedTotalPrice,
       delivery_address: "",
       orders: transformedOrders,
       currency: "gbp",
@@ -117,10 +125,11 @@ const Checkout = () => {
     },
   });
 
-  // const serviceType = [
-  //   { value: "express", label: "Express service" },
-  //   { value: "standard", label: "Standard service" },
-  // ];
+  const countries = [
+    { value: "UK", label: "United Kingdom (UK) " },
+  ];
+
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
       <div className="lg:col-span-8 bg-white border rounded-md overflow-hidden p-4">
@@ -130,23 +139,12 @@ const Checkout = () => {
         </div>
         <form
           onSubmit={createOrderForm.handleSubmit}
-          className="mt-6 grid gap-4"
+          className="mt-6 grid gap-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* <SelectInput label={"Service type"} options={serviceType} /> */}
-            <Input
-              label={"Shipping address:"}
-              name={"delivery_address"}
-              value={createOrderForm.values.delivery_address}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              onError={
-                createOrderForm.touched.delivery_address &&
-                createOrderForm.errors.delivery_address
-                  ? createOrderForm.errors.delivery_address
-                  : null
-              }
-            />
+            <div className="font-bold md:col-span-2 text-primary">
+              Customer info:
+            </div>
             <Input
               label={"First name:"}
               name={"first_name"}
@@ -199,16 +197,48 @@ const Checkout = () => {
                   : null
               }
             />
+            <div className="font-bold md:col-span-2 mt-4 text-primary">
+              Shipping address:
+            </div>
+            <Input
+              label={"House address:"}
+              name={"delivery_address"}
+              value={createOrderForm.values.delivery_address}
+              onChange={createOrderForm.handleChange}
+              onBlur={createOrderForm.handleBlur}
+              onError={
+                createOrderForm.touched.delivery_address &&
+                createOrderForm.errors.delivery_address
+                  ? createOrderForm.errors.delivery_address
+                  : null
+              }
+            />
+            <Input
+              label={"Region:"}
+              // name={"delivery_address"}
+            />
+             <Input
+              label={"State/Province/Town:"}
+              // name={"delivery_address"}
+            />
+            <SelectInput
+              label={"Service type"}
+              options={countries}
+            />
+             <Input
+              label={"Post code:"}
+              // name={"delivery_address"}
+            />
           </div>
-          <div>
-            <div>
+          <div className={`${!userSessionData ? "" : "hidden"}`}>
+            <div className="text-xs text-gray-400">
               Would you like us to create an account for you?{" "}
               <span>
                 Creating a tailorlynk account allows you to conviniently keep
                 track of your orders
               </span>
             </div>
-            <div className="text-xs border rounded w-fit mt-4 flex p-[2px]">
+            <div className="text-xs border rounded w-fit mt-2 flex p-[2px]">
               <div
                 className={`rounded py-2 px-4 cursor-pointer ${
                   createAccount ? "bg-primary text-white" : "text-primary"
@@ -227,12 +257,6 @@ const Checkout = () => {
               </div>
             </div>
           </div>
-
-          <Button
-          buttonText={"Send order"}
-          otherStyles={"bg-primary text-white"}
-          loading={loading}
-        />
         </form>
 
       </div>
@@ -245,7 +269,7 @@ const Checkout = () => {
             <div className="grid gap-3">
               <div className="flex justify-between">
                 <div className="text-[#c4c4c4]">Order amount:</div>
-                <div className="text-xs font-bold">£{orderTotal}</div>
+                <div className="text-xs font-bold">£{formattedOrderTotal}</div>
               </div>
               <div className="flex justify-between">
                 <div className="text-[#c4c4c4]">Insurance fee:</div>
@@ -258,10 +282,12 @@ const Checkout = () => {
             </div>
             <div className="flex justify-between text-primary text-sm font-semibold border-t mt-5 pt-5">
               <div>Total:</div>
-              <div className="font-bold">£{totalPrice} </div>
+              <div className="font-bold">£{formattedTotalPrice} </div>
             </div>
             <div className="mt-8">
               <Button
+                buttonRole={"custom"}
+                onClick={createOrderForm.handleSubmit}
                 buttonText={"Pay!"}
                 otherStyles={"bg-primary/30 text-primary w-full"}
               />

@@ -73,6 +73,7 @@ const AllMaterialProducts = () => {
                 materialPhoto={material.materialImageOne}
                 materialID={material.materialId}
                 price={material.costPerYard}
+                vendorName={material.vendorData.businessName}
               />
             ))}
         </div>

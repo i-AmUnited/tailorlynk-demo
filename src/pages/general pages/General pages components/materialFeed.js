@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useMaterialList } from "../../reuseableEffects";
 import Spinner from "../../../components/Spinners/pageLoadingSpinner";
@@ -44,6 +43,7 @@ const MaterialFeed = () => {
                 materialID={material.materialId}
                 price={material.price}
                 materialCategory={material.category}
+                vendorName={material.vendorData.businessName}
               />
               
             ))}

@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <div className="bg-brandGreen px-4 md:px-16 py-5 text-white grid gap-6 text-xs">
       <div className="grid grid-cols-3 md:flex gap-6 items-center">
-        <span>About us</span>
+        <Link to={"/about-us"}>About us</Link>
         <span>Contact</span>
         <span>FAQs</span>
         <Link to={"/privacy-policy"}>Privacy policy</Link>

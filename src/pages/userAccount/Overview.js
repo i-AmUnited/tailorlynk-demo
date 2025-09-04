@@ -6,21 +6,23 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { updateDetails } from "../../hooks/local/reducer";
 import { showSuccessMessage } from "../../hooks/constants";
-import { useProfileDetails } from "../reuseableEffects";
+import { useProfile } from "../reuseableEffects";
 import { useEffect, useState } from "react";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
 const Overview = () => {
   const loading = useSelector((state) => state.user.loading);
-  const profileInfo = useProfileDetails();
+  const profileInfo = useProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profileData, setProfileData] = useState(profileInfo);
 
   const dispatch = useDispatch();
 
   // Update local profile data when profileInfo changes
-  useEffect(() => {
-    setProfileData(profileInfo);
+   useEffect(() => {
+    if (profileInfo) {
+      setProfileData(profileInfo);
+    }
   }, [profileInfo]);
 
   const updateProfileForm = useFormik({
