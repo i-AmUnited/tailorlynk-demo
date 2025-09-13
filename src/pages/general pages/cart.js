@@ -1,4 +1,3 @@
-import info from "../../assets/icons/info.svg";
 import { Link } from "react-router-dom";
 import { useCart } from "../../components/cartContext";
 import removeItemIcon from "../../assets/icons/remove.svg";
@@ -7,68 +6,93 @@ import material from "../../assets/icons/material.svg";
 import { useState, useEffect } from "react";
 import Back from "../../components/goBack";
 import Button from "../../components/button";
+import { useCustomerCart } from "../reuseableEffects";
 
 const Cart = () => {
   const { cart, removeFromCart, clearCart, updateCartQuantity } = useCart();
+  // console.log(cart);
+   const customerCart = useCustomerCart()
+   console.log(customerCart)
 
-  // console.log(cart)
-
-  const rawOrderTotal = cart.reduce((sum, item) => {
-  const price = parseFloat(item.price.replace(/,/g, ''));
-  return sum + (price * item.quantity);
-}, 0);
-
-const deliveryFee = 10;
-const insuranceFee = 10;
-
-// Keep as numbers for calculation
-const totalPrice = rawOrderTotal + deliveryFee + insuranceFee;
-
-// Format only when you need to display them
-const formattedOrderTotal = rawOrderTotal.toLocaleString();
-const formattedTotalPrice = totalPrice.toLocaleString();
-  
-  // Track individual product quantities - handles both catalogueId and materialId
-  const [quantity, setQuantity] = useState(() => {
-    return cart.reduce((acc, product) => {
-      // Use whichever ID is available
-      const productId = product.catalogueId || product.materialId;
-      acc[productId] = product.quantity || 1;
-      return acc;
-    }, {});
-  });
-  
-  // Update quantities when cart changes
-  useEffect(() => {
-    setQuantity(cart.reduce((acc, product) => {
-      const productId = product.catalogueId || product.materialId;
-      acc[productId] = product.quantity || 1;
-      return acc;
-    }, {}));
-  }, [cart]);
-
-  // Helper function to get product ID (either catalogueId or materialId)
-  const getProductId = (product) => {
-    return product.catalogueId || product.materialId;
-  };
-
-  const handleIncrease = (id) => {
-    setQuantity((prev) => {
-      const newQuantity = (prev[id] || 1) + 1;
-      updateCartQuantity(id, newQuantity);
-      return { ...prev, [id]: newQuantity };
-    });
-  };
-
-  const handleDecrease = (id) => {
-    if (quantity[id] > 1) {
-      setQuantity((prev) => {
-        const newQuantity = prev[id] - 1;
-        updateCartQuantity(id, newQuantity);
-        return { ...prev, [id]: newQuantity };
-      });
+  const getItemPrice = (item) => {
+    if (!item.category) {
+      return parseFloat(item.cost || 0);
+    }
+    
+    switch (item.category) {
+      case "Ready_Made":
+      case "Western":
+        return parseFloat(item.price || 0);
+      case "Material":
+        return parseFloat(item.costPerYard || 0);
+      default:
+        return 0;
     }
   };
+
+  const getDisplayPrice = (product) => {
+    if (!product.category) {
+      return product.cost;
+    }
+    
+    switch (product.category) {
+      case "Ready_Made":
+      case "Western":
+        return product.price;
+      case "Material":
+        return product.costPerYard;
+      default:
+        return "N/A";
+    }
+  };
+
+  // Fixed price calculation using the local helper function
+  const rawOrderTotal = cart.reduce((sum, item) => {
+    const price = getItemPrice(item);
+    return sum + (price * item.quantity);
+  }, 0);
+
+  const deliveryFee = 10;
+  const insuranceFee = 10;
+
+  const totalPrice = rawOrderTotal + deliveryFee + insuranceFee;
+  const formattedOrderTotal = rawOrderTotal.toLocaleString();
+  const formattedTotalPrice = totalPrice.toLocaleString();
+
+  const [quantity, setQuantity] = useState(() => {
+  return cart.reduce((acc, product) => {
+    acc[product.cartInstanceId] = parseInt(product.quantity) || 1; // Ensure number
+    return acc;
+  }, {});
+});
+
+useEffect(() => {
+  setQuantity(cart.reduce((acc, product) => {
+    acc[product.cartInstanceId] = parseInt(product.quantity) || 1; // Ensure number
+    return acc;
+  }, {}));
+}, [cart]);
+
+  const handleIncrease = (cartInstanceId) => {
+  setQuantity((prev) => {
+    const currentQuantity = parseInt(prev[cartInstanceId]) || 1; // Convert to number
+    const newQuantity = currentQuantity + 1;
+    updateCartQuantity(cartInstanceId, newQuantity);
+    return { ...prev, [cartInstanceId]: newQuantity };
+  });
+};
+
+const handleDecrease = (cartInstanceId) => {
+  setQuantity((prev) => {
+    const currentQuantity = parseInt(prev[cartInstanceId]) || 1; // Convert to number
+    if (currentQuantity > 1) {
+      const newQuantity = currentQuantity - 1;
+      updateCartQuantity(cartInstanceId, newQuantity);
+      return { ...prev, [cartInstanceId]: newQuantity };
+    }
+    return prev;
+  });
+};
 
   return (
     <div>
@@ -92,10 +116,9 @@ const formattedTotalPrice = totalPrice.toLocaleString();
               </div>
               <div className="p-4">
                 {cart.map((product) => {
-                  const productId = getProductId(product);
                   return (
                     <div
-                      key={productId}
+                      key={product.cartInstanceId}
                       className="grid md:flex gap-4 pb-4 border-b mb-4"
                     >
                       <div className="rounded-md overflow-hidden size-32 bg-green-400 flex-shrink-0">
@@ -110,21 +133,13 @@ const formattedTotalPrice = totalPrice.toLocaleString();
                       <div className="w-full">
                         <div className="mb-3 md:mb-2 grid md:flex gap-1 items-center justify-between">
                           <Link
-                            to={`/product-detail/${btoa(productId)}`}
+                            to={`/product-detail/${btoa(product.catalogueId || product.materialId)}`}
                             className="font-semibold text-[14px] hover:underline hover:text-primary"
                           >
                             {product.styleName || product.materialName}
                           </Link>
                           <div className="font-bold text-xs">
-                            £
-                            {!product.category
-                              ? product.cost
-                              : product.category === "Ready_Made" ||
-                                product.category === "Western"
-                              ? product.price
-                              : product.category === "Material"
-                              ? product.costPerYard
-                              : "N/A"}
+                            £{getDisplayPrice(product)}
                           </div>
                         </div>
                         <div className="flex items-center gap-4 md:gap-0 md:divide-x-2">
@@ -139,6 +154,12 @@ const formattedTotalPrice = totalPrice.toLocaleString();
                               {product.vendorData.businessName}
                             </div>
                           </Link>
+                          <div className="flex items-center gap-1 md:ps-4">
+                            <img src={material} alt="" className="h-[18px]" />
+                            <div className="text-black/50 text-xs">
+                              {product.selectedSize}
+                            </div>
+                          </div>
                           <div
                             className={`${
                               !product.material
@@ -156,17 +177,16 @@ const formattedTotalPrice = totalPrice.toLocaleString();
                           {/* Quantity Controls */}
                           <div className="flex items-center gap-1">
                             <span
-                              onClick={() => handleDecrease(productId)}
+                              onClick={() => handleDecrease(product.cartInstanceId)}
                               className="rounded-md text-xs px-3 py-2 font-semibold bg-primary/30 text-primary cursor-pointer"
-                              disabled={quantity[productId] === 1}
                             >
                               -
                             </span>
                             <span className="w-8 text-center text-xs font-semibold">
-                              {quantity[productId] || 1}
+                              {product.quantity}
                             </span>
                             <div
-                              onClick={() => handleIncrease(productId)}
+                              onClick={() => handleIncrease(product.cartInstanceId)}
                               className="rounded-md text-xs px-3 py-2 font-semibold bg-primary/30 text-primary cursor-pointer"
                             >
                               +
@@ -174,7 +194,7 @@ const formattedTotalPrice = totalPrice.toLocaleString();
                           </div>
                           <div
                             className="cursor-pointer"
-                            onClick={() => removeFromCart(productId)}
+                            onClick={() => removeFromCart(product.cartInstanceId)}
                           >
                             <img alt="" src={removeItemIcon} className="h-5" />
                           </div>
@@ -210,7 +230,6 @@ const formattedTotalPrice = totalPrice.toLocaleString();
                   <div>Total:</div>
                   <div className="font-bold">£{formattedTotalPrice} </div>
                 </div>
-                {/* <Link to={"/checkout"}>Checkout</Link> */}
                 <div className="mt-10 mb-4 flex justify-end">
                   <Button
                     buttonRole={"link"}

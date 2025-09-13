@@ -215,6 +215,20 @@ export const addItemToCart = createAsyncThunk(
   }
 );
 
+export const userCart = createAsyncThunk(
+  "user/userCart",
+  async () => {
+    try {
+      const userCartEndPoint = await apiEndPoints.listUserCart();
+      const response = await userCartEndPoint.data;
+      console.log(response)
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
 export const updateDetails = createAsyncThunk(
   "user/changeProfile",
   async (values) => {
@@ -433,7 +447,8 @@ const slice = createSlice({
           listChat.fulfilled,
           chatMessages.fulfilled,
           sendChat.fulfilled,
-          getOrder.fulfilled
+          getOrder.fulfilled,
+          userCart.fulfilled
         ),
         (state, action) => {
           state.loading = false;
@@ -511,7 +526,8 @@ const slice = createSlice({
           listChat.pending,
           chatMessages.pending,
           sendChat.pending,
-          getOrder.pending
+          getOrder.pending,
+          userCart.pending
         ),
         (state) => {
           state.loading = true;
@@ -551,7 +567,8 @@ const slice = createSlice({
           listChat.rejected,
           chatMessages.rejected,
           sendChat.rejected,
-          getOrder.rejected
+          getOrder.rejected,
+          userCart.rejected
         ),
         (state, action) => {
           state.loading = false;

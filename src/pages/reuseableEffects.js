@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { chatMessages, getOrder, listChat, listVendors, materialList, savedItemsList, singleCatalogueDetail, userMeasurements, userProfileDetails, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
+import { chatMessages, getOrder, listChat, listVendors, materialList, savedItemsList, singleCatalogueDetail, userCart, userMeasurements, userProfileDetails, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])
@@ -86,6 +86,24 @@ export function useVendorReviews(vendorID) {
     }, [dispatch]);
   
     return listMaterial;
+  }
+
+  export function useCustomerCart() {
+    const [cartList, setCartList] = useState([])
+    const dispatch = useDispatch();
+    useEffect(() => {
+      const fetchCartList = async() => {
+        try {
+            const {payload} = await dispatch(userCart());
+            setCartList(payload.data);
+            console.log(payload, "dslkjne")
+        }
+        catch(e){}
+      }
+      fetchCartList();
+    }, [dispatch]);
+  
+    return cartList;
   }
 
   export function useProfile() {

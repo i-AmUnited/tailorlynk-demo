@@ -196,6 +196,15 @@ export class apiEndPoints {
     }
   }
 
+  static async listUserCart() {
+    try {
+      return await apiClientWithToken.get("/customer/list-user-cart");
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
   //user-account endpoints
   static async profileDetails() {
     try {

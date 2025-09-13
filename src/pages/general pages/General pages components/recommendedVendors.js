@@ -23,6 +23,7 @@ const RecommendedVendors = () => {
     }
 
     const recommendedVendors = shuffle(vendorList).slice(0, 10);
+    // console.log(recommendedVendors);
 
     const handleVendorClick = (vendorId) => {
         setSelectedVendorId(vendorId);

@@ -16,100 +16,118 @@ import placeholderImage from "../../assets/images/placeholder-tailorlynk.png";
 import { showErrorMessage, showSuccessMessage } from "../../hooks/constants";
 import { useFormik } from "formik";
 import { addItemToCart, saveItem } from "../../hooks/local/reducer";
-
+import SelectInput from "../../components/select";
+import * as Yup from "yup";
 
 const ProductDetail = () => {
   const dispatch = useDispatch();
-  
+
   const userSessionData = useSelector((state) => state.user.userSession);
 
   const productURL = window.location.href;
   const handleCopy = () => {
-    navigator.clipboard.writeText(productURL).then(() => {
-      showSuccessMessage("Link copied!");
-    }).catch(err => {
-      console.error("Failed to copy: ", err);
-    });
+    navigator.clipboard
+      .writeText(productURL)
+      .then(() => {
+        showSuccessMessage("Link copied!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
   };
 
-  const { addToCart, cart, removeFromCart } = useCart();
+  const { addToCart } = useCart();
 
   const { catalogueId } = useParams();
   const decodedCatalogueID = atob(catalogueId);
   const productDetail = useCatalogueDetail(decodedCatalogueID);
 
-  // console.log(productDetail)
+  // console.log(productDetail);
 
   const [quantity, setQuantity] = useState(1);
-  
-  // Get the product ID (either catalogueId or materialId)
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+
   const productId = productDetail?.catalogueId || productDetail?.materialId || "";
-  const productCategory = productDetail?.category || "";
 
-  // Check if product is in cart by checking both ID types
-  const isInCart = cart.some(
-    (item) => 
-      (item.catalogueId && productDetail?.catalogueId && item.catalogueId === productDetail.catalogueId) || 
-      (item.materialId && productDetail?.materialId && item.materialId === productDetail.materialId)
-  );
+    const availableSizes = productDetail?.size
+    ? productDetail.size.split(", ").map((size) => size.trim())
+    : [];
 
-const handleQuantityChange = (e) => {
-  setQuantity(e.target.value);
-};
+     const availableColors = productDetail?.color
+    ? productDetail.color.split(", ").map((color) => color.trim())
+    : [];
 
-const handleQuantityBlur = () => {
-  const value = parseInt(quantity, 10);
-  if (isNaN(value) || value < 1) {
-    setQuantity("1");
-  } else {
-    setQuantity(value.toString());
-  }
-};
+  const handleQuantityChange = (e) => {
+    setQuantity(e.target.value);
+  };
 
-// add to cart API
-const addToCartWithAPI = useFormik({
-  initialValues: {
-    classification: productDetail?.category || "",
-    classification_id:
-      productDetail?.catalogueId || productDetail?.materialId || "",
-  },
-  // validationSchema: Yup.object({
-  //   email: Yup.string()
-  //     .required("Please provide an email address")
-  //     .email("Please enter a valid email address"),
-  //   password: Yup.string().required("Please enter a password"),
-  // }),
-  onSubmit: async (values) => {
-    const { payload } = await dispatch(addItemToCart(values));
-    if (payload?.statusCode === 200) {
-      showSuccessMessage("Item added to cart");
+  const handleQuantityBlur = () => {
+    const value = parseInt(quantity, 10);
+    if (isNaN(value) || value < 1) {
+      setQuantity("1");
     } else {
-      showErrorMessage("Failed to add item to cart");
+      setQuantity(value.toString());
     }
-  },
-});
+  };
 
-const addToWishList = useFormik({
-  initialValues: {
-    classification: "material",
-    classification_id: productId,
-  },
-  enableReinitialize: true,
-  onSubmit: async (values) => {
-    const { payload } = await dispatch(saveItem(values));
-    // console.log(values);
+  const handleSizeChange = (e) => {
+    setSelectedSize(e.target.value);
+  };
 
-    if (payload?.statusCode === 200) {
-      showSuccessMessage("Item added to wishlist");
-    } else {
-      showErrorMessage("Failed to save item");
-    }
-  },
-});
+  const handleColorChange = (e) => {
+    setSelectedColor(e.target.value);
+  };
 
-  const image1 = productDetail?.styleImageOne || productDetail?.materialImageOne;
-  const image2 = productDetail?.styleImageTwo || productDetail?.materialImageTwo;
-  const image3 = productDetail?.styleImageThree || productDetail?.materialImageThree;
+  console.log(productDetail?.category, productDetail?.materialId)
+
+
+  // add to cart API
+  const addToCartWithAPI = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      classification: "material", //api accepts material for Ready_Made products
+      classification_id: productDetail?.catalogueId || productDetail?.materialId || "",
+      weight: productDetail?.weight || "5",
+      size: selectedSize,
+      color: selectedColor
+    },
+    validationSchema: Yup.object({
+      size: Yup.string().required("Please select a size"),
+      color: Yup.string().required("Please select a color"),
+    }),
+    onSubmit: async (values) => {
+      const { payload } = await dispatch(addItemToCart(values));
+      if (payload?.statusCode === 200) {
+        showSuccessMessage();
+      } else {
+        showErrorMessage(payload?.message);
+      }
+    },
+  });
+
+  const addToWishList = useFormik({
+    initialValues: {
+      classification: "material",
+      classification_id: productId,
+    },
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      const { payload } = await dispatch(saveItem(values));
+      // console.log(values);
+
+      if (payload?.statusCode === 200) {
+        showSuccessMessage("Item added to wishlist");
+      }
+    },
+  });
+
+  const image1 =
+    productDetail?.styleImageOne || productDetail?.materialImageOne;
+  const image2 =
+    productDetail?.styleImageTwo || productDetail?.materialImageTwo;
+  const image3 =
+    productDetail?.styleImageThree || productDetail?.materialImageThree;
 
   const images = [image1, image2, image3].filter((image) => image);
 
@@ -141,7 +159,10 @@ const addToWishList = useFormik({
         </div>
         <div className="text-sm font-semibold line-clamp-1">
           <div className="">
-            {productDetail?.styleName || productDetail?.materialName}
+            {productDetail?.styleName || productDetail?.materialName}{" "}
+            <span className="text-primary underline">
+              from {productDetail?.vendorData?.businessName}
+            </span>
           </div>
         </div>
       </div>
@@ -149,7 +170,11 @@ const addToWishList = useFormik({
         <div className="lg:col-span-3 md:relative">
           <div className="md:sticky md:top-5">
             <div className="aspect-square w-full relative rounded-lg overflow-hidden">
-              <img src={validImages[currentIndex]} alt="" className="w-full h-full object-cover"/>
+              <img
+                src={validImages[currentIndex]}
+                alt=""
+                className="w-full h-full object-cover"
+              />
               <div className="absolute top-0 w-full h-full flex items-end justify-center text-white px-4 pb-6">
                 <div className="p-2 rounded bg-brandGreen/20 w-fit backdrop-blur-md flex gap-[6px]">
                   {validImages.map((_, index) => (
@@ -165,12 +190,16 @@ const addToWishList = useFormik({
               {validImages.length > 1 && (
                 <div className="absolute top-0 w-full h-full flex items-center px-6">
                   <div className="flex justify-between w-full">
-                    <div onClick={goToPrevious} className="size-8 rounded-md bg-black/30 backdrop-blur-md flex items-center justify-center cursor-pointer">
+                    <div
+                      onClick={goToPrevious}
+                      className="size-8 rounded-md bg-black/30 backdrop-blur-md flex items-center justify-center cursor-pointer"
+                    >
                       <img src={arrow} alt="" className="h-4 rotate-90" />
                     </div>
                     <div
                       onClick={goToNext}
-                      className="size-8 rounded-md bg-black/30 backdrop-blur-md flex items-center justify-center cursor-pointer">
+                      className="size-8 rounded-md bg-black/30 backdrop-blur-md flex items-center justify-center cursor-pointer"
+                    >
                       <img src={arrow} alt="" className="h-4 -rotate-90" />
                     </div>
                   </div>
@@ -182,7 +211,10 @@ const addToWishList = useFormik({
         <div className="lg:col-span-4">
           <div className="text-xs font-semibold mb-2">Product description:</div>
           <div className="text-xs leading-5">{productDetail?.description}</div>
-          <div className="grid gap-6 mt-6">
+          <form
+            onSubmit={addToCartWithAPI.handleSubmit}
+            className="grid gap-6 mt-6"
+          >
             {!productDetail?.category ? (
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid">
@@ -208,28 +240,12 @@ const addToWishList = useFormik({
               productDetail?.category === "Ready_Made" ? (
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid">
-                  <div className="text-xs font-semibold">Vendor</div>
-                  <div className="">
-                    {productDetail?.vendorData?.businessName}
-                  </div>
-                </div>
-                <div className="grid">
-                  <div className="text-xs font-semibold">Available colors:</div>
-                  <div className="">{productDetail?.color}</div>
-                </div>
-                <div className="grid">
-                  <div className="text-xs font-semibold">Available sizes:</div>
-                  <div className="">{productDetail?.size === null ? "Free size" : productDetail?.size}</div>
+                  <div className="text-xs font-semibold">Weight:</div>
+                  <div className="">{productDetail?.weight || "12"}</div>
                 </div>
                 <div className="grid">
                   <div className="text-xs font-semibold">Stock:</div>
                   <div className="">{productDetail?.stock}</div>
-                </div>
-                <div className="grid">
-                  <div className="text-xs font-semibold">Price</div>
-                  <div className="font-bold text-lg">
-                    £{productDetail?.price}
-                  </div>
                 </div>
               </div>
             ) : productDetail?.category === "Material" ? (
@@ -253,8 +269,106 @@ const addToWishList = useFormik({
               </div>
             ) : null}
 
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              {!isInCart && (
+            {userSessionData ?
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="">
+                <SelectInput
+                  label="Available sizes"
+                  name="size"
+                  id="size"
+                  options={[
+                    { value: "", label: "Select size", isDisabled: true },
+                    ...(availableSizes.length > 0
+                      ? availableSizes.map((size) => ({
+                          value: size,
+                          label: size,
+                        }))
+                      : [{ value: "Free size", label: "Free size" }]),
+                  ]}
+                  value={addToCartWithAPI.values.size}
+                  onChange={addToCartWithAPI.handleChange}
+                  onBlur={addToCartWithAPI.handleBlur}
+                  onError={
+                    addToCartWithAPI.touched.size &&
+                    addToCartWithAPI.errors.size
+                      ? addToCartWithAPI.errors.size
+                      : null
+                  }
+                />
+              </div>
+              <div className="">
+                <SelectInput
+                  label="Available colors"
+                  name="color"
+                  id="color"
+                  options={[
+                    { value: "", label: "Select color", isDisabled: true },
+                    ...(availableColors.length > 0
+                      ? availableColors.map((color) => ({
+                          value: color,
+                          label: color,
+                        }))
+                      : [{ value: "not_defined", label: "Multi-coloured" }]),
+                  ]}
+                  value={addToCartWithAPI.values.color}
+                  onChange={addToCartWithAPI.handleChange}
+                  onBlur={addToCartWithAPI.handleBlur}
+                  onError={
+                    addToCartWithAPI.touched.color &&
+                    addToCartWithAPI.errors.color
+                      ? addToCartWithAPI.errors.color
+                      : null
+                  }
+                />
+              </div>
+              <div className="md:col-span-2">
+                <Input
+                  label="Quantity:"
+                  type="number"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                />
+              </div>
+            </div>
+            :
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="">
+                <SelectInput
+                  label="Available sizes"
+                  name="size"
+                  id="size"
+                  options={[
+                    { value: "", label: "Select size", isDisabled: true },
+                    ...(availableSizes.length > 0
+                      ? availableSizes.map((size) => ({
+                          value: size,
+                          label: size,
+                        }))
+                      : [{ value: "Free size", label: "Free size" }]),
+                  ]}
+                  value={selectedSize}
+                  onChange={handleSizeChange}
+                />
+              </div>
+              <div className="">
+                <SelectInput
+                  label="Available colors"
+                  name="color"
+                  id="color"
+                  options={[
+                    { value: "", label: "Select color", isDisabled: true },
+                    ...(availableColors.length > 0
+                      ? availableColors.map((color) => ({
+                          value: color,
+                          label: color,
+                        }))
+                      : [{ value: "not_defined", label: "Multi-coloured" }]),
+                  ]}
+                  value={selectedColor}
+                  onChange={handleColorChange}
+                />
+              </div>
+              <div className="md:col-span-2">
                 <Input
                   label="Quantity:"
                   type="number"
@@ -262,36 +376,55 @@ const addToWishList = useFormik({
                   onChange={handleQuantityChange}
                   onBlur={handleQuantityBlur}
                 />
-              )}
+              </div>
+            </div>
+            }
+
+
+            <div className="grid">
+              <div className="text-xs font-semibold">Price</div>
+              <div className="font-bold text-lg">£{productDetail?.price}</div>
             </div>
             <div className="grid lg:flex gap-2 items-center">
               <div className="grid grid-cols-2 md:flex gap-2 items-center">
-                <div className={`${productDetail?.stock === "0" ? "" : "hidden"}`}>
-                  <Button 
-                    buttonRole={"custom"}
+                <div
+                  className={`${productDetail?.stock === "0" ? "" : "hidden"}`}
+                >
+                  <Button
+                    buttonRole={"submit"}
                     buttonText={"item out of stock"}
                     otherStyles={"text-red-500 bg-red-100"}
                   />
                 </div>
-                <div className={`${productDetail?.stock === "0" ? "hidden" : ""}`}>
+                <div
+                  className={`${productDetail?.stock === "0" ? "hidden" : ""}`}
+                >
+                  {userSessionData ? <Button
+                    buttonRole="submit"
+                    buttonText={"Add to Cart"}
+                    otherStyles={"bg-primary text-white"}
+                  /> :
                   <Button
                     buttonRole="custom"
-                    buttonText={isInCart ? "Remove from Cart" : "Add to Cart"}
-                    otherStyles={
-                      isInCart
-                        ? "text-red-500 bg-red-100"
-                        : "bg-primary text-white"
-                    }
+                    buttonText={"Add to Cart"}
+                    otherStyles={"bg-primary text-white"}
                     onClick={() =>
-                      isInCart
-                        ? removeFromCart(productId)
-                        : addToCart(productDetail, quantity)
+                      addToCart(
+                        productDetail,
+                        quantity,
+                        selectedSize,
+                        selectedColor
+                      )
                     }
                   />
+                  }
+
                 </div>
                 <IconButton
                   buttonText={"Save this item"}
-                  otherStyles={`bg-primary/20 text-primary ${!userSessionData? "hidden" : ""}`}
+                  otherStyles={`bg-primary/20 text-primary ${
+                    !userSessionData ? "hidden" : ""
+                  }`}
                   icon={save}
                   onClick={addToWishList.handleSubmit}
                 />
@@ -306,7 +439,7 @@ const addToWishList = useFormik({
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

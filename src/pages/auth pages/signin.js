@@ -34,6 +34,7 @@ const SignIn = () => {
         if (payload.statusCode === 200) {
           navigate("/user-account")
           showSuccessMessage("sign in succesfull")
+          showSuccessMessage(payload?.message)
         }
       },
     });

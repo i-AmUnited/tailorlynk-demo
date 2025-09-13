@@ -36,7 +36,7 @@ const TailorProfile = () => {
   const vendorCatalogue = vendorDetail?.catalogueData;
   const vendorMaterialList = vendorDetail?.materialData || [];
 
-  // console.log (vendorMaterialList)
+  // console.log (vendorDetail)
 
   const readyMadeList = vendorMaterialList.filter(
     (item) => item.availability === "AVAILABLE" &&

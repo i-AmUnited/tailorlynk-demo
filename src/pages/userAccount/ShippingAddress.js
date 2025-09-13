@@ -17,7 +17,7 @@ const ShippingAddress = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shippingData, setShippingData] = useState(null);
 
-  console.log(shippingAddress);
+  // console.log(shippingAddress);
 
   const dispatch = useDispatch();
 

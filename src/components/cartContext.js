@@ -13,44 +13,34 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (item, quantity = 1) => {
+  const addToCart = (item, quantity = 1, selectedSize, selectedColor) => {
     setCart((prevCart) => {
       // Check if the item has catalogueId or materialId
       const itemId = item.catalogueId || item.materialId;
-      const idType = item.catalogueId ? 'catalogueId' : 'materialId';
       
       if (!itemId) {
         console.warn("Item has no catalogueId or materialId:", item);
         return prevCart;
       }
 
-      // Find existing item by either catalogueId or materialId
-      const existingItem = prevCart.find(
-        (cartItem) => 
-          (cartItem.catalogueId && cartItem.catalogueId === item.catalogueId) || 
-          (cartItem.materialId && cartItem.materialId === item.materialId)
-      );
-
       showSuccessMessage("Item added to cart");
 
-      if (existingItem) {
-        return prevCart.map((cartItem) =>
-          (cartItem.catalogueId && cartItem.catalogueId === item.catalogueId) || 
-          (cartItem.materialId && cartItem.materialId === item.materialId)
-            ? { ...cartItem, quantity: cartItem.quantity + quantity }
-            : cartItem
-        );
-      } else {
-        return [...prevCart, { ...item, quantity }];
-      }
+      // Always add as a new instance with a unique identifier
+      const newCartItem = {
+        ...item,
+        quantity: parseInt(quantity) || 1,
+        selectedSize,
+        selectedColor,
+        cartInstanceId: Date.now() + Math.random() // Unique identifier for each cart instance
+      };
+
+      return [...prevCart, newCartItem];
     });
   };
 
-  const removeFromCart = (id) => {
+  const removeFromCart = (cartInstanceId) => {
     setCart((prevCart) => 
-      prevCart.filter((item) => 
-        item.catalogueId !== id && item.materialId !== id
-      )
+      prevCart.filter((item) => item.cartInstanceId !== cartInstanceId)
     );
   };
 
@@ -59,10 +49,10 @@ export const CartProvider = ({ children }) => {
     localStorage.removeItem("cart");
   };
 
-  const updateCartQuantity = (id, newQuantity) => {
+  const updateCartQuantity = (cartInstanceId, newQuantity) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.catalogueId === id || item.materialId === id
+        item.cartInstanceId === cartInstanceId
           ? { ...item, quantity: newQuantity }
           : item
       )
@@ -70,9 +60,14 @@ export const CartProvider = ({ children }) => {
   };
 
   const getCartItemById = (id) => {
-    return cart.find(item => 
+    // This now returns all instances of an item with the given catalogueId or materialId
+    return cart.filter(item => 
       item.catalogueId === id || item.materialId === id
     );
+  };
+
+  const getCartItemByInstanceId = (cartInstanceId) => {
+    return cart.find(item => item.cartInstanceId === cartInstanceId);
   };
 
   const getCartTotal = () => {
@@ -80,6 +75,13 @@ export const CartProvider = ({ children }) => {
       const price = parseFloat(item.price || 0);
       return total + (price * item.quantity);
     }, 0);
+  };
+
+  // Helper function to get total quantity of a specific product (all instances combined)
+  const getProductTotalQuantity = (productId) => {
+    return cart
+      .filter(item => item.catalogueId === productId || item.materialId === productId)
+      .reduce((total, item) => total + item.quantity, 0);
   };
   
   return (
@@ -90,6 +92,8 @@ export const CartProvider = ({ children }) => {
       clearCart, 
       updateCartQuantity,
       getCartItemById,
+      getCartItemByInstanceId,
+      getProductTotalQuantity,
       getCartTotal
     }}>
       {children}
