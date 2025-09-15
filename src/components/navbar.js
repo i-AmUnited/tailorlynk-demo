@@ -151,6 +151,25 @@ const Navbar = () => {
                           <span className="truncate">Signout</span>
                         </li>
                       </Link>
+                      <div className="border-t my-4 w-full"></div>
+                      <Link to="/">
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                          <img src={signIn} alt="Arrow" className="h-[18px]" />
+                          <span className="truncate">Vendor</span>
+                        </li>
+                      </Link>
+                      <Link to="/coming-soon">
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                          <img src={signIn} alt="Arrow" className="h-[18px]" />
+                          <span className="truncate">Tailor</span>
+                        </li>
+                      </Link>
+                      <Link to="/coming-soon">
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
+                          <img src={signIn} alt="Arrow" className="h-[18px]"/>
+                          <span className="truncate">Material sellers</span>
+                        </li>
+                      </Link>
                     </div>
                   )}
                 </ul>

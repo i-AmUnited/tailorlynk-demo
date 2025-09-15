@@ -23,6 +23,7 @@ const Checkout = () => {
   return total + price;
 }, 0);
 
+
   const rawOrderTotal = cart.reduce((sum, item) => {
     const price = parseFloat(item.price.replace(/,/g, ""));
     return sum + price * item.quantity;
@@ -38,8 +39,8 @@ const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
 // Format only when you need to display them
 const formattedOrderTotal = rawOrderTotal.toLocaleString();
 const formattedTotalPrice = totalPrice.toLocaleString();
-
   const loading = useSelector((state) => state.user.loading);
+   
 
   const userSessionData = useSelector((state) => state.user.userSession);
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -48,7 +49,8 @@ const formattedTotalPrice = totalPrice.toLocaleString();
     setIsSignedIn(!!userSessionData);
   }, [userSessionData]);
 
-  console.log(userSessionData);
+  // const isUserSignedIn = !!userSessionData;
+  // console.log(userSessionData);
 
   const customerID = userSessionData?.data?.customerData?.customerId || "";
   const phone = userSessionData?.data?.customerData?.phoneNumber || "";

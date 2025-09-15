@@ -23,9 +23,7 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
     
     // Check if user is signed in and get customer ID safely
     const isUserSignedIn = !!userSessionData;
-    const customerId = userSessionData?.data?.customerData?.customerId || 
-                      userSessionData?.customerId || 
-                      "";
+    const customerId = userSessionData?.data?.customerData?.customerId || userSessionData?.customerId || "";
 
     const sendMessageForm = useFormik({
         initialValues: {
@@ -38,9 +36,7 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
         enableReinitialize: true,
         
         onSubmit: async (values, { resetForm }) => {
-          // Don't proceed if user is not signed in
           if (!isUserSignedIn) {
-            // Optionally redirect to login or show login prompt
             showErrorMessage("Please sign in to send a message");
             return;
           }
@@ -79,9 +75,7 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
         return shuffled.slice(0, count);
     };
 
-    // Filter for Ready_Made items first
     const readyMadeItems = materialData?.filter(item => item.category === "Ready_Made") || [];
-
     const vendorPreview = getRandomItems(readyMadeItems, 2);
     // console.log(materialData, readyMadeItems);
 
@@ -144,7 +138,7 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
                       <p className="font-bold">{vendorData?.businessName}</p>
                       {vendorData?.businessAddress && (
                         <p className="text-gray-600 text-xs truncate">
-                          {vendorData.businessAddress}
+                          {vendorData.businessCity}, {vendorData.businessState}
                         </p>
                       )}
                     </div>
@@ -227,11 +221,8 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
               </button>
               <div className="p-5 flex items-end w-full h-full">
                 <div className="w-full mb-24">
-                  <p className="text-center mb-5 font-semibold">Your about to send a message to {vendorData?.businessName}</p>
-                  <form
-                    onSubmit={sendMessageForm.handleSubmit}
-                    className="w-full relative"
-                  >
+                  <p className="text-center mb-5 font-semibold">You're about to send a message to {vendorData?.businessName}</p>
+                  <form onSubmit={sendMessageForm.handleSubmit} className="w-full relative">
                     <Input
                       placeholder="Start typing ..."
                       customStyles="w-full pr-12"

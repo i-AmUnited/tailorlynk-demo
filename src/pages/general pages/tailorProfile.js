@@ -5,16 +5,18 @@ import SelectInput from "../../components/select";
 import Button from "../../components/button";
 import { useState } from "react";
 import Modal from "../../components/modal";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useVendorDetail, useVendorReviews } from "../reuseableEffects";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { vendorReport, writeReview } from "../../hooks/local/reducer";
+import { sendChat, vendorReport, writeReview } from "../../hooks/local/reducer";
 import Input from "../../components/input";
 import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { showErrorMessage, showSuccessMessage } from "../../hooks/constants";
+import sendIcon from "../../assets/icons/send.svg";
 
 const TailorProfile = () => {
   const loading = useSelector((state) => state.user.loading);
@@ -113,6 +115,53 @@ const TailorProfile = () => {
     },
   });
 
+  const navigate = useNavigate();
+  const vendorData = vendorDetail?.vendorData;
+    
+    // Check if user is signed in and get customer ID safely
+    const isUserSignedIn = !!userSessionData;
+    const customerId = userSessionData?.data?.customerData?.customerId || userSessionData?.customerId || "";
+
+
+   const sendMessageForm = useFormik({
+          initialValues: {
+            vendor_id: vendorData?.vendorId || "",
+            customer_id: customerId,
+            message: "",
+            sender_type: "customer",
+          },
+  
+          enableReinitialize: true,
+          
+          onSubmit: async (values, { resetForm }) => {
+            if (!isUserSignedIn) {
+              showErrorMessage("Please sign in to send a message");
+              return;
+            }
+  
+            const { vendor_id, customer_id, message, sender_type } = values;
+            let sendMessageData = { vendor_id, customer_id, message, sender_type };
+            const { payload } = await dispatch(sendChat(sendMessageData));
+            if (payload.statusCode === 200) {
+              showSuccessMessage("Message sent!");
+              resetForm();
+              toggleChatConfirmation();
+              navigate("/user-account/message-center")
+            }
+          },
+        });
+  
+      const [chatConfirmation, setChatConfirmation] = useState(false);
+    const toggleChatConfirmation = () => {
+        // Only allow chat if user is signed in
+        if (!isUserSignedIn) {
+            // Optionally redirect to login or show login prompt
+            showErrorMessage("Please sign in to send a message");
+            return;
+        }
+        setChatConfirmation(!chatConfirmation);
+    };
+
   return (
     <div>
       <Spinner loading={useSelector((state) => state.user).loading} />
@@ -136,7 +185,7 @@ const TailorProfile = () => {
               <div className="grid md:col-span-2">
                 <div className="text-xs font-medium">Location:</div>
                 <div className="text-black/50 font-medium truncate">
-                  {vendorPersonal?.businessAddress}
+                  {vendorPersonal?.businessCity}, {vendorPersonal?.businessState}
                 </div>
               </div>
             </div>
@@ -159,7 +208,7 @@ const TailorProfile = () => {
             <img src={chat} alt="" className="size-12" />
             <div className="text-xs text-pretty leading-5">
               Can’t find a style that you like? Share your idea with the vendor.{" "}
-              <span className="text-primary underline font-medium">
+              <span onClick={toggleChatConfirmation} className="text-primary underline font-medium">
                 Start chat
               </span>
             </div>
@@ -344,6 +393,49 @@ const TailorProfile = () => {
           </form>
         </Modal>
       </div>
+      {chatConfirmation && isUserSignedIn && (
+          <div className="top-0 bg-black/50 fixed inset-0 z-60 flex items-center justify-center">
+            <div
+              className="absolute inset-0"
+              onClick={toggleChatConfirmation}
+            />
+            <div className="relative bg-white rounded-lg mx-4 w-full md:w-1/3 h-full overflow-y-auto max-h-[80%]">
+              <button
+                onClick={toggleChatConfirmation}
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl z-10"
+              >
+                ×
+              </button>
+              <div className="p-5 flex items-end w-full h-full">
+                <div className="w-full mb-24">
+                  <p className="text-center mb-5 font-semibold">You're about to send a message to {vendorData?.businessName}</p>
+                  <form onSubmit={sendMessageForm.handleSubmit} className="w-full relative">
+                    <Input
+                      placeholder="Start typing ..."
+                      customStyles="w-full pr-12"
+                      name={"message"}
+                      value={sendMessageForm.values.message}
+                      onChange={sendMessageForm.handleChange}
+                      onBlur={sendMessageForm.handleBlur}
+                      onError={
+                        sendMessageForm.touched.message && sendMessageForm.errors.message
+                          ? sendMessageForm.errors.message
+                          : null
+                      }
+                    />
+                    <button
+                      type="button"
+                      onClick={sendMessageForm.handleSubmit}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center"
+                    >
+                      <img alt="send" src={sendIcon} className="size-5" />
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
     </div>
   );
 };
