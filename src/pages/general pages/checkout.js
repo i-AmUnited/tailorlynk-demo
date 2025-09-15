@@ -9,21 +9,31 @@ import { placeOrder } from "../../hooks/local/reducer";
 import { useEffect, useState } from "react";
 import Button from "../../components/button";
 import { showSuccessMessage } from "../../hooks/constants";
+import { useCustomerCartList } from "../reuseableEffects";
 
 const Checkout = () => {
+
   const { cart } = useCart();
   const dispatch = useDispatch();
 
-  const rawOrderTotal = cart.reduce((sum, item) => {
-  const price = parseFloat(item.price.replace(/,/g, ''));
-  return sum + (price * item.quantity);
+  const customerCartList = useCustomerCartList()
+
+  const orderTotalSignedIn = customerCartList.reduce((total, item) => {
+  const price = parseFloat(item.productData.price) || 0;
+  return total + price;
 }, 0);
 
-const deliveryFee = 10;
-const insuranceFee = 10;
+  const rawOrderTotal = cart.reduce((sum, item) => {
+    const price = parseFloat(item.price.replace(/,/g, ""));
+    return sum + price * item.quantity;
+  }, 0);
+
+  const deliveryFee = 10;
+  const platformFee = 10;
 
 // Keep as numbers for calculation
-const totalPrice = rawOrderTotal + deliveryFee + insuranceFee;
+const totalPrice = rawOrderTotal + deliveryFee + platformFee;
+const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
 
 // Format only when you need to display them
 const formattedOrderTotal = rawOrderTotal.toLocaleString();
@@ -59,6 +69,13 @@ const formattedTotalPrice = totalPrice.toLocaleString();
     weight: "2"
   }));
 
+  const countries = [
+    { value: "UK", label: "United Kingdom (UK) " },
+    // { value: "US", label: "United States (US)" },
+    // { value: "CA", label: "Canada" },
+    // { value: "NG", label: "Nigeria" },
+  ];
+
   const createOrderForm = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -70,7 +87,12 @@ const formattedTotalPrice = totalPrice.toLocaleString();
       last_name: lastName,
       phone_number: phone,
       total_amount: formattedTotalPrice,
-      delivery_address: "",
+      // Separate address fields
+      address: "",
+      city: "",
+      state: "",
+      country: "UK",
+      postal_code: "",
       orders: transformedOrders,
       currency: "gbp",
       logistics_price: "10"
@@ -80,9 +102,11 @@ const formattedTotalPrice = totalPrice.toLocaleString();
       last_name: Yup.string().required("Please input your last name"),
       phone_number: Yup.string().required("Please input your phone number"),
       email_address: Yup.string().required("Please input your email address"),
-      delivery_address: Yup.string().required(
-        "Please provide a delivery address"
-      ),
+      address: Yup.string().required("Please provide your house address"),
+      city: Yup.string().required("Please provide your city"),
+      state: Yup.string().required("Please provide your state/province"),
+      country: Yup.string().required("Please select your country"),
+      postal_code: Yup.string().required("Please provide your postal code"),
     }),
     onSubmit: async (values) => {
       const {
@@ -94,10 +118,25 @@ const formattedTotalPrice = totalPrice.toLocaleString();
         last_name,
         phone_number,
         total_amount,
-        delivery_address,
+        address,
+        city,
+        state,
+        country,
+        postal_code,
         orders,
-        currency, logistics_price
+        currency, 
+        logistics_price
       } = values;
+
+      // Format delivery_address as an object
+      const delivery_address = {
+        address,
+        city,
+        state,
+        country,
+        postal_code
+      };
+
       let createOrderData = {
         is_signed_in,
         customer_id,
@@ -109,13 +148,15 @@ const formattedTotalPrice = totalPrice.toLocaleString();
         total_amount,
         delivery_address,
         orders,
-        currency, logistics_price
+        currency, 
+        logistics_price
       };
+      
       const { payload } = await dispatch(placeOrder(createOrderData));
       console.log(payload, createOrderData);
       if (payload.statusCode === 200) {
         console.log(payload);
-        showSuccessMessage("sign in succesfull");
+        showSuccessMessage("Order placed successfully");
 
         // Redirect to the Stripe checkout URL
         if (payload.data && payload.data.url) {
@@ -124,11 +165,6 @@ const formattedTotalPrice = totalPrice.toLocaleString();
       }
     },
   });
-
-  const countries = [
-    { value: "UK", label: "United Kingdom (UK) " },
-  ];
-
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -172,7 +208,7 @@ const formattedTotalPrice = totalPrice.toLocaleString();
               }
             />
             <Input
-              label={"Phone nuber:"}
+              label={"Phone number:"}
               name={"phone_number"}
               value={createOrderForm.values.phone_number}
               onChange={createOrderForm.handleChange}
@@ -202,39 +238,76 @@ const formattedTotalPrice = totalPrice.toLocaleString();
             </div>
             <Input
               label={"House address:"}
-              name={"delivery_address"}
-              value={createOrderForm.values.delivery_address}
+              name={"address"}
+              value={createOrderForm.values.address}
               onChange={createOrderForm.handleChange}
               onBlur={createOrderForm.handleBlur}
               onError={
-                createOrderForm.touched.delivery_address &&
-                createOrderForm.errors.delivery_address
-                  ? createOrderForm.errors.delivery_address
+                createOrderForm.touched.address &&
+                createOrderForm.errors.address
+                  ? createOrderForm.errors.address
                   : null
               }
             />
             <Input
-              label={"Region:"}
-              // name={"delivery_address"}
+              label={"City:"}
+              name={"city"}
+              value={createOrderForm.values.city}
+              onChange={createOrderForm.handleChange}
+              onBlur={createOrderForm.handleBlur}
+              onError={
+                createOrderForm.touched.city &&
+                createOrderForm.errors.city
+                  ? createOrderForm.errors.city
+                  : null
+              }
             />
              <Input
               label={"State/Province/Town:"}
-              // name={"delivery_address"}
+              name={"state"}
+              value={createOrderForm.values.state}
+              onChange={createOrderForm.handleChange}
+              onBlur={createOrderForm.handleBlur}
+              onError={
+                createOrderForm.touched.state &&
+                createOrderForm.errors.state
+                  ? createOrderForm.errors.state
+                  : null
+              }
             />
             <SelectInput
-              label={"Service type"}
+              label={"Country"}
+              name={"country"}
+              value={createOrderForm.values.country}
+              onChange={createOrderForm.handleChange}
+              onBlur={createOrderForm.handleBlur}
               options={countries}
+              onError={
+                createOrderForm.touched.country &&
+                createOrderForm.errors.country
+                  ? createOrderForm.errors.country
+                  : null
+              }
             />
              <Input
-              label={"Post code:"}
-              // name={"delivery_address"}
+              label={"Postal code:"}
+              name={"postal_code"}
+              value={createOrderForm.values.postal_code}
+              onChange={createOrderForm.handleChange}
+              onBlur={createOrderForm.handleBlur}
+              onError={
+                createOrderForm.touched.postal_code &&
+                createOrderForm.errors.postal_code
+                  ? createOrderForm.errors.postal_code
+                  : null
+              }
             />
           </div>
           <div className={`${!userSessionData ? "" : "hidden"}`}>
             <div className="text-xs text-gray-400">
               Would you like us to create an account for you?{" "}
               <span>
-                Creating a tailorlynk account allows you to conviniently keep
+                Creating a tailorlynk account allows you to conveniently keep
                 track of your orders
               </span>
             </div>
@@ -269,11 +342,11 @@ const formattedTotalPrice = totalPrice.toLocaleString();
             <div className="grid gap-3">
               <div className="flex justify-between">
                 <div className="text-[#c4c4c4]">Order amount:</div>
-                <div className="text-xs font-bold">£{formattedOrderTotal}</div>
+                <div className="text-xs font-bold">£{userSessionData? orderTotalSignedIn : formattedOrderTotal}</div>
               </div>
               <div className="flex justify-between">
                 <div className="text-[#c4c4c4]">Insurance fee:</div>
-                <div className="text-xs font-bold">£{insuranceFee} </div>
+                <div className="text-xs font-bold">£{platformFee} </div>
               </div>
               <div className="flex justify-between">
                 <div className="text-[#c4c4c4]">Delivery:</div>
@@ -282,7 +355,7 @@ const formattedTotalPrice = totalPrice.toLocaleString();
             </div>
             <div className="flex justify-between text-primary text-sm font-semibold border-t mt-5 pt-5">
               <div>Total:</div>
-              <div className="font-bold">£{formattedTotalPrice} </div>
+              <div className="font-bold">£{userSessionData? totalPriceSignedIn : formattedTotalPrice} </div>
             </div>
             <div className="mt-8">
               <Button

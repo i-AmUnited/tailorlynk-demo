@@ -16,6 +16,8 @@ const Overview = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profileData, setProfileData] = useState(profileInfo);
 
+  // console.log(profileInfo)
+
   const dispatch = useDispatch();
 
   // Update local profile data when profileInfo changes
@@ -67,7 +69,6 @@ const Overview = () => {
 
       if (payload.statusCode === 200) {
         showSuccessMessage("Details updated");
-        // Update local profile data
         setProfileData({
           fullName: full_name,
           emailAddress: email_address,
@@ -75,9 +76,7 @@ const Overview = () => {
           countryCode: country_code,
           gender: gender,
         });
-        // Close modal
         setIsModalOpen(false);
-        // Reset form
         updateProfileForm.resetForm();
       }
     },

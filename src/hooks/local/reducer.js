@@ -215,13 +215,25 @@ export const addItemToCart = createAsyncThunk(
   }
 );
 
-export const userCart = createAsyncThunk(
-  "user/userCart",
+export const customerCartList = createAsyncThunk(
+  "user/customerCartList",
   async () => {
     try {
-      const userCartEndPoint = await apiEndPoints.listUserCart();
-      const response = await userCartEndPoint.data;
-      console.log(response)
+      const customerCartEndPoint = await apiEndPoints.listCart();
+      const response = await customerCartEndPoint.data;
+      return response;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const removeCartItem = createAsyncThunk(
+  "user/removeCartItem",
+  async (values) => {
+    try {
+      const removeCartItemEndPoint = await apiEndPoints.deleteCartItem(values);
+      const response = await removeCartItemEndPoint.data;
       return response;
     } catch (error) {
       return error.response.data;
@@ -448,7 +460,7 @@ const slice = createSlice({
           chatMessages.fulfilled,
           sendChat.fulfilled,
           getOrder.fulfilled,
-          userCart.fulfilled
+          customerCartList.fulfilled
         ),
         (state, action) => {
           state.loading = false;
@@ -480,6 +492,7 @@ const slice = createSlice({
           submitFeedback.fulfilled,
           saveItem.fulfilled,
           removeSavedItem.fulfilled,
+          removeCartItem.fulfilled
         ),
         (state, action) => {
           state.loading = false;
@@ -527,7 +540,8 @@ const slice = createSlice({
           chatMessages.pending,
           sendChat.pending,
           getOrder.pending,
-          userCart.pending
+          customerCartList.pending,
+          removeCartItem.pending
         ),
         (state) => {
           state.loading = true;
@@ -568,7 +582,8 @@ const slice = createSlice({
           chatMessages.rejected,
           sendChat.rejected,
           getOrder.rejected,
-          userCart.rejected
+          customerCartList.rejected,
+          removeCartItem.rejected
         ),
         (state, action) => {
           state.loading = false;

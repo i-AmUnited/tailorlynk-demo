@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { chatMessages, getOrder, listChat, listVendors, materialList, savedItemsList, singleCatalogueDetail, userCart, userMeasurements, userProfileDetails, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
+import { chatMessages, customerCartList, getOrder, listChat, listVendors, materialList, savedItemsList, singleCatalogueDetail, userCart, userMeasurements, userProfileDetails, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])
@@ -88,22 +88,22 @@ export function useVendorReviews(vendorID) {
     return listMaterial;
   }
 
-  export function useCustomerCart() {
-    const [cartList, setCartList] = useState([])
+  export function useCustomerCartList() {
+    const [customerCart, setCustomerCart] = useState([])
     const dispatch = useDispatch();
     useEffect(() => {
-      const fetchCartList = async() => {
+      const fetchCustomerCart = async() => {
         try {
-            const {payload} = await dispatch(userCart());
-            setCartList(payload.data);
-            console.log(payload, "dslkjne")
+            const {payload} = await dispatch(customerCartList());
+            setCustomerCart(payload.data);
+            // console.log(payload)
         }
         catch(e){}
       }
-      fetchCartList();
+      fetchCustomerCart();
     }, [dispatch]);
   
-    return cartList;
+    return customerCart;
   }
 
   export function useProfile() {

@@ -29,11 +29,10 @@ function UserAccount() {
   const [mobileNav, setMobileNav] = useState(false);
 
   const handleNavLinkClick = () => {
-    setMobileNav(false); // Close the sidebar when a link is clicked
+    setMobileNav(false);
   };
 
   const userSessionData = useSelector((state) => state.user.userSession);
-  // console.log(userSessionData)
   if (!userSessionData) {
     return <SignOut />;
   }

@@ -15,6 +15,7 @@ import Title from "../components/pageTitleEffect";
 import MeasurementGuide from "./general pages/measurementsGuide";
 import PaymentStatus from "./general pages/paymentStatus";
 import AboutUs from "./general pages/about";
+import ComingSoon from "./general pages/comingSoon";
 
 const Structure = () => {
 
@@ -34,6 +35,7 @@ const Structure = () => {
           <Route path="about-us" element={<Title title="About US"><AboutUs /></Title>} />
           <Route path="measurement-guide" element={<Title title="Measurements Guide"><MeasurementGuide /></Title>} />
           <Route path="checkout" element={<Title title="Checkout"><Checkout /></Title>} />
+          <Route path="coming-soon" element={<Title title="Coming soon..."><ComingSoon /></Title>} />
           <Route path="payment-status" element={<Title title="Payment Status"><PaymentStatus /></Title>} />
           <Route path="user-account/*" element={<Title title="My Account"><UserAccount /></Title>} />
         </Routes>

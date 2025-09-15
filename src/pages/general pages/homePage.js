@@ -13,8 +13,6 @@ import MaterialFeed from "./General pages components/materialFeed";
 
 const Home = () => { 
   const img2 = "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826"  
-  
-  const [reportModal, setReportModal] = useState(false);
 
   return (
     <div className="grid gap-14">

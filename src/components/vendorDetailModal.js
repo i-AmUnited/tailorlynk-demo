@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { sendChat } from "../hooks/local/reducer";
-import { showSuccessMessage } from "../hooks/constants";
+import { showErrorMessage, showSuccessMessage } from "../hooks/constants";
 import Input from "./input";
 import sendIcon from "../assets/icons/send.svg";
 
@@ -20,11 +20,17 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
     const navigate = useNavigate();
     
     const userSessionData = useSelector((state) => state.user.userSession);
+    
+    // Check if user is signed in and get customer ID safely
+    const isUserSignedIn = !!userSessionData;
+    const customerId = userSessionData?.data?.customerData?.customerId || 
+                      userSessionData?.customerId || 
+                      "";
 
     const sendMessageForm = useFormik({
         initialValues: {
           vendor_id: vendorData?.vendorId || "",
-          customer_id: userSessionData.customerId,
+          customer_id: customerId,
           message: "",
           sender_type: "customer",
         },
@@ -32,11 +38,18 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
         enableReinitialize: true,
         
         onSubmit: async (values, { resetForm }) => {
+          // Don't proceed if user is not signed in
+          if (!isUserSignedIn) {
+            // Optionally redirect to login or show login prompt
+            showErrorMessage("Please sign in to send a message");
+            return;
+          }
+
           const { vendor_id, customer_id, message, sender_type } = values;
           let sendMessageData = { vendor_id, customer_id, message, sender_type };
           const { payload } = await dispatch(sendChat(sendMessageData));
           if (payload.statusCode === 200) {
-            showSuccessMessage("message sent!");
+            showSuccessMessage("Message sent!");
             resetForm();
             toggleChatConfirmation();
             navigate("/user-account/message-center")
@@ -45,7 +58,15 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
       });
 
     const [chatConfirmation, setChatConfirmation] = useState(false);
-    const toggleChatConfirmation = () => setChatConfirmation(!chatConfirmation);
+    const toggleChatConfirmation = () => {
+        // Only allow chat if user is signed in
+        if (!isUserSignedIn) {
+            // Optionally redirect to login or show login prompt
+            alert("Please sign in to send a message");
+            return;
+        }
+        setChatConfirmation(!chatConfirmation);
+    };
 
     const getRandomItems = (array, count) => {
         if (!array || array.length === 0) return [];
@@ -168,12 +189,20 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
                     buttonRole={"link"}
                     destination={`/tailor-profile/${btoa(vendorId)}`}
                   />
-                  {userSessionData && (
+                  {/* Only show chat button for signed-in users */}
+                  {isUserSignedIn ? (
                     <Button
                       buttonText={"Chat"}
                       buttonRole={"custom"}
                       otherStyles={"bg-primary/10 text-primary"}
                       onClick={toggleChatConfirmation}
+                    />
+                  ) : (
+                    <Button
+                      buttonText={"Sign in to Chat"}
+                      buttonRole={"link"}
+                      otherStyles={"bg-gray-100 text-gray-600"}
+                      destination={"/sign-in"}
                     />
                   )}
                 </div>
@@ -182,8 +211,8 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Chat Confirmation Modal */}
-        {chatConfirmation && (
+        {/* Chat Confirmation Modal - Only render if user is signed in */}
+        {chatConfirmation && isUserSignedIn && (
           <div className="absolute inset-0 z-60 flex items-center justify-center">
             <div
               className="absolute inset-0"

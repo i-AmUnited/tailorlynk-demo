@@ -1,10 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useCart } from "../../components/cartContext";
-import removeItemIcon from "../../assets/icons/remove.svg";
 import store from "../../assets/icons/store.svg";
 import material from "../../assets/icons/material.svg";
 import productColor from "../../assets/icons/colorPallete.svg";
-import { useState, useEffect } from "react";
 import Back from "../../components/goBack";
 import Button from "../../components/button";
 import { useCustomerCartList } from "../reuseableEffects";
@@ -12,18 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { removeCartItem } from "../../hooks/local/reducer";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
-import SessionCart from "./userSessionCart";
 
-const Cart = () => {
-  const userSessionData = useSelector((state) => state.user.userSession);
-  const { cart, removeFromCart, clearCart, updateCartQuantity } = useCart();
-  console.log(cart);
-   
-  // const customerCartList = useCustomerCartList()
-  // console.log(customerCartList)
+const SessionCart = () => {
+  const customerCartList = useCustomerCartList()
+//   console.log(customerCartList)
 
-    const dispatch = useDispatch();
-   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
       initialValues: { id: "" },
@@ -40,92 +32,21 @@ const Cart = () => {
       },
   });
 
-  const getItemPrice = (item) => {
-    if (!item.category) {
-      return parseFloat(item.cost || 0);
-    }
-    
-    switch (item.category) {
-      case "Ready_Made":
-      case "Western":
-        return parseFloat(item.price || 0);
-      case "Material":
-        return parseFloat(item.costPerYard || 0);
-      default:
-        return 0;
-    }
-  };
+  const orderTotal = customerCartList.reduce((total, item) => {
+  const price = parseFloat(item.productData.price) || 0;
+  return total + price;
+}, 0);
 
-  const getDisplayPrice = (product) => {
-    if (!product.category) {
-      return product.cost;
-    }
-    
-    switch (product.category) {
-      case "Ready_Made":
-      case "Western":
-        return product.price;
-      case "Material":
-        return product.costPerYard;
-      default:
-        return "N/A";
-    }
-  };
+  const platformFee = 10;
 
-  // Fixed price calculation using the local helper function
-  const rawOrderTotal = cart.reduce((sum, item) => {
-    const price = getItemPrice(item);
-    return sum + (price * item.quantity);
-  }, 0);
-
-  const deliveryFee = 10;
-  const insuranceFee = 10;
-
-  const totalPrice = rawOrderTotal + deliveryFee + insuranceFee;
-  const formattedOrderTotal = rawOrderTotal.toLocaleString();
-  const formattedTotalPrice = totalPrice.toLocaleString();
-
-  const [quantity, setQuantity] = useState(() => {
-  return cart.reduce((acc, product) => {
-    acc[product.cartInstanceId] = parseInt(product.quantity) || 1; // Ensure number
-    return acc;
-  }, {});
-});
-
-useEffect(() => {
-  setQuantity(cart.reduce((acc, product) => {
-    acc[product.cartInstanceId] = parseInt(product.quantity) || 1; // Ensure number
-    return acc;
-  }, {}));
-}, [cart]);
-
-  const handleIncrease = (cartInstanceId) => {
-  setQuantity((prev) => {
-    const currentQuantity = parseInt(prev[cartInstanceId]) || 1; // Convert to number
-    const newQuantity = currentQuantity + 1;
-    updateCartQuantity(cartInstanceId, newQuantity);
-    return { ...prev, [cartInstanceId]: newQuantity };
-  });
-};
-
-const handleDecrease = (cartInstanceId) => {
-  setQuantity((prev) => {
-    const currentQuantity = parseInt(prev[cartInstanceId]) || 1; // Convert to number
-    if (currentQuantity > 1) {
-      const newQuantity = currentQuantity - 1;
-      updateCartQuantity(cartInstanceId, newQuantity);
-      return { ...prev, [cartInstanceId]: newQuantity };
-    }
-    return prev;
-  });
-};
+  const formattedTotalPrice = orderTotal + platformFee;
 
   return (
     <div>
       <Spinner loading={useSelector((state) => state.user).loading} />
-      {userSessionData ? <SessionCart /> :
+
       <div>
-        {cart.length === 0 ? (
+        {customerCartList.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -137,23 +58,23 @@ const handleDecrease = (cartInstanceId) => {
                   <div>My cart</div>
                 </div>
                 <button
-                  onClick={clearCart}
                   className="text-red-600 text-xs font-semibold underline underline-offset-2 cursor-pointer"
                 >
                   Clear Cart
                 </button>
               </div>
               <div className="p-4">
-                {cart.map((product) => {
+                {customerCartList.map((product) => {
                   return (
                     <div
-                      key={product.cartInstanceId}
+                      key={product?.productData?.materialId}
                       className="grid md:flex gap-4 pb-4 border-b mb-4"
                     >
                       <div className="rounded-md overflow-hidden size-32 bg-green-400 flex-shrink-0">
                         <img
                           src={
-                            product.styleImageOne || product.materialImageOne
+                            product?.productData?.styleImageOne ||
+                            product?.productData?.materialImageOne
                           }
                           alt=""
                           className="object-cover h-full w-full"
@@ -162,31 +83,45 @@ const handleDecrease = (cartInstanceId) => {
                       <div className="w-full">
                         <div className="mb-3 md:mb-2 grid md:flex gap-1 items-center justify-between">
                           <Link
-                            to={`/product-detail/${btoa(product.catalogueId || product.materialId)}`}
+                            to={`/product-detail/${btoa(
+                              product?.productData?.catalogueId ||
+                                product?.productData?.materialId
+                            )}`}
                             className="font-semibold text-[14px] hover:underline hover:text-primary"
                           >
-                            {product.styleName || product.materialName}
+                            {product?.productData?.styleName ||
+                              product?.productData?.materialName}
                           </Link>
                           <div className="font-bold text-xs">
-                            £{getDisplayPrice(product)}
+                            £{product?.productData?.price.toLocaleString()}
                           </div>
                         </div>
                         <div className="flex items-center gap-4 md:gap-0 md:divide-x-2">
                           <Link
                             to={`/tailor-profile/${btoa(
-                              product.vendorData.vendorId
+                              product?.productData?.vendorId
                             )}`}
                             className="flex items-center gap-1 md:pe-4"
                           >
                             <img src={store} alt="" className="h-[14px]" />
                             <div className="text-black/50 text-xs">
-                              {product.vendorData.businessName}
+                              {product?.productData?.vendorData?.businessName}
                             </div>
                           </Link>
                           <div className="flex items-center gap-1 md:ps-4">
                             <img src={material} alt="" className="h-[18px]" />
                             <div className="text-black/50 text-xs">
-                              {product.selectedSize}
+                              {product?.size}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 md:ps-4">
+                            <img
+                              src={productColor}
+                              alt=""
+                              className="h-[18px]"
+                            />
+                            <div className="text-black/50 text-xs">
+                              {product?.color}
                             </div>
                           </div>
                           <div
@@ -198,36 +133,11 @@ const handleDecrease = (cartInstanceId) => {
                           >
                             <img src={material} alt="" className="h-[18px]" />
                             <div className="text-black/50 text-xs">
-                              {product.material}
+                              {product?.productData?.material}
                             </div>
                           </div>
                         </div>
-                        <div className="mt-4 flex justify-between items-center">
-                          {/* Quantity Controls */}
-                          <div className="flex items-center gap-1">
-                            <span
-                              onClick={() => handleDecrease(product.cartInstanceId)}
-                              className="rounded-md text-xs px-3 py-2 font-semibold bg-primary/30 text-primary cursor-pointer"
-                            >
-                              -
-                            </span>
-                            <span className="w-8 text-center text-xs font-semibold">
-                              {product.quantity}
-                            </span>
-                            <div
-                              onClick={() => handleIncrease(product.cartInstanceId)}
-                              className="rounded-md text-xs px-3 py-2 font-semibold bg-primary/30 text-primary cursor-pointer"
-                            >
-                              +
-                            </div>
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => removeFromCart(product.cartInstanceId)}
-                          >
-                            <img alt="" src={removeItemIcon} className="h-5" />
-                          </div>
-                        </div>
+                        
                       </div>
                     </div>
                   );
@@ -244,15 +154,15 @@ const handleDecrease = (cartInstanceId) => {
                 <div className="grid gap-3">
                   <div className="flex justify-between">
                     <div className="text-[#c4c4c4]">Order amount:</div>
-                    <div className="text-xs font-bold">£{formattedOrderTotal}</div>
+                    <div className="text-xs font-bold">£{orderTotal}</div>
                   </div>
                   <div className="flex justify-between">
-                    <div className="text-[#c4c4c4]">Insurance fee:</div>
-                    <div className="text-xs font-bold">£{insuranceFee} </div>
+                    <div className="text-[#c4c4c4]">Platform fee:</div>
+                    <div className="text-xs font-bold">£{platformFee} </div>
                   </div>
                   <div className="flex justify-between">
                     <div className="text-[#c4c4c4]">Delivery:</div>
-                    <div className="text-xs font-bold">£{deliveryFee} </div>
+                    <div className="text-xs font-bold">£0.00 </div>
                   </div>
                 </div>
                 <div className="flex justify-between text-primary text-sm font-semibold border-t mt-5 pt-5">
@@ -273,9 +183,9 @@ const handleDecrease = (cartInstanceId) => {
         </div>
       )}
       </div>
-      }
+     
     </div>
   );
 };
 
-export default Cart;
+export default SessionCart;

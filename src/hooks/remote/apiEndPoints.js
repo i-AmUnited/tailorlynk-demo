@@ -196,9 +196,18 @@ export class apiEndPoints {
     }
   }
 
-  static async listUserCart() {
+  static async listCart() {
     try {
       return await apiClientWithToken.get("/customer/list-user-cart");
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async deleteCartItem(catalogueId) {
+    try {
+      return apiClientWithToken.get(`/customer/delete-cart/${catalogueId}`);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
