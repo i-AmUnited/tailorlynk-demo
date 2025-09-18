@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
+import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
 import Input from "../../components/input";
@@ -9,6 +10,9 @@ import { sendChat } from "../../hooks/local/reducer";
 import { showSuccessMessage } from "../../hooks/constants";
 import sendIcon from "../../assets/icons/send.svg";
 
+// Set Pusher globally for Laravel Echo
+window.Pusher = Pusher;
+
 const MessageCenter = () => {
   const [selectedVendorID, setSelectedVendorID] = useState("RS0UWmpIJLltD");
   const [selectedVendorName, setSelectedVendorName] = useState("Dez Stylez");
@@ -16,83 +20,112 @@ const MessageCenter = () => {
   const [realtimeMessages, setRealtimeMessages] = useState([]);
   
   const messages = useChatMessages(selectedVendorID);
-  const chats = useListChat()
+  const chats = useListChat();
   
   const dispatch = useDispatch();
-  const pusherRef = useRef(null);
+  const echoRef = useRef(null);
   const channelRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
   const userSessionData = useSelector((state) => state.user.userSession);
-// console.log(userSessionData)
+  console.log('User Session Data:', userSessionData);
+  const userToken = useSelector((state) => state.user.userSession?.token); // Adjust based on your token location
 
-  // Initialize Pusher
+  // Initialize Laravel Echo
   useEffect(() => {
-    // Initialize Pusher with your credentials
-    pusherRef.current = new Pusher('22bcae7f02729d546285', {
+    if (!userToken) return;
+
+    echoRef.current = new Echo({
+      broadcaster: 'pusher',
+      key: '22bcae7f02729d546285',
       cluster: 'mt1',
-      encrypted: true,
-      // For custom host configuration (if needed)
-      // wsHost: 'your-custom-host',
-      // wsPort: 6001,
-      // wssPort: 6001,
-      // forceTLS: false,
+      wsHost: 'test.tailorlynk.com',
+      wsPort: 6001,
+      wssPort: 6001,
+      forceTLS: false,
+      disableStats: true,
+      authEndpoint: 'https://test.tailorlynk.com/broadcasting/auth',
+      auth: {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
     });
 
     // Cleanup on unmount
     return () => {
-      if (pusherRef.current) {
-        pusherRef.current.disconnect();
+      if (echoRef.current) {
+        echoRef.current.disconnect();
       }
     };
-  }, []);
+  }, [userToken]);
 
-  // Subscribe to chat channel when vendor changes
+  // Subscribe to private chat channel when vendor changes
   useEffect(() => {
-    if (!pusherRef.current || !selectedVendorID) return;
+    if (!echoRef.current || !selectedVendorID || !userSessionData?.customerId) return;
 
-    // Unsubscribe from previous channel
+    // Leave previous channel if exists
     if (channelRef.current) {
-      channelRef.current.unbind_all();
-      pusherRef.current.unsubscribe(channelRef.current.name);
+      echoRef.current.leave(channelRef.current);
     }
 
-    // Subscribe to new channel for selected vendor
-    const channelName = `chat-${selectedVendorID}`;
-    channelRef.current = pusherRef.current.subscribe(channelName);
+    // Create sorted channel name for private conversation
+    const ids = [userSessionData.customerId, selectedVendorID].sort();
+    const channelName = `conversation.${ids[0]}.${ids[1]}`;
+    
+    console.log('Subscribing to channel:', channelName);
+
+    // Subscribe to private channel
+    channelRef.current = echoRef.current.private(channelName);
 
     // Listen for new messages
-    channelRef.current.bind('new-message', (data) => {
+    channelRef.current.listen('.new-message', (data) => {
       console.log('New message received:', data);
       
-      // Add the new message to realtime messages
-      setRealtimeMessages(prev => [...prev, {
-        id: data.id || Date.now(),
-        message: data.message,
-        sender: data.sender_type,
-        vendor_id: data.vendor_id,
-        customer_id: data.customer_id,
-        timestamp: data.timestamp || new Date().toISOString()
-      }]);
+      // Avoid duplicating messages (check if message already exists)
+      setRealtimeMessages(prev => {
+        const messageExists = prev.some(msg => 
+          msg.id === data.id || 
+          (msg.message === data.message && msg.timestamp === data.timestamp)
+        );
+        
+        if (messageExists) {
+          return prev;
+        }
+        
+        return [...prev, {
+          id: data.id || Date.now(),
+          message: data.message,
+          sender: data.sender_type,
+          vendor_id: data.vendor_id,
+          customer_id: data.customer_id,
+          timestamp: data.timestamp || new Date().toISOString()
+        }];
+      });
     });
 
-    // Reset realtime messages when switching vendors
+    // Clear previous realtime messages when switching vendors
     setRealtimeMessages([]);
 
     return () => {
       if (channelRef.current) {
-        channelRef.current.unbind_all();
-        pusherRef.current.unsubscribe(channelName);
+        echoRef.current.leave(channelRef.current);
       }
     };
-  }, [selectedVendorID]);
+  }, [selectedVendorID, userSessionData?.customerId]);
 
   // Combine initial messages with realtime messages
   const allMessages = [...messages, ...realtimeMessages];
 
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [allMessages]);
+
   const sendMessageForm = useFormik({
     initialValues: {
       vendor_id: selectedVendorID,
-      customer_id: userSessionData.customerId,
+      customer_id: userSessionData?.customerId || "",
       message: "",
       sender_type: "customer",
     },
@@ -104,17 +137,6 @@ const MessageCenter = () => {
       if (payload.statusCode === 200) {
         showSuccessMessage("message sent!");
         resetForm();
-        
-        // Optionally add the sent message immediately to UI for better UX
-        // (if your backend doesn't immediately broadcast it back)
-        // setRealtimeMessages(prev => [...prev, {
-        //   id: Date.now(),
-        //   message: message,
-        //   sender: sender_type,
-        //   vendor_id: vendor_id,
-        //   customer_id: customer_id,
-        //   timestamp: new Date().toISOString()
-        // }]);
       }
     },
   });
@@ -186,6 +208,7 @@ const MessageCenter = () => {
                     </div>
                   </div>
                 ))}
+                <div ref={messagesEndRef} />
               </div>
             </div>
 
@@ -259,6 +282,7 @@ const MessageCenter = () => {
                   </div>
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
           </div>
           

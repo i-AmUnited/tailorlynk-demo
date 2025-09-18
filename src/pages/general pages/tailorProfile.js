@@ -17,6 +17,8 @@ import thumbsUpIcon from "../../assets/icons/thumbsUp.svg";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { showErrorMessage, showSuccessMessage } from "../../hooks/constants";
 import sendIcon from "../../assets/icons/send.svg";
+import Lottie from "lottie-react";
+import animationData from "../../assets/images/Chat.json"
 
 const TailorProfile = () => {
   const loading = useSelector((state) => state.user.loading);
@@ -208,7 +210,7 @@ const TailorProfile = () => {
             <img src={chat} alt="" className="size-12" />
             <div className="text-xs text-pretty leading-5">
               Can’t find a style that you like? Share your idea with the vendor.{" "}
-              <span onClick={toggleChatConfirmation} className="text-primary underline font-medium">
+              <span onClick={toggleChatConfirmation} className="text-primary underline font-medium cursor-pointer">
                 Start chat
               </span>
             </div>
@@ -406,31 +408,36 @@ const TailorProfile = () => {
               >
                 ×
               </button>
-              <div className="p-5 flex items-end w-full h-full">
-                <div className="w-full mb-24">
-                  <p className="text-center mb-5 font-semibold">You're about to send a message to {vendorData?.businessName}</p>
-                  <form onSubmit={sendMessageForm.handleSubmit} className="w-full relative">
-                    <Input
-                      placeholder="Start typing ..."
-                      customStyles="w-full pr-12"
-                      name={"message"}
-                      value={sendMessageForm.values.message}
-                      onChange={sendMessageForm.handleChange}
-                      onBlur={sendMessageForm.handleBlur}
-                      onError={
-                        sendMessageForm.touched.message && sendMessageForm.errors.message
-                          ? sendMessageForm.errors.message
-                          : null
-                      }
-                    />
-                    <button
-                      type="button"
-                      onClick={sendMessageForm.handleSubmit}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center"
-                    >
-                      <img alt="send" src={sendIcon} className="size-5" />
-                    </button>
-                  </form>
+              <div className="h-full w-full flex items-center">
+                <div className="w-full">
+                  <Lottie animationData={animationData} className="size-64 justify-self-center "/>
+                  <div className="p-5 flex items-end w-full">
+                    <div className="w-full">
+                      <p className="text-center mb-5 font-semibold">You're about to send a message to <span className="text-primary">{vendorData?.businessName}</span></p>
+                      <form onSubmit={sendMessageForm.handleSubmit} className="w-full relative">
+                        <Input
+                          placeholder="Start typing ..."
+                          customStyles="w-full pr-12"
+                          name={"message"}
+                          value={sendMessageForm.values.message}
+                          onChange={sendMessageForm.handleChange}
+                          onBlur={sendMessageForm.handleBlur}
+                          onError={
+                            sendMessageForm.touched.message && sendMessageForm.errors.message
+                              ? sendMessageForm.errors.message
+                              : null
+                          }
+                        />
+                        <button
+                          type="button"
+                          onClick={sendMessageForm.handleSubmit}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center"
+                        >
+                          <img alt="send" src={sendIcon} className="size-5" />
+                        </button>
+                      </form>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

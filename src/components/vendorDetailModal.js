@@ -9,6 +9,8 @@ import { sendChat } from "../hooks/local/reducer";
 import { showErrorMessage, showSuccessMessage } from "../hooks/constants";
 import Input from "./input";
 import sendIcon from "../assets/icons/send.svg";
+import Lottie from "lottie-react";
+import animationData from "../assets/images/Chat.json"
 
 const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
     const vendorDetail = useVendorDetail(vendorId);
@@ -208,42 +210,41 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
         {/* Chat Confirmation Modal - Only render if user is signed in */}
         {chatConfirmation && isUserSignedIn && (
           <div className="absolute inset-0 z-60 flex items-center justify-center">
-            <div
-              className="absolute inset-0"
-              onClick={toggleChatConfirmation}
-            />
+            <div className="absolute inset-0" onClick={toggleChatConfirmation}/>
             <div className="relative bg-white rounded-lg mx-4 w-full md:w-1/3 h-full overflow-y-auto max-h-[80%]">
-              <button
-                onClick={toggleChatConfirmation}
-                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl z-10"
-              >
+              <button onClick={toggleChatConfirmation} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl z-10">
                 ×
               </button>
-              <div className="p-5 flex items-end w-full h-full">
-                <div className="w-full mb-24">
-                  <p className="text-center mb-5 font-semibold">You're about to send a message to {vendorData?.businessName}</p>
-                  <form onSubmit={sendMessageForm.handleSubmit} className="w-full relative">
-                    <Input
-                      placeholder="Start typing ..."
-                      customStyles="w-full pr-12"
-                      name={"message"}
-                      value={sendMessageForm.values.message}
-                      onChange={sendMessageForm.handleChange}
-                      onBlur={sendMessageForm.handleBlur}
-                      onError={
-                        sendMessageForm.touched.message && sendMessageForm.errors.message
-                          ? sendMessageForm.errors.message
-                          : null
-                      }
-                    />
-                    <button
-                      type="button"
-                      onClick={sendMessageForm.handleSubmit}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center"
-                    >
-                      <img alt="send" src={sendIcon} className="size-5" />
-                    </button>
-                  </form>
+              <div className="h-full w-full flex items-center">
+                <div className="w-full">
+                  <Lottie animationData={animationData} className="size-64 justify-self-center "/>
+                  <div className="p-5 flex items-end w-full">
+                    <div className="w-full">
+                      <p className="text-center mb-5 font-semibold">You're about to send a message to <span className="text-primary">{vendorData?.businessName}</span></p>
+                      <form onSubmit={sendMessageForm.handleSubmit} className="w-full relative">
+                        <Input
+                          placeholder="Start typing ..."
+                          customStyles="w-full pr-12"
+                          name={"message"}
+                          value={sendMessageForm.values.message}
+                          onChange={sendMessageForm.handleChange}
+                          onBlur={sendMessageForm.handleBlur}
+                          onError={
+                            sendMessageForm.touched.message && sendMessageForm.errors.message
+                              ? sendMessageForm.errors.message
+                              : null
+                          }
+                        />
+                        <button
+                          type="button"
+                          onClick={sendMessageForm.handleSubmit}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center"
+                        >
+                          <img alt="send" src={sendIcon} className="size-5" />
+                        </button>
+                      </form>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -215,6 +215,15 @@ export const addItemToCart = createAsyncThunk(
   }
 );
 
+export const shippingFee = createAsyncThunk(
+  "user/shippingFee",
+  async (values) => {
+    const shippingEndPoint = await apiEndPoints.shippingPrice(values);
+    const response = await shippingEndPoint.data;
+    return response;
+  }
+);
+
 export const customerCartList = createAsyncThunk(
   "user/customerCartList",
   async () => {
@@ -492,7 +501,8 @@ const slice = createSlice({
           submitFeedback.fulfilled,
           saveItem.fulfilled,
           removeSavedItem.fulfilled,
-          removeCartItem.fulfilled
+          removeCartItem.fulfilled,
+          shippingFee.fulfilled
         ),
         (state, action) => {
           state.loading = false;
@@ -541,7 +551,8 @@ const slice = createSlice({
           sendChat.pending,
           getOrder.pending,
           customerCartList.pending,
-          removeCartItem.pending
+          removeCartItem.pending,
+          shippingFee.pending
         ),
         (state) => {
           state.loading = true;
@@ -583,7 +594,8 @@ const slice = createSlice({
           sendChat.rejected,
           getOrder.rejected,
           customerCartList.rejected,
-          removeCartItem.rejected
+          removeCartItem.rejected,
+          shippingFee.rejected
         ),
         (state, action) => {
           state.loading = false;

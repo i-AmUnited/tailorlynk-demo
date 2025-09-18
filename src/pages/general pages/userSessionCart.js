@@ -12,7 +12,7 @@ import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
 const SessionCart = () => {
   const customerCartList = useCustomerCartList()
-//   console.log(customerCartList)
+  console.log(customerCartList)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,14 +23,15 @@ const SessionCart = () => {
         if (values.id) {
           try {
             await dispatch(removeCartItem(values.id)).unwrap(); 
-            // unwrap ensures you only continue if fulfilled
-            navigate("/cart");
+            navigate("/user-cart");
           } catch (error) {
             console.error("Failed to remove item:", error);
           }
         }
       },
   });
+
+  
 
   const orderTotal = customerCartList.reduce((total, item) => {
   const price = parseFloat(item.productData.price) || 0;
@@ -57,11 +58,11 @@ const SessionCart = () => {
                   <Back />
                   <div>My cart</div>
                 </div>
-                <button
+                {/* <button
                   className="text-red-600 text-xs font-semibold underline underline-offset-2 cursor-pointer"
                 >
                   Clear Cart
-                </button>
+                </button> */}
               </div>
               <div className="p-4">
                 {customerCartList.map((product) => {
@@ -137,7 +138,15 @@ const SessionCart = () => {
                             </div>
                           </div>
                         </div>
-                        
+                        <div
+                          className="mt-4 text-red-500"
+                          onClick={() => {
+                            formik.setFieldValue("id", product.id);
+                            formik.handleSubmit();
+                          }}
+                        >
+                          remove item
+                        </div>
                       </div>
                     </div>
                   );
@@ -160,10 +169,10 @@ const SessionCart = () => {
                     <div className="text-[#c4c4c4]">Platform fee:</div>
                     <div className="text-xs font-bold">£{platformFee} </div>
                   </div>
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <div className="text-[#c4c4c4]">Delivery:</div>
                     <div className="text-xs font-bold">£0.00 </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex justify-between text-primary text-sm font-semibold border-t mt-5 pt-5">
                   <div>Total:</div>
@@ -172,8 +181,8 @@ const SessionCart = () => {
                 <div className="mt-10 mb-4 flex justify-end">
                   <Button
                     buttonRole={"link"}
-                    destination={"/checkout"}
-                    buttonText={"Checkout"}
+                    destination={"/user-checkout"}
+                    buttonText={"Continue"}
                     otherStyles={"bg-primary/30 text-primary w-full"}
                   />
                 </div>

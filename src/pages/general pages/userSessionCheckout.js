@@ -1,75 +1,94 @@
 import { useFormik } from "formik";
-import { useCart } from "../../components/cartContext";
 import Back from "../../components/goBack";
 import Input from "../../components/input";
 import SelectInput from "../../components/select";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { placeOrder, shippingFee } from "../../hooks/local/reducer";
-import { useState } from "react";
 import Button from "../../components/button";
 import { showSuccessMessage } from "../../hooks/constants";
+import { useCustomerCartList, useProfile, useShippingAddress } from "../reuseableEffects";
+import { useState } from "react";
 
-const Checkout = () => {
-
-  const { cart } = useCart();
+const SessionCheckout = () => {
   const dispatch = useDispatch();
 
-  const rawOrderTotal = cart.reduce((sum, item) => {
-    const price = parseFloat(item.price.replace(/,/g, ""));
-    return sum + price * item.quantity;
-  }, 0);
+  const customerCartList = useCustomerCartList()
+  console.log(customerCartList);
 
-  const [deliveryFee, setDeliveryFee] = useState(0.00);
+  const transformedOrders = customerCartList.map((item) => ({
+    classification_id: item.productData.materialId,
+    classification_name: item.productData.materialName,
+    classification: "catalogue",
+    amount: parseFloat(item.productData.price),
+    quantity: "1",
+    vendor_id: item.productData.vendorId,
+    weight: item.weight,
+    cart_id: String(item.id)
+  }));
 
-  const platformFee = 10;
-
-const totalPrice = rawOrderTotal + deliveryFee + platformFee;
-
-const formattedOrderTotal = rawOrderTotal.toLocaleString();
-const formattedTotalPrice = totalPrice.toLocaleString();
-
-
-  const extractShippingFeeDetails = cart.map((item) => ({
+  const extractShippingFeeDetails = customerCartList.map((item) => ({
     type: "catalogue",
     // id: item?.productData?.materialId,
     id: "nESamyFwj8",
     quantity: "1",
   }));
 
-  const transformedOrders = cart.map((item) => ({
-    classification_id: item.materialId,
-    classification_name: item.category,
-    classification: "catalogue",
-    amount: parseFloat(item.price),
-    quantity: item.quantity.toString(),
-    vendor_id: item.vendorData.vendorId,
-    weight: "2"
-  }));
+
+  const orderTotalSignedIn = customerCartList.reduce((total, item) => {
+  const price = parseFloat(item.productData.price) || 0;
+  return total + price;
+}, 0);
+
+const [getShippingButton, setGetShippingButton] = useState(true);
+const [checkoutButton, setCheckoutButton] = useState(false);
+
+const [deliveryFee, setDeliveryFee] = useState(0.00);
+const platformFee = 10;
+
+
+const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
+
+  const profileInfo = useProfile();
+  const shippingData = useShippingAddress();
+
+
+  const customerID = profileInfo?.customerId || "";
+  const phone = profileInfo?.phoneNumber || "";
+  const email = profileInfo?.emailAddress || "";
+  const fullName = profileInfo?.fullName || "";
+  const [firstName, ...lastNameParts] = fullName.split(" ");
+  const lastName = lastNameParts.join(" ");
+
+  const locality = shippingData?.locality || "";
+  const city = shippingData?.city || "";
+  const house_number = shippingData?.houseNumber || "";
+  const postal_code = shippingData?.postalCode || "";
+
 
   const countries = [
     { value: "UK", label: "United Kingdom (UK) " },
   ];
 
   const createOrderForm = useFormik({
-    // enableReinitialize: true,
+    enableReinitialize: true,
     initialValues: {
-      is_signed_in: false,
-      customer_id: "",
-      create_account: true,
-      email_address: "",
-      first_name: "",
-      last_name: "",
-      phone_number: "",
-      total_amount: formattedTotalPrice,
-      address: "",
-      city: "",
-      state: "",
+      is_signed_in: true,
+      customer_id: customerID,
+      create_account: false,
+      email_address: email,
+      first_name: firstName,
+      last_name: lastName,
+      phone_number: phone,
+      total_amount: totalPriceSignedIn,
+      address: house_number,
+      city: city,
+      state: locality,
       country: "UK",
-      postal_code: "",
+      postal_code: postal_code,
       orders: transformedOrders,
       currency: "gbp",
-      logistics_price: "10"
+      logistics_price: deliveryFee.toLocaleString()
     },
     validationSchema: Yup.object({
       first_name: Yup.string().required("Please input your first name"),
@@ -129,8 +148,9 @@ const formattedTotalPrice = totalPrice.toLocaleString();
       const { payload } = await dispatch(placeOrder(createOrderData));
       console.log(payload, createOrderData);
       if (payload.statusCode === 200) {
-        // console.log(payload);
+        console.log(payload);
         showSuccessMessage("Order placed successfully");
+
         // Redirect to the Stripe checkout URL
         if (payload.data && payload.data.url) {
           window.location.href = payload.data.url;
@@ -140,32 +160,32 @@ const formattedTotalPrice = totalPrice.toLocaleString();
   });
 
   const getShippingfee = useFormik({
-      enableReinitialize: true,
-      initialValues: {
-        customer_address: {
-          address: "",
-          country: "GB",
-          city: "",
-          postal_code: "",
-          state: ""
-        },
-        classification: extractShippingFeeDetails
+    enableReinitialize: true,
+    initialValues: {
+      customer_address: {
+        address: house_number,
+        country: "GB",
+        city: city,
+        postal_code: postal_code,
+        state: locality
       },
-      
-      onSubmit: async (values) => {
-      try {
-        const { payload } = await dispatch(shippingFee(values));
-        if (payload.statusCode === 200) {
-          setDeliveryFee(payload?.data?.price);
-          showSuccessMessage(payload?.message);
-          // setGetShippingButton(false);
-          // setCheckoutButton(true);
-        }
-      } catch (error) {
-        console.error("Error fetching shipping fee:", error);
+      classification: extractShippingFeeDetails
+    },
+    
+    onSubmit: async (values) => {
+    try {
+      const { payload } = await dispatch(shippingFee(values));
+      if (payload.statusCode === 200) {
+        setDeliveryFee(payload?.data?.price);
+        showSuccessMessage(payload?.message);
+        setGetShippingButton(false);
+        setCheckoutButton(true);
       }
+    } catch (error) {
+      console.error("Error fetching shipping fee:", error);
     }
-  });
+  }
+});
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -185,6 +205,8 @@ const formattedTotalPrice = totalPrice.toLocaleString();
             <Input
               label={"First name:"}
               name={"first_name"}
+              readOnly={"readOnly"}
+              disabled={"disabled"}
               value={createOrderForm.values.first_name}
               onChange={createOrderForm.handleChange}
               onBlur={createOrderForm.handleBlur}
@@ -198,6 +220,8 @@ const formattedTotalPrice = totalPrice.toLocaleString();
             <Input
               label={"Last name:"}
               name={"last_name"}
+              readOnly={"readOnly"}
+              disabled={"disabled"}
               value={createOrderForm.values.last_name}
               onChange={createOrderForm.handleChange}
               onBlur={createOrderForm.handleBlur}
@@ -304,34 +328,7 @@ const formattedTotalPrice = totalPrice.toLocaleString();
               }
             />
           </div>
-          <div>
-            <div className="text-xs text-gray-400">
-              Would you like us to create an account for you?{" "}
-              <span>
-                Creating a tailorlynk account allows you to conveniently keep
-                track of your orders
-              </span>
-            </div>
-            <div className="text-xs border rounded w-fit mt-2 flex p-[2px]">
-              <div
-  className={`rounded py-2 px-4 cursor-pointer ${
-    createOrderForm.values.create_account ? "bg-primary text-white" : "text-primary"
-  }`}
-  onClick={() => createOrderForm.setFieldValue("create_account", true)}
->
-  Yes
-</div>
-<div
-  className={`rounded py-2 px-4 cursor-pointer ${
-    !createOrderForm.values.create_account ? "bg-primary text-white" : "text-primary"
-  }`}
-  onClick={() => createOrderForm.setFieldValue("create_account", false)}
->
-  No
-</div>
 
-            </div>
-          </div>
         </form>
 
       </div>
@@ -344,10 +341,10 @@ const formattedTotalPrice = totalPrice.toLocaleString();
             <div className="grid gap-3">
               <div className="flex justify-between">
                 <div className="text-[#c4c4c4]">Order amount:</div>
-                <div className="text-xs font-bold">£{formattedOrderTotal}</div>
+                <div className="text-xs font-bold">£{orderTotalSignedIn}</div>
               </div>
               <div className="flex justify-between">
-                <div className="text-[#c4c4c4]">Insurance fee:</div>
+                <div className="text-[#c4c4c4]">Platform fee:</div>
                 <div className="text-xs font-bold">£{platformFee} </div>
               </div>
               <div className="flex justify-between">
@@ -357,21 +354,27 @@ const formattedTotalPrice = totalPrice.toLocaleString();
             </div>
             <div className="flex justify-between text-primary text-sm font-semibold border-t mt-5 pt-5">
               <div>Total:</div>
-              <div className="font-bold">£{formattedTotalPrice} </div>
+              <div className="font-bold">£{totalPriceSignedIn} </div>
             </div>
             <div className="mt-8">
-              <Button
+              {
+                checkoutButton && (
+                  <Button
                 buttonRole={"custom"}
                 onClick={createOrderForm.handleSubmit}
-                buttonText={"Pay!"}
-                otherStyles={"bg-primary/30 text-primary w-full"}
+                buttonText={"Checkout!"}
+                otherStyles={"bg-primary text-white w-full text-center"}
               />
-              <Button 
-                              buttonRole={"custom"}
-                              onClick={getShippingfee.handleSubmit}
-                              buttonText={"Get shipping fee"}
-                              otherStyles={"bg-primary/30 text-primary w-full text-center"}
-                            />
+                )
+              }
+              {
+                getShippingButton && (<Button 
+                buttonRole={"custom"}
+                onClick={getShippingfee.handleSubmit}
+                buttonText={"Get shipping fee"}
+                otherStyles={"bg-primary/30 text-primary w-full text-center"}
+              />)
+              }
             </div>
           </div>
         </div>
@@ -380,4 +383,4 @@ const formattedTotalPrice = totalPrice.toLocaleString();
   );
 };
 
-export default Checkout;
+export default SessionCheckout;

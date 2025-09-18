@@ -205,9 +205,18 @@ export class apiEndPoints {
     }
   }
 
-  static async deleteCartItem(catalogueId) {
+  static async deleteCartItem(cartId) {
     try {
-      return apiClientWithToken.get(`/customer/delete-cart/${catalogueId}`);
+      return apiClientWithToken.get(`/customer/delete-cart/${cartId}`);
+    } catch (error) {
+      apiEndPoints.extractError(error);
+      throw error;
+    }
+  }
+
+  static async shippingPrice(data) {
+    try {
+      return apiClientWithToken.post("/customer/shipping-price", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;

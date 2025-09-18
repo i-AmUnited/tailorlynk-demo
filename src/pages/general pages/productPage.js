@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import { addItemToCart, saveItem } from "../../hooks/local/reducer";
 import SelectInput from "../../components/select";
 import * as Yup from "yup";
+import enlargeimg from "../../assets/icons/enlarge.svg";
 
 const ProductDetail = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,12 @@ const ProductDetail = () => {
         console.error("Failed to copy: ", err);
       });
   };
+
+  const [fullImageModal, setFullImageModal] = useState(false);
+
+  const toggleFullImageModal = () => {
+    setFullImageModal(!fullImageModal);
+  }
 
   const { addToCart } = useCart();
 
@@ -150,7 +157,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <div>
+    <div className="relative">
       <Spinner loading={useSelector((state) => state.user).loading} />
 
       <div className="flex items-center gap-4 mb-4">
@@ -161,7 +168,7 @@ const ProductDetail = () => {
           <div className="">
             {productDetail?.styleName || productDetail?.materialName}{" "}
             <span className="text-primary underline">
-              from {productDetail?.vendorData?.businessName}
+              by {productDetail?.vendorData?.businessName}
             </span>
           </div>
         </div>
@@ -205,6 +212,15 @@ const ProductDetail = () => {
                   </div>
                 </div>
               )}
+              <div className="absolute top-0 w-full flex items-start mt-5 justify-center text-white px-4 pb-6">
+                <div
+                  onClick={toggleFullImageModal}
+                  className="p-2 rounded bg-brandGreen/20 w-fit backdrop-blur-md flex gap-[6px] items-center cursor-pointer"
+                >
+                  <span>View full image</span>{" "}
+                  <img src={enlargeimg} alt="" className="h-4" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -269,117 +285,116 @@ const ProductDetail = () => {
               </div>
             ) : null}
 
-            {userSessionData ?
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="">
-                <SelectInput
-                  label="Available sizes"
-                  name="size"
-                  id="size"
-                  options={[
-                    { value: "", label: "Select size", isDisabled: true },
-                    ...(availableSizes.length > 0
-                      ? availableSizes.map((size) => ({
-                          value: size,
-                          label: size,
-                        }))
-                      : [{ value: "Free size", label: "Free size" }]),
-                  ]}
-                  value={addToCartWithAPI.values.size}
-                  onChange={addToCartWithAPI.handleChange}
-                  onBlur={addToCartWithAPI.handleBlur}
-                  onError={
-                    addToCartWithAPI.touched.size &&
-                    addToCartWithAPI.errors.size
-                      ? addToCartWithAPI.errors.size
-                      : null
-                  }
-                />
+            {userSessionData ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="">
+                  <SelectInput
+                    label="Available sizes"
+                    name="size"
+                    id="size"
+                    options={[
+                      { value: "", label: "Select size", isDisabled: true },
+                      ...(availableSizes.length > 0
+                        ? availableSizes.map((size) => ({
+                            value: size,
+                            label: size,
+                          }))
+                        : [{ value: "Free size", label: "Free size" }]),
+                    ]}
+                    value={addToCartWithAPI.values.size}
+                    onChange={addToCartWithAPI.handleChange}
+                    onBlur={addToCartWithAPI.handleBlur}
+                    onError={
+                      addToCartWithAPI.touched.size &&
+                      addToCartWithAPI.errors.size
+                        ? addToCartWithAPI.errors.size
+                        : null
+                    }
+                  />
+                </div>
+                <div className="">
+                  <SelectInput
+                    label="Available colors"
+                    name="color"
+                    id="color"
+                    options={[
+                      { value: "", label: "Select color", isDisabled: true },
+                      ...(availableColors.length > 0
+                        ? availableColors.map((color) => ({
+                            value: color,
+                            label: color,
+                          }))
+                        : [{ value: "not_defined", label: "Multi-coloured" }]),
+                    ]}
+                    value={addToCartWithAPI.values.color}
+                    onChange={addToCartWithAPI.handleChange}
+                    onBlur={addToCartWithAPI.handleBlur}
+                    onError={
+                      addToCartWithAPI.touched.color &&
+                      addToCartWithAPI.errors.color
+                        ? addToCartWithAPI.errors.color
+                        : null
+                    }
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Input
+                    label="Quantity:"
+                    type="number"
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                  />
+                </div>
               </div>
-              <div className="">
-                <SelectInput
-                  label="Available colors"
-                  name="color"
-                  id="color"
-                  options={[
-                    { value: "", label: "Select color", isDisabled: true },
-                    ...(availableColors.length > 0
-                      ? availableColors.map((color) => ({
-                          value: color,
-                          label: color,
-                        }))
-                      : [{ value: "not_defined", label: "Multi-coloured" }]),
-                  ]}
-                  value={addToCartWithAPI.values.color}
-                  onChange={addToCartWithAPI.handleChange}
-                  onBlur={addToCartWithAPI.handleBlur}
-                  onError={
-                    addToCartWithAPI.touched.color &&
-                    addToCartWithAPI.errors.color
-                      ? addToCartWithAPI.errors.color
-                      : null
-                  }
-                />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="">
+                  <SelectInput
+                    label="Available sizes"
+                    name="size"
+                    id="size"
+                    options={[
+                      { value: "", label: "Select size", isDisabled: true },
+                      ...(availableSizes.length > 0
+                        ? availableSizes.map((size) => ({
+                            value: size,
+                            label: size,
+                          }))
+                        : [{ value: "Free size", label: "Free size" }]),
+                    ]}
+                    value={selectedSize}
+                    onChange={handleSizeChange}
+                  />
+                </div>
+                <div className="">
+                  <SelectInput
+                    label="Available colors"
+                    name="color"
+                    id="color"
+                    options={[
+                      { value: "", label: "Select color", isDisabled: true },
+                      ...(availableColors.length > 0
+                        ? availableColors.map((color) => ({
+                            value: color,
+                            label: color,
+                          }))
+                        : [{ value: "not_defined", label: "Multi-coloured" }]),
+                    ]}
+                    value={selectedColor}
+                    onChange={handleColorChange}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Input
+                    label="Quantity:"
+                    type="number"
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                    onBlur={handleQuantityBlur}
+                  />
+                </div>
               </div>
-              <div className="md:col-span-2">
-                <Input
-                  label="Quantity:"
-                  type="number"
-                  value={quantity}
-                  onChange={handleQuantityChange}
-                />
-              </div>
-            </div>
-            :
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="">
-                <SelectInput
-                  label="Available sizes"
-                  name="size"
-                  id="size"
-                  options={[
-                    { value: "", label: "Select size", isDisabled: true },
-                    ...(availableSizes.length > 0
-                      ? availableSizes.map((size) => ({
-                          value: size,
-                          label: size,
-                        }))
-                      : [{ value: "Free size", label: "Free size" }]),
-                  ]}
-                  value={selectedSize}
-                  onChange={handleSizeChange}
-                />
-              </div>
-              <div className="">
-                <SelectInput
-                  label="Available colors"
-                  name="color"
-                  id="color"
-                  options={[
-                    { value: "", label: "Select color", isDisabled: true },
-                    ...(availableColors.length > 0
-                      ? availableColors.map((color) => ({
-                          value: color,
-                          label: color,
-                        }))
-                      : [{ value: "not_defined", label: "Multi-coloured" }]),
-                  ]}
-                  value={selectedColor}
-                  onChange={handleColorChange}
-                />
-              </div>
-              <div className="md:col-span-2">
-                <Input
-                  label="Quantity:"
-                  type="number"
-                  value={quantity}
-                  onChange={handleQuantityChange}
-                  onBlur={handleQuantityBlur}
-                />
-              </div>
-            </div>
-            }
-
+            )}
 
             <div className="grid">
               <div className="text-xs font-semibold">Price</div>
@@ -391,34 +406,35 @@ const ProductDetail = () => {
                   className={`${productDetail?.stock === "0" ? "" : "hidden"}`}
                 >
                   <Button
-                    buttonRole={"submit"}
+                    buttonRole={"custom"}
                     buttonText={"item out of stock"}
-                    otherStyles={"text-red-500 bg-red-100"}
+                    otherStyles={"text-red-500 bg-red-100 cursor-not-allowed"}
                   />
                 </div>
                 <div
                   className={`${productDetail?.stock === "0" ? "hidden" : ""}`}
                 >
-                  {userSessionData ? <Button
-                    buttonRole="submit"
-                    buttonText={"Add to Cart"}
-                    otherStyles={"bg-primary text-white"}
-                  /> :
-                  <Button
-                    buttonRole="custom"
-                    buttonText={"Add to Cart"}
-                    otherStyles={"bg-primary text-white"}
-                    onClick={() =>
-                      addToCart(
-                        productDetail,
-                        quantity,
-                        selectedSize,
-                        selectedColor
-                      )
-                    }
-                  />
-                  }
-
+                  {userSessionData ? (
+                    <Button
+                      buttonRole="submit"
+                      buttonText={"Add to Cart"}
+                      otherStyles={"bg-primary text-white"}
+                    />
+                  ) : (
+                    <Button
+                      buttonRole="custom"
+                      buttonText={"Add to Cart"}
+                      otherStyles={"bg-primary text-white"}
+                      onClick={() =>
+                        addToCart(
+                          productDetail,
+                          quantity,
+                          selectedSize,
+                          selectedColor
+                        )
+                      }
+                    />
+                  )}
                 </div>
                 <IconButton
                   buttonText={"Save this item"}
@@ -442,6 +458,54 @@ const ProductDetail = () => {
           </form>
         </div>
       </div>
+
+      {fullImageModal && (
+        <div className="fixed inset-0 bg-black text-white bg-opacity-70 z-50 flex items-center justify-center p-4">
+          <img
+                src={validImages[currentIndex]}
+                alt=""
+                className="h-full object-fit"
+              />
+              <div className="absolute top-0 w-full h-full flex items-end justify-center text-white px-4 pb-6">
+                <div className="p-2 rounded bg-brandGreen/20 w-fit backdrop-blur-md flex gap-[6px]">
+                  {validImages.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`h-[8px] w-[8px] ${
+                        currentIndex === index ? "bg-primary" : "bg-gray-300"
+                      } rounded-full`}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+              {validImages.length > 1 && (
+                <div className="absolute top-0 w-full h-full flex items-center px-6">
+                  <div className="flex justify-between w-full">
+                    <div
+                      onClick={goToPrevious}
+                      className="size-8 rounded-md bg-black/30 backdrop-blur-md flex items-center justify-center cursor-pointer"
+                    >
+                      <img src={arrow} alt="" className="h-4 rotate-90" />
+                    </div>
+                    <div
+                      onClick={goToNext}
+                      className="size-8 rounded-md bg-black/30 backdrop-blur-md flex items-center justify-center cursor-pointer"
+                    >
+                      <img src={arrow} alt="" className="h-4 -rotate-90" />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className="absolute top-0 w-full flex items-start mt-5 justify-end text-white px-4 pb-6">
+                <div
+                  onClick={toggleFullImageModal}
+                  className="p-2 rounded bg-brandGreen/20 w-fit backdrop-blur-md flex gap-[6px] items-center cursor-pointer"
+                >
+                  Close
+                </div>
+              </div>
+        </div>
+      )}
     </div>
   );
 };

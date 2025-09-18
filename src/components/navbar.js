@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 import { useCart } from "./cartContext";
 import menuIcon from "../assets/icons/menu.svg";
 import blackProfile from "../assets/icons/blackProfile.svg";
+import material from "../assets/icons/materialColored.svg";
+import store from "../assets/icons/storeColored.svg";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -98,7 +100,7 @@ const Navbar = () => {
                       <div className="border-t my-4 w-full"></div>
                       <Link to="/">
                         <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={signIn} alt="Arrow" className="h-[18px]" />
+                          <img src={store} alt="Arrow" className="h-[18px]" />
                           <span className="truncate">Vendor</span>
                         </li>
                       </Link>
@@ -110,7 +112,7 @@ const Navbar = () => {
                       </Link>
                       <Link to="/coming-soon">
                         <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={signIn} alt="Arrow" className="h-[18px]"/>
+                          <img src={material} alt="Arrow" className="h-[18px]"/>
                           <span className="truncate">Material sellers</span>
                         </li>
                       </Link>
@@ -177,7 +179,7 @@ const Navbar = () => {
             )}
           </div>
           <Link
-            to={"/cart"}
+            to={userSessionData ? "/user-cart" : "/cart"}
             className="flex items-end gap-1 font-semibold text-[13px] px-3 text-primary"
           >
             <img src={cartIcon} alt="Cart" className="h-5" />

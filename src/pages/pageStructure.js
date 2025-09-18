@@ -16,6 +16,8 @@ import MeasurementGuide from "./general pages/measurementsGuide";
 import PaymentStatus from "./general pages/paymentStatus";
 import AboutUs from "./general pages/about";
 import ComingSoon from "./general pages/comingSoon";
+import SessionCart from "./general pages/userSessionCart";
+import SessionCheckout from "./general pages/userSessionCheckout";
 
 const Structure = () => {
 
@@ -31,10 +33,12 @@ const Structure = () => {
           <Route path="product-detail/:catalogueId" element={<Title title="Product Detail"><ProductDetail /></Title>} />
           <Route path="western" element={<Title title="Western Styles"><Western /></Title>} />
           <Route path="cart" element={<Title title="Cart"><Cart /></Title>} />
+          <Route path="user-cart" element={<Title title="Cart"><SessionCart /></Title>} />
           <Route path="privacy-policy" element={<Title title="Privacy Policy"><PrivacyPolicy /></Title>} />
           <Route path="about-us" element={<Title title="About US"><AboutUs /></Title>} />
           <Route path="measurement-guide" element={<Title title="Measurements Guide"><MeasurementGuide /></Title>} />
           <Route path="checkout" element={<Title title="Checkout"><Checkout /></Title>} />
+          <Route path="user-checkout" element={<Title title="Checkout"><SessionCheckout /></Title>} />
           <Route path="coming-soon" element={<Title title="Coming soon..."><ComingSoon /></Title>} />
           <Route path="payment-status" element={<Title title="Payment Status"><PaymentStatus /></Title>} />
           <Route path="user-account/*" element={<Title title="My Account"><UserAccount /></Title>} />

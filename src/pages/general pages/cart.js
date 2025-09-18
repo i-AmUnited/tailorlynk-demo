@@ -3,24 +3,17 @@ import { useCart } from "../../components/cartContext";
 import removeItemIcon from "../../assets/icons/remove.svg";
 import store from "../../assets/icons/store.svg";
 import material from "../../assets/icons/material.svg";
-import productColor from "../../assets/icons/colorPallete.svg";
 import { useState, useEffect } from "react";
 import Back from "../../components/goBack";
 import Button from "../../components/button";
-import { useCustomerCartList } from "../reuseableEffects";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { removeCartItem } from "../../hooks/local/reducer";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
-import SessionCart from "./userSessionCart";
 
 const Cart = () => {
-  const userSessionData = useSelector((state) => state.user.userSession);
   const { cart, removeFromCart, clearCart, updateCartQuantity } = useCart();
   console.log(cart);
-   
-  // const customerCartList = useCustomerCartList()
-  // console.log(customerCartList)
 
     const dispatch = useDispatch();
    const navigate = useNavigate();
@@ -123,7 +116,6 @@ const handleDecrease = (cartInstanceId) => {
   return (
     <div>
       <Spinner loading={useSelector((state) => state.user).loading} />
-      {userSessionData ? <SessionCart /> :
       <div>
         {cart.length === 0 ? (
         <p>Your cart is empty.</p>
@@ -263,7 +255,7 @@ const handleDecrease = (cartInstanceId) => {
                   <Button
                     buttonRole={"link"}
                     destination={"/checkout"}
-                    buttonText={"Checkout"}
+                    buttonText={"Continue"}
                     otherStyles={"bg-primary/30 text-primary w-full"}
                   />
                 </div>
@@ -273,7 +265,6 @@ const handleDecrease = (cartInstanceId) => {
         </div>
       )}
       </div>
-      }
     </div>
   );
 };
