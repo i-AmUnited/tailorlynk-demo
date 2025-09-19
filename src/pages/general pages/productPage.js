@@ -86,7 +86,7 @@ const ProductDetail = () => {
     setSelectedColor(e.target.value);
   };
 
-  console.log(productDetail?.category, productDetail?.materialId)
+  // console.log(productDetail)
 
 
   // add to cart API
@@ -95,7 +95,7 @@ const ProductDetail = () => {
     initialValues: {
       classification: "material", //api accepts material for Ready_Made products
       classification_id: productDetail?.catalogueId || productDetail?.materialId || "",
-      weight: productDetail?.weight || "5",
+      weight: productDetail?.weight || "",
       size: selectedSize,
       color: selectedColor
     },

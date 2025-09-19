@@ -176,6 +176,7 @@ export const placeOrder = createAsyncThunk(
   async (values) => {
     try {
       const placeOrderEndPoint = await apiEndPoints.createOrder(values);
+      console.log(placeOrderEndPoint);
       const response = await placeOrderEndPoint.data;
       return response;
     } catch (error) {
@@ -209,10 +210,15 @@ export const materialList = createAsyncThunk(
 export const addItemToCart = createAsyncThunk(
   "user/addToCart",
   async (values) => {
-    const addToCartEndPoint = await apiEndPoints.addToCart(values);
+    try{
+  const addToCartEndPoint = await apiEndPoints.addToCart(values);
     const response = await addToCartEndPoint.data;
     return response;
+    }
+    catch(error){   
+      return error.response.data;
   }
+}
 );
 
 export const shippingFee = createAsyncThunk(
@@ -600,9 +606,7 @@ const slice = createSlice({
         (state, action) => {
           state.loading = false;
           state.users = null;
-          const { data } = action.payload || {};
-          let errorMessage = data?.message || "Failed, Try again later";
-          state.error = showErrorMessage(errorMessage);
+          state.error = showErrorMessage(action?.error?.message);
         }
       );
   },

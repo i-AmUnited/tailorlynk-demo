@@ -134,7 +134,7 @@ export class apiEndPoints {
 
   static async createOrder(data) {
     try {
-      return apiClientWithToken.post("/customer/create-order", data);
+      return apiClient.post("/customer/create-order", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;
@@ -216,7 +216,7 @@ export class apiEndPoints {
 
   static async shippingPrice(data) {
     try {
-      return apiClientWithToken.post("/customer/shipping-price", data);
+      return apiClient.post("/customer/shipping-price", data);
     } catch (error) {
       apiEndPoints.extractError(error);
       throw error;

@@ -65,7 +65,6 @@ const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
   const house_number = shippingData?.houseNumber || "";
   const postal_code = shippingData?.postalCode || "";
 
-
   const countries = [
     { value: "UK", label: "United Kingdom (UK) " },
   ];
@@ -150,7 +149,6 @@ const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
       if (payload.statusCode === 200) {
         console.log(payload);
         showSuccessMessage("Order placed successfully");
-
         // Redirect to the Stripe checkout URL
         if (payload.data && payload.data.url) {
           window.location.href = payload.data.url;
@@ -194,10 +192,7 @@ const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
           <Back />
           <div>Checkout</div>
         </div>
-        <form
-          onSubmit={createOrderForm.handleSubmit}
-          className="mt-6 grid gap-8"
-        >
+        <form onSubmit={createOrderForm.handleSubmit} className="mt-6 grid gap-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="font-bold md:col-span-2 text-primary">
               Customer info:
@@ -328,9 +323,7 @@ const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
               }
             />
           </div>
-
         </form>
-
       </div>
       <div className="lg:col-span-4 lg:relative">
         <div className="bg-white border rounded-md overflow-hidden lg:sticky lg:top-5">
