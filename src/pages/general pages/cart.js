@@ -71,8 +71,8 @@ const Cart = () => {
     return sum + (price * item.quantity);
   }, 0);
 
-  const deliveryFee = 10;
-  const insuranceFee = 10;
+  const deliveryFee = 0.00;
+  const insuranceFee = 5;
 
   const totalPrice = rawOrderTotal + deliveryFee + insuranceFee;
   const formattedOrderTotal = rawOrderTotal.toLocaleString();
@@ -119,7 +119,7 @@ const handleDecrease = (cartInstanceId) => {
       <div>
         {cart.length === 0 ? (
         <p>Your cart is empty.</p>
-      ) : (
+        ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div className="lg:col-span-8">
             <div className="bg-white border rounded-md overflow-hidden">

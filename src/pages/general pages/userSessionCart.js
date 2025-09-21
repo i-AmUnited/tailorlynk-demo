@@ -12,7 +12,7 @@ import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
 const SessionCart = () => {
   const customerCartList = useCustomerCartList()
-  console.log(customerCartList)
+  // console.log(customerCartList)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,12 +31,10 @@ const SessionCart = () => {
       },
   });
 
-  
-
   const orderTotal = customerCartList.reduce((total, item) => {
-  const price = parseFloat(item.productData.price) || 0;
-  return total + price;
-}, 0);
+    const price = parseFloat(item.productData.price) || 0;
+    return total + price;
+  }, 0);
 
   const platformFee = 10;
 

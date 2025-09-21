@@ -119,9 +119,14 @@ export const vendorReviewList = createAsyncThunk(
 export const writeReview = createAsyncThunk(
   "user/writeReview",
   async (values) => {
-    const writeReviewEndPoint = await apiEndPoints.rateVendor(values);
+
+try {
+      const writeReviewEndPoint = await apiEndPoints.rateVendor(values);
     const response = await writeReviewEndPoint.data;
     return response;
+    } catch (error) {
+      return error.response.data;
+    }
   }
 );
 
@@ -224,9 +229,13 @@ export const addItemToCart = createAsyncThunk(
 export const shippingFee = createAsyncThunk(
   "user/shippingFee",
   async (values) => {
+    try{
     const shippingEndPoint = await apiEndPoints.shippingPrice(values);
     const response = await shippingEndPoint.data;
     return response;
+     } catch (error) {
+      return error.response.data;
+    }
   }
 );
 

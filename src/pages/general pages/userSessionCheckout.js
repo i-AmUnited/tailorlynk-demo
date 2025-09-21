@@ -3,18 +3,21 @@ import Back from "../../components/goBack";
 import Input from "../../components/input";
 import SelectInput from "../../components/select";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { placeOrder, shippingFee } from "../../hooks/local/reducer";
 import Button from "../../components/button";
 import { showSuccessMessage } from "../../hooks/constants";
 import { useCustomerCartList, useProfile, useShippingAddress } from "../reuseableEffects";
 import { useState } from "react";
+import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
 const SessionCheckout = () => {
   const dispatch = useDispatch();
 
+  const loading = useSelector((state) => state.user.loading);
+
   const customerCartList = useCustomerCartList()
-  console.log(customerCartList);
+  // console.log(customerCartList);
 
   const transformedOrders = customerCartList.map((item) => ({
     classification_id: item.productData.materialId,
@@ -187,6 +190,7 @@ const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <Spinner loading={useSelector((state) => state.user).loading} />
       <div className="lg:col-span-8 bg-white border rounded-md overflow-hidden p-4">
         <div className="font-bold secondary-font flex items-center gap-4">
           <Back />
