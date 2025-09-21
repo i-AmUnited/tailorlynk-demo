@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { removeCartItem } from "../../hooks/local/reducer";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
+import cartIcon from "../../assets/icons/cart.svg";
 
 const SessionCart = () => {
   const customerCartList = useCustomerCartList()
@@ -46,7 +47,24 @@ const SessionCart = () => {
 
       <div>
         {customerCartList.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <div className="flex justify-center mb-5 mt-20">
+            <div className="text-center py-8 grid gap-2">
+                <div className="mx-auto mb-4"><img src={cartIcon} alt="" className="size-8"/></div>
+              <p className="text-gray-500 font-bold secondary-font text-[14px]">
+                Cart empty!
+              </p>
+              <div className="text-xs text-gray-500 secondary-font ">
+                Your havent added anything to Tailorlynk cart yet!{" "}
+                <Link
+                  to={"/all-materials"}
+                  className="text-primary font-bold underline"
+                >
+                  Continue shopping
+                </Link>
+                .
+              </div>
+            </div>
+          </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div className="lg:col-span-8">

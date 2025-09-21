@@ -44,6 +44,7 @@ const Navbar = () => {
   const userSessionData = useSelector((state) => state.user.userSession)
   const username = userSessionData?.fullName;
 
+
   return (
     <div className="flex justify-between items-end py-4 border-b border-b-[#c4c4c432] relative">
       <Link to={"/"}>
@@ -86,89 +87,74 @@ const Navbar = () => {
                   {!userSessionData ? (
                     <div>
                       <Link to="/Sign-up">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={profile} alt="Arrow" className="h-[18px]" />
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">Sign up</span>
                         </li>
                       </Link>
                       <Link to="/sign-in">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={signIn} alt="Arrow" className="h-[18px]" />
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">Sign in</span>
                         </li>
                       </Link>
-                      <div className="border-t my-4 w-full"></div>
-                      <Link to="/">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={store} alt="Arrow" className="h-[18px]" />
-                          <span className="truncate">Vendor</span>
-                        </li>
-                      </Link>
-                      <Link to="/coming-soon">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={signIn} alt="Arrow" className="h-[18px]" />
-                          <span className="truncate">Tailor</span>
-                        </li>
-                      </Link>
-                      <Link to="/coming-soon">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={material} alt="Arrow" className="h-[18px]"/>
-                          <span className="truncate">Material sellers</span>
-                        </li>
-                      </Link>
+                      <div className="border-t my-4 w-full lg:hidden"></div>
+                      <div className="lg:hidden">
+                        <Link to="/">
+                          <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
+                            <span className="truncate">Vendor</span>
+                          </li>
+                        </Link>
+                        <Link to="/coming-soon">
+                          <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
+                            <span className="truncate">Tailor</span>
+                          </li>
+                        </Link>
+                        <Link to="/coming-soon">
+                          <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
+                            <span className="truncate">Material sellers</span>
+                          </li>
+                        </Link>
+                      </div>
                     </div>
                   ):(
                     <div>
                       <Link to="/user-account">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={profile} alt="Arrow" className="h-[18px]" />
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">My account</span>
                         </li>
                       </Link>
                       <Link to="/user-account/message-center">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={message} alt="Arrow" className="h-[18px]" />
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">Messages</span>
                         </li>
                       </Link>
                       <Link to="user-account/order">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={receipt} alt="Arrow" className="h-[18px]" />
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">Orders</span>
                         </li>
                       </Link>
                       <Link to="/user-account/saved-styles">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img
-                            src={bookmark}
-                            alt="Arrow"
-                            className="h-[18px]"
-                          />
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">Saved styles</span>
                         </li>
                       </Link>
                       <Link to={"/user-account/sign-out"}>
-                        <li className="p-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer flex items-center gap-2 truncate">
-                          <img src={signout} alt="Arrow" className="h-[18px]" />
+                        <li className="p-3 rounded hover:bg-red-500/10 text-red-500 cursor-pointer truncate">
                           <span className="truncate">Signout</span>
                         </li>
                       </Link>
                       <div className="border-t my-4 w-full"></div>
                       <Link to="/">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={signIn} alt="Arrow" className="h-[18px]" />
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">Vendor</span>
                         </li>
                       </Link>
                       <Link to="/coming-soon">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={signIn} alt="Arrow" className="h-[18px]" />
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">Tailor</span>
                         </li>
                       </Link>
                       <Link to="/coming-soon">
-                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer flex items-center gap-2 truncate hover:text-primary transition-all">
-                          <img src={signIn} alt="Arrow" className="h-[18px]"/>
+                        <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">Material sellers</span>
                         </li>
                       </Link>

@@ -16,6 +16,7 @@ const Checkout = () => {
   const loading = useSelector((state) => state.user.loading);
 
   const { cart } = useCart();
+  console.log(cart)
 
   const transformedOrders = cart.map((item) => ({
     classification_id: item.materialId,
@@ -24,14 +25,14 @@ const Checkout = () => {
     amount: item.price.toString(),
     quantity: item.quantity.toString(),
     vendor_id: item.vendorId,
-    weight: item.weight ,
+    weight: item.weight || "0" ,
     cart_id: String(item.cartInstanceId)
   }));
 
   const extractShippingFeeDetails = cart.map((item) => ({
     type: "catalogue",
-    //  id: item?.productData?.materialId,
-    id: "nESamyFwj8",
+     id: item?.productData?.materialId,
+    // id: "nESamyFwj8",
     quantity: "1",
   }));
 

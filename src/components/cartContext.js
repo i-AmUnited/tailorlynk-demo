@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { showSuccessMessage } from "../hooks/constants";
+import { showErrorMessage, showSuccessMessage } from "../hooks/constants";
 
 const CartContext = createContext();
 
@@ -14,8 +14,11 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   const addToCart = (item, quantity = 1, selectedSize, selectedColor) => {
+      if (!selectedSize || !selectedColor) {
+      showErrorMessage("Please select both size and color");
+      return;
+    }
     setCart((prevCart) => {
-      // Check if the item has catalogueId or materialId
       const itemId = item.catalogueId || item.materialId;
       
       if (!itemId) {
@@ -24,14 +27,12 @@ export const CartProvider = ({ children }) => {
       }
 
       showSuccessMessage("Item added to cart");
-
-      // Always add as a new instance with a unique identifier
       const newCartItem = {
         ...item,
         quantity: parseInt(quantity) || 1,
         selectedSize,
         selectedColor,
-        cartInstanceId: Date.now() + Math.random() // Unique identifier for each cart instance
+        cartInstanceId: Date.now() + Math.random()
       };
 
       return [...prevCart, newCartItem];

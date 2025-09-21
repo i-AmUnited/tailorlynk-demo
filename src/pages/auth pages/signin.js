@@ -33,8 +33,7 @@ const SignIn = () => {
         const { payload } = await dispatch(userSignIn(signInData));
         if (payload.statusCode === 200) {
           navigate("/user-account")
-          showSuccessMessage("sign in succesfull")
-          showSuccessMessage(payload?.message)
+          window.location.reload()
         }
       },
     });

@@ -32,8 +32,8 @@ const SessionCheckout = () => {
 
   const extractShippingFeeDetails = customerCartList.map((item) => ({
     type: "catalogue",
-    // id: item?.productData?.materialId,
-    id: "nESamyFwj8",
+    id: item?.productData?.materialId,
+    // id: "nESamyFwj8",
     quantity: "1",
   }));
 

@@ -15,9 +15,6 @@ const initialState = {
   ...retrieveFromLocalStorage(["userSession"]),
 };
 
-// const saveToLocalStorage = (key, data) => {
-//   localStorage.setItem(key, data);
-// };
 
 const saveToLocalStorage = (key, data) => {
   const encryptedData = CryptoJS.AES.encrypt(data, APP_SECRET_KEY).toString();
@@ -442,14 +439,16 @@ export const sendChat = createAsyncThunk(
 const slice = createSlice({
   name: "user",
   initialState: initialState,
+  
   reducers: {},
+ 
   extraReducers: (builder) => {
     builder
       .addCase(userSignIn.fulfilled, (state, action) => {
         if (action.payload.statusCode === 200) {
           state.users = action.payload;
           state.isAuthenticated = true;
-          state.userSession = action.payload;
+          state.userSession = action.payload; 
         } else {
           state.error = action.payload.message;
           showErrorMessage(action.payload.message);
@@ -620,5 +619,6 @@ const slice = createSlice({
       );
   },
 });
+
 
 export const userReducer = slice.reducer;
