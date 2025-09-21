@@ -24,7 +24,7 @@ const Checkout = () => {
     amount: item.price.toString(),
     quantity: item.quantity.toString(),
     vendor_id: item.vendorId,
-    weight: item.weight ,
+    weight: item.weight || "0" ,
     cart_id: String(item.cartInstanceId)
   }));
 
