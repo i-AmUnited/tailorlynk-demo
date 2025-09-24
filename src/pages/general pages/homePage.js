@@ -6,18 +6,18 @@ import Accordion from "../../components/faq";
 import Carousel from "./General pages components/homePageCarousel";
 import tailor_register from "../../assets/images/tailor_register.jpg";
 import { Link } from "react-router-dom";
-import RecommendedMaterials from "./General pages components/recommendedMaterials";
-import { useState } from "react";
-import close from "../../assets/icons/close.svg";
 import MaterialFeed from "./General pages components/materialFeed";
 
 const Home = () => { 
   const img2 = "https://img.freepik.com/free-photo/medium-shot-man-with-braids-portrait_23-2151428195.jpg?t=st=1733173796~exp=1733177396~hmac=74907e16e2b6a58e2fd117c29a8968dd0219e395f7e92b4631f5ccd7494ba313&w=826"  
 
+
   return (
     <div className="grid gap-14">
       <Carousel />
       <RecommendedVendors />
+
+      
       {/* Register */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 items-center">
         <div className="lg:col-span-3 grid gap-6">

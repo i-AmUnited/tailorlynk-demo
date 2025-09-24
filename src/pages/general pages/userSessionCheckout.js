@@ -26,15 +26,15 @@ const SessionCheckout = () => {
     amount: parseFloat(item.productData.price),
     quantity: "1",
     vendor_id: item.productData.vendorId,
-    weight: item.weight,
+    weight: item.weight ?? "100",
     cart_id: String(item.id)
   }));
 
   const extractShippingFeeDetails = customerCartList.map((item) => ({
-    type: "catalogue",
-    id: item?.productData?.materialId,
+    type: item?.productData?.category === "catalogue" ? "catalogue" : "material",
+    id: item?.productData?.category === "catalogue" ?  item?.productData?.catalogueId : item?.productData?.materialId,
     // id: "nESamyFwj8",
-    quantity: "1",
+    quantity: item?.quantity || "1",
   }));
 
 
@@ -47,7 +47,7 @@ const [getShippingButton, setGetShippingButton] = useState(true);
 const [checkoutButton, setCheckoutButton] = useState(false);
 
 const [deliveryFee, setDeliveryFee] = useState(0.00);
-const platformFee = 10;
+const platformFee = 5;
 
 
 const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
@@ -189,189 +189,191 @@ const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
 });
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+    <div>
       <Spinner loading={useSelector((state) => state.user).loading} />
-      <div className="lg:col-span-8 bg-white border rounded-md overflow-hidden p-4">
-        <div className="font-bold secondary-font flex items-center gap-4">
-          <Back />
-          <div>Checkout</div>
-        </div>
-        <form onSubmit={createOrderForm.handleSubmit} className="mt-6 grid gap-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="font-bold md:col-span-2 text-primary">
-              Customer info:
-            </div>
-            <Input
-              label={"First name:"}
-              name={"first_name"}
-              readOnly={"readOnly"}
-              disabled={"disabled"}
-              value={createOrderForm.values.first_name}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              onError={
-                createOrderForm.touched.first_name &&
-                createOrderForm.errors.first_name
-                  ? createOrderForm.errors.first_name
-                  : null
-              }
-            />
-            <Input
-              label={"Last name:"}
-              name={"last_name"}
-              readOnly={"readOnly"}
-              disabled={"disabled"}
-              value={createOrderForm.values.last_name}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              onError={
-                createOrderForm.touched.last_name &&
-                createOrderForm.errors.last_name
-                  ? createOrderForm.errors.last_name
-                  : null
-              }
-            />
-            <Input
-              label={"Phone number:"}
-              name={"phone_number"}
-              value={createOrderForm.values.phone_number}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              onError={
-                createOrderForm.touched.phone_number &&
-                createOrderForm.errors.phone_number
-                  ? createOrderForm.errors.phone_number
-                  : null
-              }
-            />
-            <Input
-              label={"Email address:"}
-              name={"email_address"}
-              value={createOrderForm.values.email_address}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              onError={
-                createOrderForm.touched.email_address &&
-                createOrderForm.errors.email_address
-                  ? createOrderForm.errors.email_address
-                  : null
-              }
-            />
-            <div className="font-bold md:col-span-2 mt-4 text-primary">
-              Shipping address:
-            </div>
-            <Input
-              label={"House address:"}
-              name={"address"}
-              value={createOrderForm.values.address}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              onError={
-                createOrderForm.touched.address &&
-                createOrderForm.errors.address
-                  ? createOrderForm.errors.address
-                  : null
-              }
-            />
-            <Input
-              label={"City:"}
-              name={"city"}
-              value={createOrderForm.values.city}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              onError={
-                createOrderForm.touched.city &&
-                createOrderForm.errors.city
-                  ? createOrderForm.errors.city
-                  : null
-              }
-            />
-             <Input
-              label={"State/Province/Town:"}
-              name={"state"}
-              value={createOrderForm.values.state}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              onError={
-                createOrderForm.touched.state &&
-                createOrderForm.errors.state
-                  ? createOrderForm.errors.state
-                  : null
-              }
-            />
-            <SelectInput
-              label={"Country"}
-              name={"country"}
-              value={createOrderForm.values.country}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              options={countries}
-              onError={
-                createOrderForm.touched.country &&
-                createOrderForm.errors.country
-                  ? createOrderForm.errors.country
-                  : null
-              }
-            />
-             <Input
-              label={"Postal code:"}
-              name={"postal_code"}
-              value={createOrderForm.values.postal_code}
-              onChange={createOrderForm.handleChange}
-              onBlur={createOrderForm.handleBlur}
-              onError={
-                createOrderForm.touched.postal_code &&
-                createOrderForm.errors.postal_code
-                  ? createOrderForm.errors.postal_code
-                  : null
-              }
-            />
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div className="lg:col-span-8 bg-white border rounded-md overflow-hidden p-4">
+          <div className="font-bold secondary-font flex items-center gap-4">
+            <Back />
+            <div>Checkout</div>
           </div>
-        </form>
-      </div>
-      <div className="lg:col-span-4 lg:relative">
-        <div className="bg-white border rounded-md overflow-hidden lg:sticky lg:top-5">
-          <div className="bg-primary text-white px-4 py-6 border-b">
-            <div className="font-bold secondary-font">Summary</div>
-          </div>
-          <div className="p-4">
-            <div className="grid gap-3">
-              <div className="flex justify-between">
-                <div className="text-[#c4c4c4]">Order amount:</div>
-                <div className="text-xs font-bold">£{orderTotalSignedIn}</div>
+          <form onSubmit={createOrderForm.handleSubmit} className="mt-6 grid gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="font-bold md:col-span-2 text-primary">
+                Customer info:
               </div>
-              <div className="flex justify-between">
-                <div className="text-[#c4c4c4]">Platform fee:</div>
-                <div className="text-xs font-bold">£{platformFee} </div>
-              </div>
-              <div className="flex justify-between">
-                <div className="text-[#c4c4c4]">Delivery:</div>
-                <div className="text-xs font-bold">£{deliveryFee} </div>
-              </div>
-            </div>
-            <div className="flex justify-between text-primary text-sm font-semibold border-t mt-5 pt-5">
-              <div>Total:</div>
-              <div className="font-bold">£{totalPriceSignedIn} </div>
-            </div>
-            <div className="mt-8">
-              {
-                checkoutButton && (
-                  <Button
-                buttonRole={"custom"}
-                onClick={createOrderForm.handleSubmit}
-                buttonText={"Checkout!"}
-                otherStyles={"bg-primary text-white w-full text-center"}
+              <Input
+                label={"First name:"}
+                name={"first_name"}
+                readOnly={"readOnly"}
+                disabled={"disabled"}
+                value={createOrderForm.values.first_name}
+                onChange={createOrderForm.handleChange}
+                onBlur={createOrderForm.handleBlur}
+                onError={
+                  createOrderForm.touched.first_name &&
+                  createOrderForm.errors.first_name
+                    ? createOrderForm.errors.first_name
+                    : null
+                }
               />
-                )
-              }
-              {
-                getShippingButton && (<Button 
-                buttonRole={"custom"}
-                onClick={getShippingfee.handleSubmit}
-                buttonText={"Get shipping fee"}
-                otherStyles={"bg-primary/30 text-primary w-full text-center"}
-              />)
-              }
+              <Input
+                label={"Last name:"}
+                name={"last_name"}
+                readOnly={"readOnly"}
+                disabled={"disabled"}
+                value={createOrderForm.values.last_name}
+                onChange={createOrderForm.handleChange}
+                onBlur={createOrderForm.handleBlur}
+                onError={
+                  createOrderForm.touched.last_name &&
+                  createOrderForm.errors.last_name
+                    ? createOrderForm.errors.last_name
+                    : null
+                }
+              />
+              <Input
+                label={"Phone number:"}
+                name={"phone_number"}
+                value={createOrderForm.values.phone_number}
+                onChange={createOrderForm.handleChange}
+                onBlur={createOrderForm.handleBlur}
+                onError={
+                  createOrderForm.touched.phone_number &&
+                  createOrderForm.errors.phone_number
+                    ? createOrderForm.errors.phone_number
+                    : null
+                }
+              />
+              <Input
+                label={"Email address:"}
+                name={"email_address"}
+                value={createOrderForm.values.email_address}
+                onChange={createOrderForm.handleChange}
+                onBlur={createOrderForm.handleBlur}
+                onError={
+                  createOrderForm.touched.email_address &&
+                  createOrderForm.errors.email_address
+                    ? createOrderForm.errors.email_address
+                    : null
+                }
+              />
+              <div className="font-bold md:col-span-2 mt-4 text-primary">
+                Shipping address:
+              </div>
+              <Input
+                label={"House address:"}
+                name={"address"}
+                value={createOrderForm.values.address}
+                onChange={createOrderForm.handleChange}
+                onBlur={createOrderForm.handleBlur}
+                onError={
+                  createOrderForm.touched.address &&
+                  createOrderForm.errors.address
+                    ? createOrderForm.errors.address
+                    : null
+                }
+              />
+              <Input
+                label={"City:"}
+                name={"city"}
+                value={createOrderForm.values.city}
+                onChange={createOrderForm.handleChange}
+                onBlur={createOrderForm.handleBlur}
+                onError={
+                  createOrderForm.touched.city &&
+                  createOrderForm.errors.city
+                    ? createOrderForm.errors.city
+                    : null
+                }
+              />
+               <Input
+                label={"State/Province/Town:"}
+                name={"state"}
+                value={createOrderForm.values.state}
+                onChange={createOrderForm.handleChange}
+                onBlur={createOrderForm.handleBlur}
+                onError={
+                  createOrderForm.touched.state &&
+                  createOrderForm.errors.state
+                    ? createOrderForm.errors.state
+                    : null
+                }
+              />
+              <SelectInput
+                label={"Country"}
+                name={"country"}
+                value={createOrderForm.values.country}
+                onChange={createOrderForm.handleChange}
+                onBlur={createOrderForm.handleBlur}
+                options={countries}
+                onError={
+                  createOrderForm.touched.country &&
+                  createOrderForm.errors.country
+                    ? createOrderForm.errors.country
+                    : null
+                }
+              />
+               <Input
+                label={"Postal code:"}
+                name={"postal_code"}
+                value={createOrderForm.values.postal_code}
+                onChange={createOrderForm.handleChange}
+                onBlur={createOrderForm.handleBlur}
+                onError={
+                  createOrderForm.touched.postal_code &&
+                  createOrderForm.errors.postal_code
+                    ? createOrderForm.errors.postal_code
+                    : null
+                }
+              />
+            </div>
+          </form>
+        </div>
+        <div className="lg:col-span-4 lg:relative">
+          <div className="bg-white border rounded-md overflow-hidden lg:sticky lg:top-5">
+            <div className="bg-primary text-white px-4 py-6 border-b">
+              <div className="font-bold secondary-font">Summary</div>
+            </div>
+            <div className="p-4">
+              <div className="grid gap-3">
+                <div className="flex justify-between">
+                  <div className="text-[#c4c4c4]">Order amount:</div>
+                  <div className="text-xs font-bold">£{orderTotalSignedIn}</div>
+                </div>
+                <div className="flex justify-between">
+                  <div className="text-[#c4c4c4]">Platform fee:</div>
+                  <div className="text-xs font-bold">£{platformFee} </div>
+                </div>
+                <div className="flex justify-between">
+                  <div className="text-[#c4c4c4]">Delivery:</div>
+                  <div className="text-xs font-bold">£{deliveryFee} </div>
+                </div>
+              </div>
+              <div className="flex justify-between text-primary text-sm font-semibold border-t mt-5 pt-5">
+                <div>Total:</div>
+                <div className="font-bold">£{totalPriceSignedIn} </div>
+              </div>
+              <div className="mt-8">
+                {
+                  checkoutButton && (
+                    <Button
+                  buttonRole={"custom"}
+                  onClick={createOrderForm.handleSubmit}
+                  buttonText={"Checkout!"}
+                  otherStyles={"bg-primary text-white w-full text-center"}
+                />
+                  )
+                }
+                {
+                  getShippingButton && (<Button
+                  buttonRole={"custom"}
+                  onClick={getShippingfee.handleSubmit}
+                  buttonText={"Get shipping fee"}
+                  otherStyles={"bg-primary/30 text-primary w-full text-center"}
+                />)
+                }
+              </div>
             </div>
           </div>
         </div>

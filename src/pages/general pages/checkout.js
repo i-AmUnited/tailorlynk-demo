@@ -25,15 +25,17 @@ const Checkout = () => {
     amount: item.price.toString(),
     quantity: item.quantity.toString(),
     vendor_id: item.vendorId,
-    weight: item.weight || "0" ,
+    weight: item.weight ?? "100",
     cart_id: String(item.cartInstanceId)
   }));
 
+  console.log(transformedOrders)
+
   const extractShippingFeeDetails = cart.map((item) => ({
-    type: "catalogue",
-     id: item?.productData?.materialId,
+    type: item?.category === "catalogue" ? "catalogue" : "material",
+    id: item?.category === "catalogue" ?  item?.catalogueId : item?.materialId,
     // id: "nESamyFwj8",
-    quantity: "1",
+    quantity: item?.quantity,
   }));
 
 // const [createAccountStatus, setCreateAccountStatus] = useState(false);
@@ -41,7 +43,7 @@ const [getShippingButton, setGetShippingButton] = useState(true);
 const [checkoutButton, setCheckoutButton] = useState(false);
 
 const [deliveryFee, setDeliveryFee] = useState(0.00);
-const platformFee = 10;
+const platformFee = 5;
 
 const orderTotal = cart.reduce((total, item) => {
   const price = parseFloat(item.price) || 0;
@@ -164,7 +166,7 @@ const totalAmount = orderTotal + deliveryFee + platformFee;
     
     onSubmit: async (values) => {
      const { customer_address } = values;
-      
+      console.log(values)
       if (!customer_address.address?.trim() || 
           !customer_address.city?.trim() || 
           !customer_address.postal_code?.trim() || 
@@ -391,7 +393,7 @@ const totalAmount = orderTotal + deliveryFee + platformFee;
                   <Button
                     buttonRole={"custom"}
                     onClick={createOrderForm.handleSubmit}
-                    buttonText={"Checkout!"}
+                    buttonText={"Confirm order"}
                     otherStyles={"bg-primary text-white w-full text-center"}
                   />
                 )}
@@ -399,7 +401,7 @@ const totalAmount = orderTotal + deliveryFee + platformFee;
                   <Button
                     buttonRole={"custom"}
                     onClick={getShippingfee.handleSubmit}
-                    buttonText={"Get shipping fee"}
+                    buttonText={"Checkout!"}
                     otherStyles={"bg-primary/30 text-primary w-full text-center"}
                   />
                 )}

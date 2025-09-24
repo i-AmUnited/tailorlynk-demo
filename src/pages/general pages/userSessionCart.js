@@ -13,7 +13,6 @@ import cartIcon from "../../assets/icons/cart.svg";
 
 const SessionCart = () => {
   const customerCartList = useCustomerCartList()
-  // console.log(customerCartList)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
