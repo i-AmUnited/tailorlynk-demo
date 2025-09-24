@@ -49,7 +49,6 @@ const [checkoutButton, setCheckoutButton] = useState(false);
 const [deliveryFee, setDeliveryFee] = useState(0.00);
 const platformFee = 5;
 
-
 const totalPriceSignedIn = orderTotalSignedIn + platformFee + deliveryFee;
 
   const profileInfo = useProfile();
