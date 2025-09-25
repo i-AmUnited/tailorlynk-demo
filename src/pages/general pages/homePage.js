@@ -17,7 +17,6 @@ const Home = () => {
       <Carousel />
       <RecommendedVendors />
 
-      
       {/* Register */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 items-center">
         <div className="lg:col-span-3 grid gap-6">

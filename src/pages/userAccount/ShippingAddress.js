@@ -130,11 +130,11 @@ const ShippingAddress = () => {
       {/* check if all items inside shippingAddress is empty */}
       {isAddressEmpty ? (
         <div className="p-6">
-          <p className="text-gray-500 mb-4">No shipping address found. Please add your shipping address.</p>
+          <p className="text-gray-500 mb-4">For faster checkout, you can save your address in your tailorlynk profile.</p>
           <Button
-            buttonRole="button"
+            buttonRole="custom"
             buttonText="Add shipping address"
-            otherStyles="bg-primary text-white"
+            otherStyles="bg-primary text-white w-fit"
             onClick={openModal}
           />
         </div>

@@ -66,6 +66,8 @@ const RecommendedVendors = () => {
                 </div>
             )}
 
+            <div>{recommendedVendors.length === 0 ? <span className="text-md font-bold text-[#c4c4c4]">We haven't added any vendors yet</span> : <span></span>}</div>
+
             {/* Vendor Detail Modal */}
             {isModalOpen && selectedVendorId && (
                 <VendorDetailModal

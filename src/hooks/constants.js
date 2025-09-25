@@ -28,7 +28,16 @@ export const retrieveFromLocalStorage = (keys) => {
         try {
             const bytes = CryptoJS.AES.decrypt(persistedState, APP_SECRET_KEY);
             const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-            data[key] = persistedState ? JSON.parse(decryptedData) : null;
+
+            // data[key] = persistedState ? JSON.parse(decryptedData) : null;
+
+            if (!decryptedData) {
+              console.error(`Failed to decrypt data for key "${key}"`);
+              data[key] = null;
+              return;
+            }
+            data[key] = JSON.parse(decryptedData);
+
             if (typeof data[key] === "string") {
                 data[key] = JSON.parse(data[key]);
             }

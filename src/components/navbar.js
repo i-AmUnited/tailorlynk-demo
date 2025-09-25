@@ -3,26 +3,19 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logos/logo.svg";
 import cartIcon from "../assets/icons/cart.svg";
 import arrow from "../assets/icons/arrow.svg";
-import bookmark from "../assets/icons/bookmark.svg";
-import profile from "../assets/icons/profile.svg";
-import receipt from "../assets/icons/receipt.svg";
-import signout from "../assets/icons/signout.svg";
-import signIn from "../assets/icons/signIn.svg";
-import message from "../assets/icons/message.svg";
 import { useSelector } from "react-redux";
 import { useCart } from "./cartContext";
 import menuIcon from "../assets/icons/menu.svg";
 import blackProfile from "../assets/icons/blackProfile.svg";
-import material from "../assets/icons/materialColored.svg";
-import store from "../assets/icons/storeColored.svg";
+import { useCustomerCartList } from "../pages/reuseableEffects";
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
-  // const customerCartList = useCustomerCartList()
-
   const dropdownRef = useRef(null);
 
   const { cart } = useCart();
+  const customerCartList = useCustomerCartList();
+
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -142,7 +135,7 @@ const Navbar = () => {
                           <span className="truncate">Signout</span>
                         </li>
                       </Link>
-                      <div className="border-t my-4 w-full"></div>
+                      <div className="border-t my-4 w-full lg:hidden">
                       <Link to="/">
                         <li className="p-3 rounded hover:bg-primary/10 cursor-pointer truncate hover:text-primary transition-all">
                           <span className="truncate">Vendor</span>
@@ -158,6 +151,7 @@ const Navbar = () => {
                           <span className="truncate">Material sellers</span>
                         </li>
                       </Link>
+                      </div>
                     </div>
                   )}
                 </ul>
@@ -169,7 +163,7 @@ const Navbar = () => {
             className="flex items-end gap-1 font-semibold text-[13px] px-3 text-primary"
           >
             <img src={cartIcon} alt="Cart" className="h-5" />
-            <span>{cart.length}</span>
+            <span>{userSessionData ? customerCartList.length : cart.length}</span>
           </Link>
         </div>
       </div>

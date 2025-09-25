@@ -28,6 +28,7 @@ export const userSignIn = createAsyncThunk("user/signIn",
       const response = await signInEndPoint.data;
       saveToLocalStorage("userSession", JSON.stringify(response.data.customerData));
       saveToLocalStorage("token", JSON.stringify(response.data.accessToken));
+      // console.log(response.data.accessToken)
       return response;
     }
     catch(error){
@@ -448,7 +449,7 @@ const slice = createSlice({
         if (action.payload.statusCode === 200) {
           state.users = action.payload;
           state.isAuthenticated = true;
-          state.userSession = action.payload; 
+          state.userSession = action.payload;
         } else {
           state.error = action.payload.message;
           showErrorMessage(action.payload.message);

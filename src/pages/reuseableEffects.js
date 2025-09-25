@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { chatMessages, customerCartList, getOrder, listChat, listVendors, materialList, savedItemsList, singleCatalogueDetail, userCart, userMeasurements, userProfileDetails, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
@@ -91,6 +91,8 @@ export function useVendorReviews(vendorID) {
   export function useCustomerCartList() {
     const [customerCart, setCustomerCart] = useState([])
     const dispatch = useDispatch();
+    const userSessionData = useSelector((state) => state.user.userSession);
+
     useEffect(() => {
       const fetchCustomerCart = async() => {
         try {
@@ -100,8 +102,13 @@ export function useVendorReviews(vendorID) {
         }
         catch(e){}
       }
+      // fetchCustomerCart();
+      if (userSessionData) {
       fetchCustomerCart();
-    }, [dispatch]);
+    } else {
+      setCustomerCart([]);
+    }
+    }, [dispatch, userSessionData]);
   
     return customerCart;
   }

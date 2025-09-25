@@ -33,7 +33,8 @@ const MaterialFeed = () => {
         </Link>
       </div>
 
-     
+     <div>{readyMade.length === 0 ? <span className="text-md font-bold text-[#c4c4c4]">We haven't added any styles yet</span> : <span></span>}</div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredList.map((material) => (
               <MaterialProductCard 

@@ -11,12 +11,17 @@ import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
 const Measurements = () => {
   const loading = useSelector((state) => state.user.loading);
+
   const userMeasurements = useMeasurements();
-  
-  // Local state to manage measurements data
+  // console.log(userMeasurements)
   const [measurementsData, setMeasurementsData] = useState(null);
+
+  const fieldsToCheck = ["armHole", "chest", "hip", "longSleeveLength", "neck", "others", "shirtLength", "shortSleeveLength", "shoulder", "thigh", "waist"];
+
+  const isMeasurementsEmpty = fieldsToCheck.every(
+  (key) => (measurementsData?.[key] || "") === ""
+  );
   
-  // Update local measurements data when userMeasurements changes
   useEffect(() => {
     if (userMeasurements) {
       setMeasurementsData(userMeasurements);
@@ -80,9 +85,7 @@ const Measurements = () => {
       };
       const { payload } = await dispatch(updateMeasurements(measurementsPayload));
       
-      if (payload.statusCode === 200) {
-        showSuccessMessage("Measurements updated");
-        
+      if (payload.statusCode === 200) {        
         // Update local measurements data immediately
         setMeasurementsData({
           chest: chest || "",
@@ -127,6 +130,13 @@ const Measurements = () => {
     <div className="rounded-lg bg-white">
       <Spinner loading={useSelector((state) => state.user).loading} />
       <div className="px-4 py-6 border-b text-md font-bold">Measurement</div>
+      {/* check if all items inside shippingAddress is empty */}
+            {isMeasurementsEmpty ? (
+              <div className="p-6">
+                <p className="text-gray-500 mb-4">You do not have your mesurements saved yet in your tailorlynk profile.</p>
+              </div>
+            ) : (
+              <>
       <div className="p-6">
         <div className="flex items-start gap-2 text-xs mb-6">
           <img src={infoIcon} alt="" className="h-4" />
@@ -187,6 +197,8 @@ const Measurements = () => {
           </div>
         </div>
       </div>
+      </>
+      )}
       {/* Update Profile Info Button */}
       <div className="px-6 pb-6">
         <Button
@@ -378,7 +390,7 @@ const Measurements = () => {
               </div>
               <div className="mt-4 bg-brandGreen/10 p-4 rounded text-xs text-brandGreen grid gap-1">
                 <span>
-                  Enter your "Other" measurements in the following format:
+                  Enter your "Others" measurements in the following format:
                 </span>
                 <span className="font-bold">
                   Bust - 14, Laps - 12, Packs and Habs - 15

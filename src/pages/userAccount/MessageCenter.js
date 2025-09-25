@@ -9,13 +9,15 @@ import { useFormik } from "formik";
 import { sendChat } from "../../hooks/local/reducer";
 import { showSuccessMessage } from "../../hooks/constants";
 import sendIcon from "../../assets/icons/send.svg";
+import { APP_SECRET_KEY } from "../../hooks/constants";
+import CryptoJS from "crypto-js";
 
 // Set Pusher globally for Laravel Echo
 window.Pusher = Pusher;
 
 const MessageCenter = () => {
   const [selectedVendorID, setSelectedVendorID] = useState("RS0UWmpIJLltD");
-  const [selectedVendorName, setSelectedVendorName] = useState("Dez Stylez");
+  const [selectedVendorName, setSelectedVendorName] = useState("Tailorlynk");
   const [showMessages, setShowMessages] = useState(false);
   const [realtimeMessages, setRealtimeMessages] = useState([]);
   
@@ -28,8 +30,7 @@ const MessageCenter = () => {
   const messagesEndRef = useRef(null);
 
   const userSessionData = useSelector((state) => state.user.userSession);
-  console.log('User Session Data:', userSessionData);
-  const userToken = useSelector((state) => state.user.userSession?.token); // Adjust based on your token location
+  const userToken = CryptoJS.AES.decrypt(localStorage.getItem("token"), APP_SECRET_KEY).toString(CryptoJS.enc.Utf8);
 
   // Initialize Laravel Echo
   useEffect(() => {
@@ -73,7 +74,7 @@ const MessageCenter = () => {
     const ids = [userSessionData.customerId, selectedVendorID].sort();
     const channelName = `conversation.${ids[0]}.${ids[1]}`;
     
-    console.log('Subscribing to channel:', channelName);
+    // console.log('Subscribing to channel:', channelName);
 
     // Subscribe to private channel
     channelRef.current = echoRef.current.private(channelName);
