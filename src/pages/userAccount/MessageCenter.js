@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
@@ -116,7 +116,10 @@ const MessageCenter = () => {
   }, [selectedVendorID, userSessionData?.customerId]);
 
   // Combine initial messages with realtime messages
-  const allMessages = [...messages, ...realtimeMessages];
+  // const allMessages = [...messages, ...realtimeMessages];
+  const allMessages = useMemo(() => {
+  return [...messages, ...realtimeMessages];
+}, [messages, realtimeMessages]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -145,7 +148,7 @@ const MessageCenter = () => {
   // Update form when selected vendor changes
   React.useEffect(() => {
     sendMessageForm.setFieldValue('vendor_id', selectedVendorID);
-  }, [selectedVendorID]);
+  }, [selectedVendorID, sendMessageForm]);
 
   const handleChatClick = (vendorId, businessName) => {
     setSelectedVendorID(vendorId);

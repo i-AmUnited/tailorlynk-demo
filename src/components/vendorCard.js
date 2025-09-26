@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+
 import "react-lazy-load-image-component/src/effects/blur.css";
 import imgFallback from "../assets/images/fallbackProductImage.png";
 

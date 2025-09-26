@@ -37,7 +37,7 @@ const TailorProfile = () => {
   const roundedAverage = averageRating.toFixed(1);
 
   const vendorPersonal = vendorDetail?.vendorData;
-  const vendorCatalogue = vendorDetail?.catalogueData;
+  // const vendorCatalogue = vendorDetail?.catalogueData;
   const vendorMaterialList = vendorDetail?.materialData || [];
 
   // console.log (vendorDetail)

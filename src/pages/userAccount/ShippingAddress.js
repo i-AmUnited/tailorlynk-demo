@@ -106,7 +106,7 @@ const ShippingAddress = () => {
     } else if (shippingAddressForm.values.location === "Outside Nigeria" && shippingAddressForm.values.country === "Nigeria") {
       shippingAddressForm.setFieldValue("country", "");
     }
-  }, [shippingAddressForm.values.location]);
+  }, [shippingAddressForm.values.location, shippingAddressForm]);
 
   const openModal = () => {
     setIsModalOpen(true);

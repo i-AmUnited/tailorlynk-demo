@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Button from "../../../components/button";
 import image1 from "../../../assets/images/image 1.jpg";
 import image2 from "../../../assets/images/image 2.jpg";
-import image3 from "../../../assets/images/image 3.jpg";
 import arrow from "../../../assets/icons/whiteArrow.svg";
 
 const slides = [

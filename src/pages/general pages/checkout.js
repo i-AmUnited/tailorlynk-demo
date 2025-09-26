@@ -13,7 +13,6 @@ import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
 const Checkout = () => {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.user.loading);
 
   const { cart } = useCart();
   console.log(cart)
@@ -149,7 +148,7 @@ const totalAmount = orderTotal + deliveryFee + platformFee;
   useEffect(() => {
     createOrderForm.setFieldValue('logistics_price', deliveryFee.toString());
     createOrderForm.setFieldValue('total_amount', totalAmount.toString());
-  }, [deliveryFee, totalAmount]);
+  }, [deliveryFee, totalAmount, createOrderForm]);
 
  const getShippingfee = useFormik({
     initialValues: {

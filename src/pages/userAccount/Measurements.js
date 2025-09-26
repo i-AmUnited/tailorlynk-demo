@@ -6,7 +6,6 @@ import { useMeasurements } from "../reuseableEffects";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { updateMeasurements } from "../../hooks/local/reducer";
-import { showSuccessMessage } from "../../hooks/constants";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
 const Measurements = () => {
@@ -424,6 +423,7 @@ const Measurements = () => {
               </button>
             </div>
             <iframe
+             title="Measurement Guide"
               src="https://docs.google.com/document/d/1yQ7La7mSKRsgjcx9J9leRKbbqd8gm9QAqca1ehylihU/preview"
               width="100%"
               className="h-[500px] rounded-md"

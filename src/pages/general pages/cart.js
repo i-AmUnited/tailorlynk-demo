@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCart } from "../../components/cartContext";
 import removeItemIcon from "../../assets/icons/remove.svg";
 import store from "../../assets/icons/store.svg";
@@ -6,9 +6,9 @@ import material from "../../assets/icons/material.svg";
 import { useState, useEffect } from "react";
 import Back from "../../components/goBack";
 import Button from "../../components/button";
-import { useDispatch, useSelector } from "react-redux";
-import { useFormik } from "formik";
-import { removeCartItem } from "../../hooks/local/reducer";
+import {  useSelector } from "react-redux";
+// import { useFormik } from "formik";
+// import { removeCartItem } from "../../hooks/local/reducer";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
 import cartIcon from "../../assets/icons/cart.svg";
 
@@ -16,23 +16,22 @@ const Cart = () => {
   const { cart, removeFromCart, clearCart, updateCartQuantity } = useCart();
   console.log(cart);
 
-    const dispatch = useDispatch();
-   const navigate = useNavigate();
+  //   const dispatch = useDispatch();
+  //  const navigate = useNavigate();
 
-  const formik = useFormik({
-      initialValues: { id: "" },
-      onSubmit: async (values) => {
-        if (values.id) {
-          try {
-            await dispatch(removeCartItem(values.id)).unwrap(); 
-            // unwrap ensures you only continue if fulfilled
-            navigate("/cart");
-          } catch (error) {
-            console.error("Failed to remove item:", error);
-          }
-        }
-      },
-  });
+  // const formik = useFormik({
+  //     initialValues: { id: "" },
+  //     onSubmit: async (values) => {
+  //       if (values.id) {
+  //         try {
+  //           await dispatch(removeCartItem(values.id)).unwrap(); 
+  //           navigate("/cart");
+  //         } catch (error) {
+  //           console.error("Failed to remove item:", error);
+  //         }
+  //       }
+  //     },
+  // });
 
   const getItemPrice = (item) => {
     if (!item.category) {
@@ -85,6 +84,8 @@ const Cart = () => {
     return acc;
   }, {});
 });
+
+console.log(quantity)
 
 useEffect(() => {
   setQuantity(cart.reduce((acc, product) => {

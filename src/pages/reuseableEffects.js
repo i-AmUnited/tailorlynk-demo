@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { chatMessages, customerCartList, getOrder, listChat, listVendors, materialList, savedItemsList, singleCatalogueDetail, userCart, userMeasurements, userProfileDetails, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
+import { chatMessages, customerCartList, getOrder, listChat, listVendors, materialList, savedItemsList, singleCatalogueDetail, userMeasurements, userProfileDetails, userShippingAddress, vendorDetail, vendorReviewList } from '../hooks/local/reducer';
 
 export function useVendorList() {
     const [listVendor, setListVendor] = useState([])

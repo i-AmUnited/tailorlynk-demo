@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { updateUserPassword } from "../../hooks/local/reducer";
-import { showSuccessMessage } from "../../hooks/constants";
 
 
 const ChangePassword = () => {

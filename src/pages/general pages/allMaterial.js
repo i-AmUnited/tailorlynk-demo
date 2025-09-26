@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Back from "../../components/goBack";
-import filterIcon from "../../assets/icons/filter.svg";
 import Input from "../../components/input";
 import arrow from "../../assets/icons/arrow.svg";
 import { useMaterialList } from "../reuseableEffects";

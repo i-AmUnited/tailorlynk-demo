@@ -1,5 +1,4 @@
 import { useMaterialList } from "../reuseableEffects";
-import ProductCard from "../../components/productCard";
 import westernImageSample from "../../assets/images/western.png";
 import featuredProductImage from "../../assets/images/image 3.jpg";
 import { useSelector } from "react-redux";

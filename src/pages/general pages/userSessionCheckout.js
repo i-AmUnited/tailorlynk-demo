@@ -14,8 +14,6 @@ import Spinner from "../../components/Spinners/pageLoadingSpinner";
 const SessionCheckout = () => {
   const dispatch = useDispatch();
 
-  const loading = useSelector((state) => state.user.loading);
-
   const customerCartList = useCustomerCartList()
   // console.log(customerCartList);
 
