@@ -16,7 +16,7 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
     const vendorDetail = useVendorDetail(vendorId);
     const vendorData = vendorDetail?.vendorData;
     const materialData = vendorDetail?.materialData;
-    // console.log(vendorDetail)
+    console.log(vendorData)
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -140,7 +140,7 @@ const VendorDetailModal = ({ vendorId, isOpen, onClose }) => {
                       <p className="font-bold">{vendorData?.businessName}</p>
                       {vendorData?.businessAddress && (
                         <p className="text-gray-600 text-xs truncate">
-                          {vendorData.businessCity}, {vendorData.businessState}
+                          {vendorData.businessCity}, {vendorData.businessCountry === "GB" ? "UK" : vendorData.businessCountry}
                         </p>
                       )}
                     </div>

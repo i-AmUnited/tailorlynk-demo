@@ -145,6 +145,7 @@ const totalAmount = useMemo(() => {
  useEffect(() => {
     createOrderForm.setFieldValue('logistics_price', deliveryFee.toString());
     createOrderForm.setFieldValue('total_amount', totalAmount.toString());
+    // eslint-disable-next-line
   }, [deliveryFee, totalAmount]); 
 
  const getShippingfee = useFormik({

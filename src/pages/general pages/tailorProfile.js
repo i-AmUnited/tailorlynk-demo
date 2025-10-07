@@ -187,11 +187,10 @@ const TailorProfile = () => {
               <div className="grid md:col-span-2">
                 <div className="text-xs font-medium">Location:</div>
                 <div className="text-black/50 font-medium truncate">
-                  {vendorPersonal?.businessCity}, {vendorPersonal?.businessState}
+                  {vendorPersonal?.businessCity}, {vendorPersonal?.businessCountry === "GB" ? "UK" : vendorPersonal?.businessCountry}
                 </div>
               </div>
             </div>
-          
           </div>
           <div className="grid gap-10 mb-10">
             {/* <div className="">
