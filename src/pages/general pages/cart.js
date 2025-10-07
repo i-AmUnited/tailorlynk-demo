@@ -78,6 +78,7 @@ const Cart = () => {
   const formattedOrderTotal = rawOrderTotal.toLocaleString();
   const formattedTotalPrice = totalPrice.toLocaleString();
 
+  // eslint-disable-next-line
   const [quantity, setQuantity] = useState(() => {
   return cart.reduce((acc, product) => {
     acc[product.cartInstanceId] = parseInt(product.quantity) || 1; // Ensure number
