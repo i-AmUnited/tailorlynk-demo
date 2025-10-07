@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { placeOrder, shippingFee } from "../../hooks/local/reducer";
 import Button from "../../components/button";
 import { showErrorMessage, showSuccessMessage } from "../../hooks/constants";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useCart } from "../../components/cartContext";
 import Spinner from "../../components/Spinners/pageLoadingSpinner";
 
@@ -15,7 +15,7 @@ const Checkout = () => {
   const dispatch = useDispatch();
 
   const { cart } = useCart();
-  console.log(cart)
+  // console.log(cart)
 
   const transformedOrders = cart.map((item) => ({
     classification_id: item.materialId,
@@ -28,16 +28,14 @@ const Checkout = () => {
     cart_id: String(item.cartInstanceId)
   }));
 
-  console.log(transformedOrders)
+  // console.log(transformedOrders)
 
   const extractShippingFeeDetails = cart.map((item) => ({
     type: item?.category === "catalogue" ? "catalogue" : "material",
     id: item?.category === "catalogue" ?  item?.catalogueId : item?.materialId,
-    // id: "nESamyFwj8",
     quantity: item?.quantity,
   }));
 
-// const [createAccountStatus, setCreateAccountStatus] = useState(false);
 const [getShippingButton, setGetShippingButton] = useState(true);
 const [checkoutButton, setCheckoutButton] = useState(false);
 
@@ -49,7 +47,10 @@ const orderTotal = cart.reduce((total, item) => {
   return total + price;
 }, 0);
 
-const totalAmount = orderTotal + deliveryFee + platformFee;
+// const totalAmount = orderTotal + deliveryFee + platformFee;
+const totalAmount = useMemo(() => {
+  return orderTotal + deliveryFee + platformFee;
+}, [orderTotal, deliveryFee, platformFee]);
 
   const countries = [
     { value: "UK", label: "United Kingdom (UK) " },
@@ -74,7 +75,6 @@ const totalAmount = orderTotal + deliveryFee + platformFee;
       currency: "gbp",
       logistics_price: deliveryFee.toString()
     },
-    // enableReinitialize: true,
     validationSchema: Yup.object({
       first_name: Yup.string().required("Please input your first name"),
       last_name: Yup.string().required("Please input your last name"),
@@ -106,7 +106,6 @@ const totalAmount = orderTotal + deliveryFee + platformFee;
         logistics_price
       } = values;
 
-      // Format delivery_address as an object
       const delivery_address = {
         address,
         city,
@@ -130,13 +129,12 @@ const totalAmount = orderTotal + deliveryFee + platformFee;
         logistics_price
       };
 
-      console.log("Submitting order data:", createOrderData); // Debug log to verify logistics_price
+      console.log("Submitting order data:", createOrderData);
 
       const { payload } = await dispatch(placeOrder(createOrderData));
       if (payload.statusCode === 200) {
         console.log(payload);
         showSuccessMessage("Order placed successfully");
-        // Redirect to the Stripe checkout URL
         if (payload.data && payload.data.url) {
           window.location.href = payload.data.url;
         }
@@ -144,11 +142,10 @@ const totalAmount = orderTotal + deliveryFee + platformFee;
     },
   });
 
-  // Update form values when deliveryFee or totalAmount changes
-  useEffect(() => {
+ useEffect(() => {
     createOrderForm.setFieldValue('logistics_price', deliveryFee.toString());
     createOrderForm.setFieldValue('total_amount', totalAmount.toString());
-  }, [deliveryFee, totalAmount, createOrderForm]);
+  }, [deliveryFee, totalAmount]); 
 
  const getShippingfee = useFormik({
     initialValues: {

@@ -179,7 +179,7 @@ export const placeOrder = createAsyncThunk(
   async (values) => {
     try {
       const placeOrderEndPoint = await apiEndPoints.createOrder(values);
-      console.log(placeOrderEndPoint);
+      // console.log(placeOrderEndPoint);
       const response = await placeOrderEndPoint.data;
       return response;
     } catch (error) {
@@ -524,11 +524,11 @@ const slice = createSlice({
           if (action.payload.statusCode === 200) {
             state.users = action.payload;
             showSuccessMessage(action.payload.message);
-            console.log(action.payload)
+            // console.log(action.payload)
           } else {
             state.error = action.payload.message;
             showErrorMessage(action.payload.message);
-            console.log(action.payload)
+            // console.log(action.payload)
           }
         }
       )

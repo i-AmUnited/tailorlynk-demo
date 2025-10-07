@@ -14,7 +14,7 @@ import cartIcon from "../../assets/icons/cart.svg";
 
 const Cart = () => {
   const { cart, removeFromCart, clearCart, updateCartQuantity } = useCart();
-  console.log(cart);
+  // console.log(cart);
 
   //   const dispatch = useDispatch();
   //  const navigate = useNavigate();
@@ -85,7 +85,7 @@ const Cart = () => {
   }, {});
 });
 
-console.log(quantity)
+// console.log(quantity)
 
 useEffect(() => {
   setQuantity(cart.reduce((acc, product) => {
