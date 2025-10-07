@@ -167,7 +167,7 @@ const totalAmount = useMemo(() => {
           !customer_address.city?.trim() || 
           !customer_address.postal_code?.trim() || 
           !customer_address.state?.trim()) {
-        showErrorMessage("Please fill in all address fields before calculating shipping fee");
+        showErrorMessage("Please fill in all address fields before calculating your shipping fee");
         return;
       }
     try {
