@@ -18,6 +18,7 @@ import AboutUs from "./general pages/about";
 import ComingSoon from "./general pages/comingSoon";
 import SessionCart from "./general pages/userSessionCart";
 import SessionCheckout from "./general pages/userSessionCheckout";
+import TermsOfService from "./general pages/termsOfService";
 
 const Structure = () => {
     
@@ -35,6 +36,7 @@ const Structure = () => {
           <Route path="cart" element={<Title title="Cart"><Cart /></Title>} />
           <Route path="user-cart" element={<Title title="Cart"><SessionCart /></Title>} />
           <Route path="privacy-policy" element={<Title title="Privacy Policy"><PrivacyPolicy /></Title>} />
+          <Route path="terms" element={<Title title="Terms Of Service"><TermsOfService /></Title>} />
           <Route path="about-us" element={<Title title="About US"><AboutUs /></Title>} />
           <Route path="measurement-guide" element={<Title title="Measurements Guide"><MeasurementGuide /></Title>} />
           <Route path="checkout" element={<Title title="Checkout"><Checkout /></Title>} />

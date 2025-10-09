@@ -11,7 +11,7 @@ const Footer = () => {
         <span>Contact</span>
         <span>FAQs</span>
         <Link to={"/privacy-policy"}>Privacy policy</Link>
-        <span>Terms of service</span>
+         <Link to={"/terms"}>Terms of service</Link>
       </div>
       <hr className="opacity-30" />
       <div className="grid md:flex items-center gap-2 md:gap-4">
