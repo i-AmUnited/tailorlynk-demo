@@ -58,11 +58,11 @@ const ProductDetail = () => {
   const productId = productDetail?.catalogueId || productDetail?.materialId || "";
 
     const availableSizes = productDetail?.size
-    ? productDetail.size.split(", ").map((size) => size.trim())
+    ? productDetail.size.split(",").map((size) => size.trim())
     : [];
 
      const availableColors = productDetail?.color
-    ? productDetail.color.split(", ").map((color) => color.trim())
+    ? productDetail.color.split(",").map((color) => color.trim())
     : [];
 
   const handleQuantityChange = (e) => {
