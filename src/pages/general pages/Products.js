@@ -78,7 +78,8 @@ const AllVendors = () => {
               <ProductCard
                 key={vendor.vendorId}
                 vendorName={vendor.businessName}
-                vendorLocation={vendor.businessAddress}
+                vendorLocation={vendor.businessCity}
+                vendorCountry={vendor.businessCountry}
                 rating={vendor.rating}
                 coverPhoto={coverPhoto}
                 loadingPlaceholderImage={placeholderImage}

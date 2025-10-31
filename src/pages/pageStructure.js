@@ -19,6 +19,7 @@ import ComingSoon from "./general pages/comingSoon";
 import SessionCart from "./general pages/userSessionCart";
 import SessionCheckout from "./general pages/userSessionCheckout";
 import TermsOfService from "./general pages/termsOfService";
+import PaymentStatusFail from "./general pages/paymentStatusFail";
 
 const Structure = () => {
     
@@ -42,7 +43,8 @@ const Structure = () => {
           <Route path="checkout" element={<Title title="Checkout"><Checkout /></Title>} />
           <Route path="user-checkout" element={<Title title="Checkout"><SessionCheckout /></Title>} />
           <Route path="coming-soon" element={<Title title="Coming soon..."><ComingSoon /></Title>} />
-          <Route path="payment-status" element={<Title title="Payment Status"><PaymentStatus /></Title>} />
+          <Route path="payment-successfull" element={<Title title="Payment Status"><PaymentStatus /></Title>} />
+          <Route path="payment-failed" element={<Title title="Payment Status"><PaymentStatusFail /></Title>} />
           <Route path="user-account/*" element={<Title title="My Account"><UserAccount /></Title>} />
         </Routes>
       </div>
