@@ -179,12 +179,14 @@ const TailorProfile = () => {
                 <img src={vendorPersonal?.brandLogo} alt="" className="object-cover object-center w-full h-full"/>
               </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 items-start gap-6 md:gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-6 md:gap-4">
               <div className="grid">
                 <div className="text-xs font-medium">Category:</div>
-                <div className="text-black/50 font-medium">Male clothing</div>
+                <div className="text-black/50 font-medium">{vendorPersonal?.speciality
+  ? vendorPersonal.speciality.charAt(0).toUpperCase() + vendorPersonal.speciality.slice(1).toLowerCase()
+  : ''}</div>
               </div>
-              <div className="grid md:col-span-2">
+              <div className="grid ">
                 <div className="text-xs font-medium">Location:</div>
                 <div className="text-black/50 font-medium truncate">
                   {vendorPersonal?.businessCity}, {vendorPersonal?.businessCountry === "GB" ? "UK" : vendorPersonal?.businessCountry}
